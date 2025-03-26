@@ -4,17 +4,17 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Knowledge Wiki</title>
+  <title>Knowledge Explorer</title>
   <meta name="description"
-    content="A collaborative knowledge system with audio responses and natural language processing." />
+    content="A friendly knowledge system that combines the reliability of Wikipedia with the simplicity of Apple design." />
   <link rel="icon"
-    href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23333'%3E%3Ccircle cx='12' cy='12' r='10' /%3E%3C/svg%3E"
+    href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%230077ff'%3E%3Ccircle cx='12' cy='12' r='10' /%3E%3C/svg%3E"
     type="image/svg+xml">
   <link rel="stylesheet" href="css/styles.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link
-    href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:wght@400;700&family=Roboto:wght@400;500&display=swap"
+    href="https://fonts.googleapis.com/css2?family=SF+Pro+Display:wght@400;500;600&family=SF+Pro+Text:wght@400;500&display=swap"
     rel="stylesheet">
 </head>
 
@@ -25,12 +25,12 @@
         <svg class="icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
           <circle cx="12" cy="12" r="10" fill="currentColor" />
         </svg>
-        <h1>Knowledge Wiki</h1>
+        <h1>Knowledge Explorer</h1>
       </div>
       <nav>
         <ul>
-          <li><a href="#" class="active">Main</a></li>
-          <li><a href="#">Reference</a></li>
+          <li><a href="#" class="active">Home</a></li>
+          <li><a href="#">About</a></li>
         </ul>
       </nav>
     </div>
@@ -63,12 +63,12 @@
   <main>
     <div class="container">
       <section class="hero">
-        <h1 class="hero-title">Interactive Knowledge System</h1>
-        <p class="hero-subtitle">Access information through natural language queries with both text and audio responses.
-          Ask questions to retrieve information on any topic.</p>
+        <h1 class="hero-title">Your Interactive Knowledge Companion</h1>
+        <p class="hero-subtitle">Ask questions in a natural way and receive helpful information with both text and audio
+          responses. Explore topics with the reliability of Wikipedia and the simplicity of Apple design.</p>
 
         <div class="divider">
-          <span>Current Dialog</span>
+          <span>Your Conversation</span>
         </div>
 
         <div id="welcome-message" class="welcome-message">
@@ -77,14 +77,15 @@
               <circle cx="12" cy="12" r="10" fill="currentColor" />
             </svg>
           </div>
-          <p>Welcome to the knowledge system. You can type a question or use voice input to retrieve information.</p>
+          <p>Hi there! I'm here to help you discover information on any topic you're curious about. Just type your
+            question below or use the microphone icon to ask with your voice.</p>
         </div>
 
         <div class="main-input-container">
           <form id="main-form" class="main-input">
-            <input type="text" id="main-question-input" placeholder="Enter your query..." autocomplete="off">
+            <input type="text" id="main-question-input" placeholder="What would you like to know?" autocomplete="off">
             <button type="submit" id="main-send-button">
-              <span class="button-text">Search</span>
+              <span class="button-text">Ask</span>
               <span class="loading-spinner"></span>
             </button>
             <button type="button" id="voice-input-button" aria-label="Use voice input">
@@ -108,7 +109,7 @@
               <line x1="12" y1="5" x2="12" y2="19"></line>
               <line x1="5" y1="12" x2="19" y2="12"></line>
             </svg>
-            New Dialog
+            Start New Conversation
           </button>
         </div>
 
@@ -121,7 +122,7 @@
 
   <footer>
     <div class="container">
-      <p>Knowledge Wiki | Text & Audio Information Retrieval | CC BY-SA 4.0</p>
+      <p>Knowledge Explorer | Audio-enabled information system | Learn, discover, explore</p>
     </div>
   </footer>
 
@@ -165,7 +166,7 @@
               <path d="M1 20v-6h6"></path>
               <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path>
             </svg>
-            <span>Refresh</span>
+            <span>Try Again</span>
           </button>
 
           <button class="action-button download-audio-button" aria-label="Download audio">
@@ -175,7 +176,7 @@
               <polyline points="7 10 12 15 17 10"></polyline>
               <line x1="12" y1="15" x2="12" y2="3"></line>
             </svg>
-            <span>Save Audio</span>
+            <span>Download Audio</span>
           </button>
         </div>
       </div>
