@@ -1,11 +1,15 @@
 // Import Framer Motion for basic animations
-import { animate, inView, stagger } from 'https://cdn.skypack.dev/framer-motion@4.1.17/dist/es/index.mjs';
+import { animate } from 'https://cdn.skypack.dev/framer-motion@4.1.17/dist/es/index.mjs';
 
 // DOM Elements
-const chatForm = document.getElementById('chat-form');
-const questionInput = document.getElementById('question-input');
-const sendButton = document.getElementById('send-button');
-const chatBox = document.getElementById('chat-box');
+const mainForm = document.getElementById('main-form');
+const mainQuestionInput = document.getElementById('main-question-input');
+const mainSendButton = document.getElementById('main-send-button');
+const welcomeContainer = document.getElementById('welcome-container');
+const conversationContainer = document.getElementById('conversation-container');
+const qaContainer = document.getElementById('qa-container');
+const newConversationButton = document.getElementById('new-conversation');
+const voiceInputButton = document.getElementById('voice-input-button');
 
 // Demo responses to simulate a backend
 const demoResponses = {
@@ -18,8 +22,8 @@ const demoResponses = {
 
 // Backend API simulation
 const simulateAPIResponse = async (question) => {
-    // Simulate network latency (300-800ms)
-    const delay = Math.floor(Math.random() * 500) + 300;
+    // Simulate network latency (500-1200ms)
+    const delay = Math.floor(Math.random() * 700) + 500;
     await new Promise(resolve => setTimeout(resolve, delay));
 
     // Normalize the question by removing punctuation and converting to lowercase
@@ -44,22 +48,19 @@ const simulateAPIResponse = async (question) => {
     return fallbackResponses[Math.floor(Math.random() * fallbackResponses.length)];
 };
 
-// Create the typing indicator element
+// Create a typing indicator
 const createTypingIndicator = () => {
     const typingIndicator = document.createElement('div');
-    typingIndicator.className = 'message ai-message typing-indicator';
-
-    const bubble = document.createElement('div');
-    bubble.className = 'message-bubble';
+    typingIndicator.className = 'typing-indicator';
+    typingIndicator.setAttribute('aria-label', 'Assistant is typing');
 
     // Create 3 dots for the typing animation
     for (let i = 0; i < 3; i++) {
         const dot = document.createElement('span');
-        dot.className = 'dot';
-        bubble.appendChild(dot);
+        dot.className = 'typing-dot';
+        typingIndicator.appendChild(dot);
     }
 
-    typingIndicator.appendChild(bubble);
     return typingIndicator;
 };
 
@@ -89,116 +90,130 @@ const showNotification = (message, duration = 2000) => {
     }, duration);
 };
 
-// Initialize chat
-const initChat = () => {
-    // Focus the input field when the page loads
-    questionInput.focus();
+// Create a new QA pair from the template
+const createQAPair = (question, answer) => {
+    const template = document.getElementById('qa-pair-template');
+    const qaPair = template.content.cloneNode(true);
 
-    // Handle form submission
-    chatForm.addEventListener('submit', async (e) => {
-        e.preventDefault();
-        const question = questionInput.value.trim();
+    // Set question and answer text
+    qaPair.querySelector('.question-text').textContent = question;
+    qaPair.querySelector('.answer-text').textContent = answer;
 
-        if (!question) return;
-
-        // Disable form while processing
-        questionInput.disabled = true;
-        sendButton.disabled = true;
-        sendButton.classList.add('loading');
-
-        // Add user message
-        addMessage(question, 'user');
-
-        // Clear input
-        questionInput.value = '';
-
-        // Add typing indicator
-        const typingIndicator = createTypingIndicator();
-        chatBox.appendChild(typingIndicator);
-        chatBox.scrollTop = chatBox.scrollHeight;
-
-        // Animate typing dots (simple CSS animation)
-        const dots = typingIndicator.querySelectorAll('.dot');
-        dots.forEach((dot, i) => {
-            dot.style.animation = `typingDot 1s ${i * 0.2}s infinite`;
-        });
-
-        try {
-            // Simulate API request to backend
-            const response = await simulateAPIResponse(question);
-
-            // Remove typing indicator
-            typingIndicator.remove();
-
-            // Add AI response
-            addMessage(response, 'ai');
-        } catch (error) {
-            console.error('Error:', error);
-
-            // Remove typing indicator
-            typingIndicator.remove();
-
-            // Add error message
-            addMessage("I'm having trouble connecting right now. Please try again later.", 'ai');
-        } finally {
-            // Re-enable form
-            questionInput.disabled = false;
-            sendButton.disabled = false;
-            sendButton.classList.remove('loading');
-            questionInput.focus();
-        }
-    });
+    return qaPair;
 };
 
-// Function to add message to chat
-function addMessage(text, sender) {
-    const messageElement = document.createElement('div');
-    messageElement.className = `message ${sender}-message`;
+// Handle the submission of a question
+const handleQuestionSubmit = async (question) => {
+    if (!question.trim()) return;
 
-    const bubble = document.createElement('div');
-    bubble.className = 'message-bubble';
-    bubble.textContent = text;
+    // Hide welcome container and show conversation container
+    welcomeContainer.classList.add('hidden');
+    conversationContainer.classList.remove('hidden');
 
-    messageElement.appendChild(bubble);
-    chatBox.appendChild(messageElement);
+    // Create a new QA pair and add it to the container
+    const newPair = createQAPair(question, '');
+    const qaPairElement = newPair.querySelector('.qa-pair');
 
-    // Simple fade-in animation
-    messageElement.style.opacity = '0';
-    setTimeout(() => {
-        messageElement.style.opacity = '1';
-    }, 10);
+    // Add the pair to the container
+    qaContainer.appendChild(newPair);
 
-    // Scroll to bottom
-    chatBox.scrollTop = chatBox.scrollHeight;
+    // Create and add typing indicator to the answer container
+    const answerContainer = qaPairElement.querySelector('.answer-container');
+    const answerText = qaPairElement.querySelector('.answer-text');
+    const typingIndicator = createTypingIndicator();
 
-    // Add actions for AI messages
-    if (sender === 'ai') {
-        const actions = document.createElement('div');
-        actions.className = 'actions';
+    // Hide answer text and actions initially
+    answerText.style.display = 'none';
+    qaPairElement.querySelector('.answer-actions').style.display = 'none';
 
-        // Listen button for text-to-speech
-        const listenButton = document.createElement('button');
-        listenButton.className = 'action-button';
-        listenButton.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path><path d="M19.07 4.93a10 10 0 0 1 0 14.14"></path></svg> Listen';
+    // Add typing indicator
+    answerContainer.insertBefore(typingIndicator, answerContainer.firstChild);
 
-        listenButton.addEventListener('click', () => {
-            speak(text);
-        });
+    try {
+        // Simulate API request
+        const response = await simulateAPIResponse(question);
 
-        // Copy button
-        const copyButton = document.createElement('button');
-        copyButton.className = 'action-button';
-        copyButton.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg> Copy';
+        // Remove typing indicator and show answer
+        typingIndicator.remove();
+        answerText.textContent = response;
+        answerText.style.display = 'block';
 
-        copyButton.addEventListener('click', () => {
-            copyToClipboard(text);
-        });
+        // Show answer actions
+        qaPairElement.querySelector('.answer-actions').style.display = 'flex';
 
-        actions.appendChild(listenButton);
-        actions.appendChild(copyButton);
-        messageElement.appendChild(actions);
+        // Set up action buttons
+        setupActionButtons(qaPairElement, response);
+
+        // Scroll to the answer
+        qaPairElement.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    } catch (error) {
+        console.error('Error:', error);
+
+        // Remove typing indicator and show error message
+        typingIndicator.remove();
+        answerText.textContent = "I'm having trouble connecting right now. Please try again later.";
+        answerText.style.display = 'block';
     }
-}
+};
+
+// Set up action buttons for a QA pair
+const setupActionButtons = (qaPairElement, answerText) => {
+    const playButton = qaPairElement.querySelector('.play-audio-button');
+    const regenerateButton = qaPairElement.querySelector('.regenerate-button');
+    const downloadButton = qaPairElement.querySelector('.download-audio-button');
+
+    // Play audio button
+    playButton.addEventListener('click', () => {
+        speak(answerText);
+    });
+
+    // Regenerate button
+    regenerateButton.addEventListener('click', async () => {
+        const questionText = qaPairElement.querySelector('.question-text').textContent;
+        const answerTextElement = qaPairElement.querySelector('.answer-text');
+        const actionsElement = qaPairElement.querySelector('.answer-actions');
+
+        // Hide answer and actions
+        answerTextElement.style.display = 'none';
+        actionsElement.style.display = 'none';
+
+        // Create and add typing indicator
+        const answerContainer = qaPairElement.querySelector('.answer-container');
+        const typingIndicator = createTypingIndicator();
+        answerContainer.insertBefore(typingIndicator, answerContainer.firstChild);
+
+        try {
+            // Get a new response (with added delay for realism)
+            await new Promise(resolve => setTimeout(resolve, 500));
+            const newResponse = await simulateAPIResponse(questionText);
+
+            // Remove typing indicator
+            typingIndicator.remove();
+
+            // Update answer text
+            answerTextElement.textContent = newResponse;
+            answerTextElement.style.display = 'block';
+            actionsElement.style.display = 'flex';
+
+            // Update the action buttons with the new response
+            playButton.onclick = () => speak(newResponse);
+            downloadButton.onclick = () => downloadAudio(newResponse);
+
+            showNotification('Response regenerated');
+        } catch (error) {
+            console.error('Error regenerating response:', error);
+            typingIndicator.remove();
+            answerTextElement.textContent = "I'm having trouble regenerating a response. Please try again.";
+            answerTextElement.style.display = 'block';
+            actionsElement.style.display = 'flex';
+        }
+    });
+
+    // Download audio button
+    downloadButton.addEventListener('click', () => {
+        downloadAudio(answerText);
+    });
+};
 
 // Text-to-speech function
 const speak = (text) => {
@@ -240,34 +255,152 @@ const speak = (text) => {
     window.speechSynthesis.speak(utterance);
 };
 
-// Copy text to clipboard
-const copyToClipboard = (text) => {
-    navigator.clipboard.writeText(text)
-        .then(() => {
-            showNotification("Copied to clipboard");
-        })
-        .catch(err => {
-            console.error('Failed to copy text: ', err);
-            showNotification("Failed to copy text");
+// Download audio function
+const downloadAudio = async (text) => {
+    try {
+        // Create speech synthesis utterance
+        const utterance = new SpeechSynthesisUtterance(text);
+
+        // Select best available voice
+        const voices = window.speechSynthesis.getVoices();
+        const selectedVoice = voices.find(voice => voice.name.includes('Samantha')) ||
+            voices.find(voice => voice.lang === 'en-US') ||
+            voices[0];
+
+        if (selectedVoice) {
+            utterance.voice = selectedVoice;
+        }
+
+        // For a real implementation, you would convert speech to an audio file server-side
+        // As a workaround for this demo, we'll show a notification
+        showNotification("In a full implementation, this would download an MP3 file");
+
+        // Here's what a real implementation might do:
+        // 1. Send text to a server endpoint that converts text to speech
+        // 2. Server returns an audio file URL
+        // 3. Create a download link and trigger the download
+
+        // Simulated implementation
+        /*
+        const response = await fetch('/api/text-to-speech', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ text })
         });
+        
+        const audioBlob = await response.blob();
+        const audioUrl = URL.createObjectURL(audioBlob);
+        
+        const a = document.createElement('a');
+        a.href = audioUrl;
+        a.download = 'knowledge_response.mp3';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        */
+    } catch (error) {
+        console.error('Error downloading audio:', error);
+        showNotification("Could not download audio");
+    }
+};
+
+// Set up voice input
+const setupVoiceInput = () => {
+    if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
+        voiceInputButton.style.display = 'none';
+        return;
+    }
+
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    const recognition = new SpeechRecognition();
+    recognition.continuous = false;
+    recognition.interimResults = false;
+
+    recognition.onstart = () => {
+        voiceInputButton.classList.add('recording');
+        showNotification("Listening...");
+    };
+
+    recognition.onresult = (event) => {
+        const transcript = event.results[0][0].transcript;
+        mainQuestionInput.value = transcript;
+        // Focus on input to show the user what was transcribed
+        mainQuestionInput.focus();
+    };
+
+    recognition.onend = () => {
+        voiceInputButton.classList.remove('recording');
+    };
+
+    recognition.onerror = (event) => {
+        console.error('Speech recognition error', event.error);
+        voiceInputButton.classList.remove('recording');
+        showNotification("Couldn't understand speech. Please try again.");
+    };
+
+    voiceInputButton.addEventListener('click', () => {
+        if (voiceInputButton.classList.contains('recording')) {
+            recognition.stop();
+        } else {
+            recognition.start();
+        }
+    });
+};
+
+// Initialize the app
+const initApp = () => {
+    // Focus on input field
+    mainQuestionInput.focus();
+
+    // Set up main form submission
+    mainForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const question = mainQuestionInput.value.trim();
+
+        if (!question) return;
+
+        // Disable input while processing
+        mainQuestionInput.disabled = true;
+        mainSendButton.disabled = true;
+        mainSendButton.classList.add('loading');
+
+        // Handle the question
+        handleQuestionSubmit(question)
+            .finally(() => {
+                // Clear and re-enable input
+                mainQuestionInput.value = '';
+                mainQuestionInput.disabled = false;
+                mainSendButton.disabled = false;
+                mainSendButton.classList.remove('loading');
+                mainQuestionInput.focus();
+            });
+    });
+
+    // Set up new conversation button
+    newConversationButton.addEventListener('click', () => {
+        // Clear the QA container
+        qaContainer.innerHTML = '';
+
+        // Show welcome container, hide conversation container
+        welcomeContainer.classList.remove('hidden');
+        conversationContainer.classList.add('hidden');
+
+        // Focus on input
+        mainQuestionInput.focus();
+    });
+
+    // Set up voice input if available
+    setupVoiceInput();
 };
 
 // Wait for document to load
 document.addEventListener('DOMContentLoaded', () => {
-    console.log('Knowledge chat initialized');
+    console.log('Knowledge app initialized');
 
-    // Initialize chat
-    initChat();
-
-    // Add simple CSS for the typing animation
-    const style = document.createElement('style');
-    style.textContent = `
-        @keyframes typingDot {
-            0%, 100% { opacity: 0.5; transform: translateY(0); }
-            50% { opacity: 1; transform: translateY(-2px); }
-        }
-    `;
-    document.head.appendChild(style);
+    // Initialize app
+    initApp();
 
     // Listen for voices to load (needed in some browsers)
     if (window.speechSynthesis) {

@@ -38,47 +38,116 @@
 
   <main>
     <div class="container">
-      <section class="intro">
-        <h2>Your intelligent learning companion</h2>
-        <p>Ask a question and get clear, helpful answers. Explore topics, gain insights, and enhance your knowledge
-          through simple conversations.</p>
+      <section class="hero">
+        <h1>Ask Anything. Learn Effortlessly.</h1>
+        <p>An AI-powered knowledge assistant that answers your questions and reads them aloud.</p>
+
+        <div class="main-input-container">
+          <form id="main-form" class="main-input">
+            <input type="text" id="main-question-input" placeholder="Ask a question..." autocomplete="off">
+            <button type="submit" id="main-send-button">
+              <span class="button-text">Ask</span>
+              <span class="loading-spinner"></span>
+            </button>
+            <button type="button" id="voice-input-button" aria-label="Use voice input">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                stroke-linejoin="round">
+                <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path>
+                <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
+                <line x1="12" y1="19" x2="12" y2="23"></line>
+                <line x1="8" y1="23" x2="16" y2="23"></line>
+              </svg>
+            </button>
+          </form>
+        </div>
       </section>
 
-      <section class="chat-container">
-        <div id="chat-box" class="chat-box">
-          <div class="date-divider">
-            <span>Today</span>
-          </div>
-
-          <div class="message welcome-message">
-            <div class="welcome-content">
-              <div class="welcome-icon-wrapper">
-                <svg class="welcome-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                  <circle cx="12" cy="12" r="10" fill="currentColor" />
-                </svg>
-              </div>
-              <p>Welcome to Knowledge. I'm here to help you learn and explore topics. What would you like to know about?
-              </p>
-            </div>
-          </div>
+      <section id="conversation-container" class="conversation-container hidden">
+        <div class="conversation-header">
+          <button id="new-conversation" class="text-button">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+              stroke-linejoin="round">
+              <line x1="12" y1="5" x2="12" y2="19"></line>
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+            </svg>
+            New Conversation
+          </button>
         </div>
 
-        <form id="chat-form" class="chat-input">
-          <input type="text" id="question-input" placeholder="Ask a question..." autocomplete="off">
-          <button type="submit" id="send-button">
-            <span class="button-text">Send</span>
-            <div class="loading-spinner"></div>
-          </button>
-        </form>
+        <div id="qa-container" class="qa-container">
+          <!-- Q&A pairs will be added here by JavaScript -->
+        </div>
+      </section>
+
+      <section id="welcome-container" class="welcome-container">
+        <div class="welcome-content">
+          <div class="welcome-icon-wrapper">
+            <svg class="welcome-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="12" cy="12" r="10" fill="currentColor" />
+            </svg>
+          </div>
+          <p>What would you like to learn about today?</p>
+        </div>
       </section>
     </div>
   </main>
 
-  <footer>
-    <div class="container">
-      <p>Designed in California. © 2025 Knowledge</p>
+  <!-- QA pair template -->
+  <template id="qa-pair-template">
+    <div class="qa-pair">
+      <div class="question-container">
+        <div class="question-content">
+          <svg class="user-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+            <circle cx="12" cy="7" r="4"></circle>
+          </svg>
+          <div class="question-text"></div>
+        </div>
+      </div>
+
+      <div class="answer-container">
+        <div class="answer-content">
+          <svg class="assistant-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="12" cy="12" r="10" fill="currentColor" />
+          </svg>
+          <div class="answer-text"></div>
+        </div>
+
+        <div class="answer-actions">
+          <button class="action-button play-audio-button" aria-label="Play audio response">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+              stroke-linejoin="round">
+              <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+              <path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+              <path d="M19.07 4.93a10 10 0 0 1 0 14.14"></path>
+            </svg>
+            <span>Play Audio</span>
+          </button>
+
+          <button class="action-button regenerate-button" aria-label="Regenerate response">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+              stroke-linejoin="round">
+              <path d="M23 4v6h-6"></path>
+              <path d="M1 20v-6h6"></path>
+              <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path>
+            </svg>
+            <span>Regenerate</span>
+          </button>
+
+          <button class="action-button download-audio-button" aria-label="Download audio">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+              stroke-linejoin="round">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+              <polyline points="7 10 12 15 17 10"></polyline>
+              <line x1="12" y1="15" x2="12" y2="3"></line>
+            </svg>
+            <span>Download Audio</span>
+          </button>
+        </div>
+      </div>
     </div>
-  </footer>
+  </template>
 
   <script src="https://cdn.skypack.dev/framer-motion@4.1.17/dist/es/index.mjs" type="module"></script>
   <script src="js/app.js" type="module"></script>
