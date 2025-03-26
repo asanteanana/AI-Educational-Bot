@@ -22,6 +22,14 @@
     --color-glow: rgba(0, 113, 227, 0.5);
     --color-user-message: #007aff;
     --color-ai-message: #f5f5f7;
+    /* OpenAI-inspired colors */
+    --openai-teal: #10a37f;
+    --openai-purple: #6b40d8;
+    --openai-blue: #3e65fe;
+    --openai-gradient-start: #10a37f;
+    --openai-gradient-mid: #6b40d8;
+    --openai-gradient-end: #3e65fe;
+    /* Sizes */
     --border-radius-sm: 10px;
     --border-radius: 14px;
     --border-radius-lg: 18px;
@@ -51,6 +59,8 @@ body {
     flex-direction: column;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    position: relative;
+    overflow-x: hidden;
 }
 
 .backdrop-blur {
@@ -63,6 +73,20 @@ body {
     -webkit-backdrop-filter: saturate(180%) blur(20px);
     backdrop-filter: saturate(180%) blur(20px);
     z-index: 10;
+}
+
+.gradient-bg {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 100vh;
+    background:
+        radial-gradient(circle at 10% 5%, rgba(16, 163, 127, 0.03), transparent 30%),
+        radial-gradient(circle at 90% 25%, rgba(107, 64, 216, 0.03), transparent 40%),
+        radial-gradient(circle at 50% 60%, rgba(62, 101, 254, 0.03), transparent 50%);
+    opacity: 0.8;
+    z-index: -1;
 }
 
 .container {
@@ -139,30 +163,134 @@ nav a.active:after {
 main {
     flex: 1;
     padding: 2rem 0 4rem;
+    position: relative;
 }
 
-.intro {
-    max-width: 600px;
-    margin: 1rem auto 3rem;
+/* Hero section (formerly intro) */
+.hero {
+    max-width: 700px;
+    margin: 1rem auto 4rem;
     text-align: center;
+    position: relative;
+    padding: 2rem 0;
 }
 
-.intro h2 {
+.hero-content {
+    position: relative;
+    z-index: 2;
+}
+
+.hero h2 {
     font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, sans-serif;
-    font-size: 2.75rem;
+    font-size: 3rem;
     font-weight: 600;
-    margin-bottom: 1rem;
+    margin-bottom: 1.5rem;
     line-height: 1.1;
     letter-spacing: -0.03em;
 }
 
-.intro p {
+.title-gradient {
+    background: linear-gradient(90deg,
+            var(--openai-gradient-start),
+            var(--openai-gradient-mid),
+            var(--openai-gradient-end));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    color: transparent;
+    background-size: 200% auto;
+    animation: gradientText 8s ease infinite;
+}
+
+@keyframes gradientText {
+    0% {
+        background-position: 0% center;
+    }
+
+    50% {
+        background-position: 100% center;
+    }
+
+    100% {
+        background-position: 0% center;
+    }
+}
+
+.hero p {
     color: var(--color-gray-600);
-    font-size: 1.125rem;
-    line-height: 1.45;
+    font-size: 1.25rem;
+    line-height: 1.5;
     letter-spacing: -0.01em;
-    max-width: 520px;
+    max-width: 540px;
     margin: 0 auto;
+}
+
+.hero-shapes {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: -1;
+    overflow: hidden;
+    pointer-events: none;
+}
+
+.shape {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(30px);
+    opacity: 0.15;
+}
+
+.shape-1 {
+    width: 300px;
+    height: 300px;
+    background: var(--openai-gradient-start);
+    top: -100px;
+    left: -100px;
+    animation: float 15s ease-in-out infinite;
+}
+
+.shape-2 {
+    width: 250px;
+    height: 250px;
+    background: var(--openai-gradient-mid);
+    bottom: -80px;
+    right: -80px;
+    animation: float 18s ease-in-out infinite 2s;
+}
+
+.shape-3 {
+    width: 200px;
+    height: 200px;
+    background: var(--openai-gradient-end);
+    top: 50%;
+    left: 60%;
+    transform: translate(-50%, -50%);
+    animation: float 20s ease-in-out infinite 1s;
+}
+
+@keyframes float {
+    0% {
+        transform: translate(0, 0);
+    }
+
+    25% {
+        transform: translate(-10px, 10px);
+    }
+
+    50% {
+        transform: translate(10px, -10px);
+    }
+
+    75% {
+        transform: translate(10px, 10px);
+    }
+
+    100% {
+        transform: translate(0, 0);
+    }
 }
 
 /* Chat container */
@@ -183,6 +311,8 @@ main {
     flex-direction: column;
     gap: 1rem;
     box-shadow: var(--box-shadow);
+    position: relative;
+    isolation: isolate;
 }
 
 .date-divider {
@@ -239,10 +369,21 @@ main {
     gap: 1rem;
 }
 
+.welcome-icon-wrapper {
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--openai-gradient-start), var(--openai-gradient-end));
+    padding: 5px;
+}
+
 .welcome-icon {
     width: 40px;
     height: 40px;
-    color: var(--color-foreground);
+    color: white;
 }
 
 .welcome-message p {
@@ -259,6 +400,7 @@ main {
     font-size: 0.9375rem;
     line-height: 1.5;
     letter-spacing: -0.01em;
+    transition: transform 0.2s ease;
 }
 
 .user-message .message-bubble {
@@ -273,6 +415,10 @@ main {
     border-bottom-left-radius: 4px;
     -webkit-backdrop-filter: blur(8px);
     backdrop-filter: blur(8px);
+}
+
+.message:hover .message-bubble {
+    transform: translateY(-2px);
 }
 
 .actions {
@@ -330,14 +476,13 @@ main {
     transition: var(--transition);
     transform: translateZ(0);
     will-change: transform;
-    transition: transform 0.2s ease;
+    transition: transform 0.2s ease, background-color 0.3s ease, box-shadow 0.3s ease;
 }
 
 #question-input:focus {
     background-color: var(--color-gray-200);
     box-shadow: 0 0 0 3px var(--color-glow);
-    transform: translateY(-1px);
-    transition: transform 0.3s ease, background-color 0.3s ease, box-shadow 0.3s ease;
+    transform: translateY(-2px);
 }
 
 #question-input::placeholder {
@@ -345,7 +490,7 @@ main {
 }
 
 #send-button {
-    background-color: var(--color-accent);
+    background: linear-gradient(135deg, var(--openai-teal), var(--openai-blue));
     color: white;
     border: none;
     padding: 0 1.25rem;
@@ -358,26 +503,65 @@ main {
     transition: var(--transition);
     min-width: 70px;
     font-size: 0.9375rem;
+    position: relative;
+    overflow: hidden;
 }
 
 #send-button:hover {
-    background-color: var(--color-accent-light);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(16, 163, 127, 0.3);
 }
 
 #send-button:active {
-    background-color: var(--color-accent-dark);
-    transform: scale(0.98);
+    transform: translateY(0) scale(0.98);
 }
 
 #send-button:disabled {
-    background-color: var(--color-gray-300);
+    background: var(--color-gray-300);
     color: var(--color-gray-500);
     cursor: not-allowed;
     transform: none;
+    box-shadow: none;
+}
+
+.pulse-on-hover:not(:disabled)::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: var(--border-radius);
+    transform: translate(-50%, -50%) scale(0);
+    opacity: 0;
+    transition: transform 0.4s ease, opacity 0.4s ease;
+}
+
+.pulse-on-hover:not(:disabled):hover::after {
+    animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+    0% {
+        transform: translate(-50%, -50%) scale(0);
+        opacity: 0.6;
+    }
+
+    50% {
+        opacity: 0;
+    }
+
+    100% {
+        transform: translate(-50%, -50%) scale(2);
+        opacity: 0;
+    }
 }
 
 .button-text {
     display: inline-block;
+    position: relative;
+    z-index: 1;
 }
 
 .loading-spinner {
@@ -388,6 +572,8 @@ main {
     border-top-color: white;
     border-radius: 50%;
     animation: spin 0.8s linear infinite;
+    position: relative;
+    z-index: 1;
 }
 
 @keyframes spin {
@@ -424,13 +610,14 @@ footer p {
     left: 50%;
     transform: translateX(-50%);
     padding: 0.625rem 1rem;
-    background-color: var(--color-gray-800);
+    background: linear-gradient(135deg, var(--openai-teal), var(--openai-blue));
     color: white;
     border-radius: var(--border-radius);
     font-size: 0.875rem;
     font-weight: 500;
     opacity: 0;
     z-index: 100;
+    box-shadow: 0 4px 12px rgba(62, 101, 254, 0.2);
 }
 
 /* Typing indicator */
@@ -459,13 +646,23 @@ footer p {
 
 /* Media queries */
 @media (max-width: 768px) {
-    .intro h2 {
+    .hero h2 {
         font-size: 2.25rem;
+    }
+
+    .hero p {
+        font-size: 1.125rem;
     }
 
     .chat-box {
         min-height: 280px;
         max-height: 450px;
+    }
+
+    .shape-1,
+    .shape-2,
+    .shape-3 {
+        opacity: 0.1;
     }
 }
 
@@ -479,11 +676,11 @@ footer p {
         gap: 1.5rem;
     }
 
-    .intro h2 {
+    .hero h2 {
         font-size: 1.875rem;
     }
 
-    .intro p {
+    .hero p {
         font-size: 1rem;
     }
 
@@ -497,6 +694,12 @@ footer p {
 
     .welcome-message {
         max-width: 100%;
+    }
+
+    .shape-1,
+    .shape-2,
+    .shape-3 {
+        transform: scale(0.7);
     }
 }
 
@@ -518,15 +721,28 @@ footer p {
         --color-user-message: #0a84ff;
         --color-ai-message: #2c2c2e;
         --color-glow: rgba(10, 132, 255, 0.5);
+        --openai-gradient-start: #1a7f64;
+        --openai-gradient-mid: #5333b8;
+        --openai-gradient-end: #3254cd;
     }
 
     .backdrop-blur {
         background: rgba(0, 0, 0, 0.8);
     }
 
+    .gradient-bg {
+        opacity: 0.15;
+    }
+
     @supports (-webkit-backdrop-filter: none) or (backdrop-filter: none) {
         :root {
             --color-ai-message: rgba(44, 44, 46, 0.8);
         }
+    }
+
+    .shape-1,
+    .shape-2,
+    .shape-3 {
+        opacity: 0.1;
     }
 }

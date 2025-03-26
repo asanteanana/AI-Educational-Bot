@@ -4,11 +4,12 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>AI Educational Bot</title>
+  <title>Knowledge | Your AI Learning Companion</title>
   <meta name="description"
     content="An AI-powered educational assistant that answers your questions with both text and audio responses." />
   <link rel="icon"
-    href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23000000'%3E%3Ccircle cx='12' cy='12' r='10' /%3E%3C/svg%3E">
+    href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23000000'%3E%3Ccircle cx='12' cy='12' r='10' /%3E%3C/svg%3E"
+    type="image/svg+xml">
   <link rel="stylesheet" href="css/styles.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -19,6 +20,7 @@
 
 <body>
   <div class="backdrop-blur"></div>
+  <div class="gradient-bg"></div>
 
   <header>
     <div class="container">
@@ -32,41 +34,55 @@
         <ul>
           <li><a href="#" class="active">Home</a></li>
           <li><a href="#">About</a></li>
+          <li><a href="#">Support</a></li>
         </ul>
       </nav>
     </div>
   </header>
 
-  <main class="container">
-    <section class="intro">
-      <h2>Your intelligent<br>learning companion</h2>
-      <p>Ask anything. Learn everything. A revolutionary way to expand your knowledge through AI-powered conversations
-        and insights.</p>
-    </section>
-
-    <section class="chat-container">
-      <div class="chat-box" id="chat-box">
-        <div class="date-divider">
-          <span>Today</span>
+  <main>
+    <div class="container">
+      <section class="hero">
+        <div class="hero-shapes">
+          <div class="shape shape-1"></div>
+          <div class="shape shape-2"></div>
+          <div class="shape shape-3"></div>
         </div>
-        <div class="welcome-message">
-          <div class="welcome-content">
-            <svg class="welcome-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-              <circle cx="12" cy="12" r="10" fill="currentColor" />
-            </svg>
-            <p>Hello, I'm Knowledge. How can I help you learn today?</p>
+        <div class="hero-content">
+          <h2>Your <span class="title-gradient">intelligent</span> learning companion</h2>
+          <p>Ask any question and get clear, helpful answers powered by AI. Explore topics, gain insights, and enhance
+            your knowledge with simple conversations.</p>
+        </div>
+      </section>
+
+      <section class="chat-container">
+        <div id="chat-box" class="chat-box">
+          <div class="date-divider">
+            <span>Today</span>
+          </div>
+
+          <div class="message welcome-message">
+            <div class="welcome-content">
+              <div class="welcome-icon-wrapper">
+                <svg class="welcome-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                  <circle cx="12" cy="12" r="10" fill="currentColor" />
+                </svg>
+              </div>
+              <p>Welcome to Knowledge. I'm here to help you learn and explore topics with AI-powered conversations. What
+                would you like to know about?</p>
+            </div>
           </div>
         </div>
-      </div>
 
-      <form id="chat-form" class="chat-input">
-        <input type="text" id="question-input" placeholder="Ask a question...">
-        <button type="submit" id="send-button">
-          <span class="button-text">Ask</span>
-          <span class="loading-spinner"></span>
-        </button>
-      </form>
-    </section>
+        <form id="chat-form" class="chat-input">
+          <input type="text" id="question-input" placeholder="Ask a question..." autocomplete="off">
+          <button type="submit" id="send-button" class="pulse-on-hover">
+            <span class="button-text">Send</span>
+            <div class="loading-spinner"></div>
+          </button>
+        </form>
+      </section>
+    </div>
   </main>
 
   <footer>
@@ -75,8 +91,8 @@
     </div>
   </footer>
 
-  <script src="https://cdn.jsdelivr.net/npm/framer-motion@10.16.4/dist/framer-motion.js"></script>
-  <script src="js/app.js"></script>
+  <script src="https://cdn.skypack.dev/framer-motion@4.1.17/dist/es/index.mjs" type="module"></script>
+  <script src="js/app.js" type="module"></script>
 </body>
 
 </html>
