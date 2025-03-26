@@ -599,25 +599,25 @@ footer {
     }
 }
 
-/* Theme toggle switch */
+/* Theme toggle switch - original style */
 .theme-toggle {
     position: fixed;
-    right: var(--space-xl);
+    right: 24px;
     top: 50%;
     transform: translateY(-50%);
     background-color: var(--color-gray-100);
     border-radius: 30px;
-    padding: var(--space-xs);
+    padding: 0.375rem;
     display: flex;
     flex-direction: column;
-    gap: var(--space-xs);
+    gap: 0.5rem;
     box-shadow: var(--box-shadow);
     z-index: 100;
 }
 
 .theme-toggle button {
-    width: 32px;
-    height: 32px;
+    width: 36px;
+    height: 36px;
     border-radius: 50%;
     border: none;
     background-color: transparent;
@@ -631,13 +631,13 @@ footer {
 
 .theme-toggle button.active {
     background-color: var(--color-background);
-    color: var(--color-gray-600);
+    color: var(--color-accent);
     box-shadow: var(--box-shadow-sm);
 }
 
 .theme-toggle button svg {
-    width: 16px;
-    height: 16px;
+    width: 18px;
+    height: 18px;
 }
 
 /* Media queries */
@@ -651,7 +651,7 @@ footer {
     }
 
     .theme-toggle {
-        right: var(--space-md);
+        right: 16px;
     }
 }
 
@@ -679,8 +679,8 @@ footer {
 
     .theme-toggle {
         top: auto;
-        right: var(--space-md);
-        bottom: var(--space-2xl);
+        right: 16px;
+        bottom: 80px;
         transform: none;
         flex-direction: row;
     }
