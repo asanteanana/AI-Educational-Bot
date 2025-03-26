@@ -1,5 +1,5 @@
 // Initialize Framer Motion for animations
-const { animate, inView, stagger } = window.Motion;
+const { animate, inView, stagger, transform } = window.Motion;
 
 // DOM Elements
 const chatForm = document.getElementById('chat-form');
@@ -7,34 +7,97 @@ const questionInput = document.getElementById('question-input');
 const sendButton = document.getElementById('send-button');
 const chatBox = document.getElementById('chat-box');
 
-// Demo responses
+// Demo responses with Apple-style language
 const demoResponses = {
-    "hello": "Hello! I'm your educational AI assistant. How can I help you today?",
-    "hi": "Hi there! What would you like to learn about today?",
-    "who are you": "I'm an AI Educational Bot designed to help answer your questions and make learning more accessible.",
-    "how does this work": "Simply type your question in the input field, and I'll provide an answer. You can also listen to the response by clicking the Listen button on any message.",
-    "what can you do": "I can answer educational questions, provide explanations on various topics, and offer the information in both text and audio formats for better accessibility."
+    "hello": "Hello! I'm Knowledge, your personal learning assistant. How can I help you discover something new today?",
+    "hi": "Hi there! I'm ready to help you explore any topic you're curious about.",
+    "who are you": "I'm Knowledge, an AI assistant designed by Apple to make learning intuitive and accessible. I'm here to answer questions and provide insights on virtually any topic.",
+    "how does this work": "Just type your question in the input field below, and I'll respond with helpful information. You can also tap the Listen button to hear the response read aloud. It's that simple.",
+    "what can you do": "I can answer questions about almost any topic, explain complex concepts in simple terms, and even read my responses aloud for easier learning. I'm designed to be your personal knowledge companion."
+};
+
+// Typing indicator animation
+const createTypingIndicator = () => {
+    const typingDiv = document.createElement('div');
+    typingDiv.className = 'message ai-message typing-indicator';
+    typingDiv.innerHTML = `
+        <div class="message-bubble">
+            <span class="dot"></span>
+            <span class="dot"></span>
+            <span class="dot"></span>
+        </div>
+    `;
+    chatBox.appendChild(typingDiv);
+
+    // Animate dots
+    const dots = typingDiv.querySelectorAll('.dot');
+    animate(dots,
+        { opacity: [0.4, 1, 0.4], y: [0, -6, 0] },
+        {
+            duration: 1.2,
+            repeat: Infinity,
+            delay: stagger(0.2)
+        }
+    );
+
+    return typingDiv;
+};
+
+// Create notification message
+const showNotification = (message) => {
+    const notification = document.createElement('div');
+    notification.className = 'notification';
+    notification.textContent = message;
+    document.body.appendChild(notification);
+
+    animate(notification,
+        { opacity: [0, 1, 1, 0], y: [20, 0, 0, -20] },
+        { duration: 2.5, times: [0, 0.1, 0.9, 1] }
+    ).then(() => {
+        document.body.removeChild(notification);
+    });
 };
 
 // Initialize chat
 document.addEventListener('DOMContentLoaded', () => {
+    // Focus input field
+    setTimeout(() => {
+        questionInput.focus();
+    }, 500);
+
     // Animate the welcome message
     const welcomeMessage = document.querySelector('.welcome-message');
-    animate(welcomeMessage, { opacity: [0, 1], y: [20, 0] }, { duration: 0.8, delay: 0.3 });
+    animate(welcomeMessage,
+        { opacity: [0, 1], scale: [0.95, 1] },
+        { duration: 0.8, delay: 0.3, ease: [0.23, 1, 0.32, 1] }
+    );
 
     // Set up form submission
     chatForm.addEventListener('submit', handleSubmit);
 
-    // Set up inView animations
-    inView('.intro h2', () => {
-        animate('.intro h2', { opacity: [0, 1], y: [20, 0] }, { duration: 0.8 });
+    // Set up inView animations with Apple-style spring animations
+    inView('.intro h2', ({ target }) => {
+        animate(target,
+            { opacity: [0, 1], y: [30, 0] },
+            { duration: 0.8, ease: [0.23, 1, 0.32, 1] }
+        );
         return false; // Only animate once
     });
 
-    inView('.intro p', () => {
-        animate('.intro p', { opacity: [0, 1], y: [20, 0] }, { duration: 0.8, delay: 0.2 });
+    inView('.intro p', ({ target }) => {
+        animate(target,
+            { opacity: [0, 1], y: [20, 0] },
+            { duration: 0.7, delay: 0.2, ease: [0.23, 1, 0.32, 1] }
+        );
         return false; // Only animate once
     });
+
+    // Add date separator animation
+    const dateDivider = document.querySelector('.date-divider');
+    animate(dateDivider,
+        { opacity: [0, 1] },
+        { duration: 0.8, delay: 0.1 }
+    );
 });
 
 // Handle form submission
@@ -53,19 +116,38 @@ async function handleSubmit(e) {
     // Clear input
     questionInput.value = '';
 
+    // Create typing indicator
+    const typingIndicator = createTypingIndicator();
+
     try {
-        // Simulate API delay
-        await new Promise(resolve => setTimeout(resolve, 1500));
+        // Simulate API delay with natural timing variation (Apple-style attention to detail)
+        const delay = 1000 + Math.random() * 1000;
+        await new Promise(resolve => setTimeout(resolve, delay));
+
+        // Remove typing indicator
+        typingIndicator.remove();
 
         // Get response from demo responses or generate a default one
-        const answer = demoResponses[question.toLowerCase()] ||
-            `This is a demonstration of the AI Educational Bot interface. In a production environment, this would connect to a backend API that provides real AI-generated responses to your question: "${question}"`;
+        let answer;
+        if (demoResponses[question.toLowerCase()]) {
+            answer = demoResponses[question.toLowerCase()];
+        } else {
+            // Create a more Apple-style generic response
+            const genericResponses = [
+                `I'd be happy to help with "${question}". In the full version, I would connect to Apple's knowledge base to provide accurate information on this topic.`,
+                `That's an interesting question about "${question}". When fully implemented, I'd use Apple's advanced learning models to give you a comprehensive answer.`,
+                `I understand you're asking about "${question}". In the production version, I would draw from a vast knowledge base to provide you with precise information.`
+            ];
+            answer = genericResponses[Math.floor(Math.random() * genericResponses.length)];
+        }
 
         // Add AI response
         addMessage(answer, 'ai');
     } catch (error) {
         console.error('Error:', error);
-        addMessage("Sorry, I couldn't process your request at the moment. Please try again.", 'ai');
+        // Remove typing indicator
+        typingIndicator.remove();
+        addMessage("I'm sorry, I couldn't process your request at the moment. Please try again.", 'ai');
     } finally {
         setLoading(false);
     }
@@ -76,14 +158,18 @@ function addMessage(text, type) {
     // Remove welcome message if it exists
     const welcomeMessage = document.querySelector('.welcome-message');
     if (welcomeMessage) {
-        welcomeMessage.remove();
+        animate(welcomeMessage,
+            { opacity: [1, 0], height: [welcomeMessage.offsetHeight, 0] },
+            { duration: 0.3 }
+        ).then(() => {
+            welcomeMessage.remove();
+        });
     }
 
     // Create message element
     const messageDiv = document.createElement('div');
     messageDiv.className = `message ${type}-message`;
     messageDiv.style.opacity = 0;
-    messageDiv.style.transform = 'translateY(20px)';
 
     // Create message bubble
     const bubbleDiv = document.createElement('div');
@@ -95,6 +181,7 @@ function addMessage(text, type) {
     if (type === 'ai') {
         const actionsDiv = document.createElement('div');
         actionsDiv.className = 'actions';
+        actionsDiv.style.opacity = 0;
 
         // Listen button
         const listenButton = document.createElement('button');
@@ -126,11 +213,24 @@ function addMessage(text, type) {
     // Add to chat box
     chatBox.appendChild(messageDiv);
 
-    // Animate the new message
-    animate(messageDiv, { opacity: [0, 1], y: [20, 0] }, { duration: 0.5 });
+    // Apple-style spring animations
+    animate(messageDiv,
+        { opacity: [0, 1], scale: [0.98, 1], y: [10, 0] },
+        { duration: 0.5, ease: [0.23, 1, 0.32, 1] }
+    );
 
-    // Scroll to the bottom
-    chatBox.scrollTop = chatBox.scrollHeight;
+    // Animate actions with slight delay
+    if (type === 'ai') {
+        const actionsDiv = messageDiv.querySelector('.actions');
+        animate(actionsDiv,
+            { opacity: [0, 1] },
+            { duration: 0.4, delay: 0.3 }
+        );
+    }
+
+    // Scroll to the bottom with smooth animation
+    const targetScroll = chatBox.scrollHeight;
+    animate(chatBox, { scrollTop: targetScroll }, { duration: 0.5, ease: [0.23, 1, 0.32, 1] });
 }
 
 // Set loading state
@@ -145,10 +245,10 @@ function setLoading(isLoading) {
     }
 }
 
-// Text to speech
+// Text to speech with Apple-like voice settings
 function textToSpeech(text) {
     if (!('speechSynthesis' in window)) {
-        alert('Text-to-speech is not supported in your browser.');
+        showNotification("Text-to-speech is not supported in your browser.");
         return;
     }
 
@@ -158,40 +258,36 @@ function textToSpeech(text) {
     // Create a new speech synthesis utterance
     const utterance = new SpeechSynthesisUtterance(text);
     utterance.lang = 'en-US';
-    utterance.rate = 1.0;
+    utterance.rate = 0.97; // Slightly slower for clarity
     utterance.pitch = 1.0;
+
+    // Try to select a higher quality voice if available
+    const voices = window.speechSynthesis.getVoices();
+    const preferredVoices = ['Samantha', 'Alex', 'Daniel', 'Google US English', 'Microsoft Zira'];
+
+    for (const preferredVoice of preferredVoices) {
+        const voice = voices.find(v => v.name.includes(preferredVoice));
+        if (voice) {
+            utterance.voice = voice;
+            break;
+        }
+    }
+
+    // Show feedback notification
+    showNotification("Playing audio...");
 
     // Speak
     window.speechSynthesis.speak(utterance);
 }
 
-// Copy to clipboard
+// Copy to clipboard with Apple-style feedback
 function copyToClipboard(text) {
     navigator.clipboard.writeText(text)
         .then(() => {
-            // Show feedback (could be more elaborate)
-            const feedback = document.createElement('div');
-            feedback.textContent = 'Copied!';
-            feedback.style.position = 'fixed';
-            feedback.style.bottom = '20px';
-            feedback.style.left = '50%';
-            feedback.style.transform = 'translateX(-50%)';
-            feedback.style.padding = '0.5rem 1rem';
-            feedback.style.backgroundColor = 'var(--color-gray-800)';
-            feedback.style.color = 'var(--color-foreground)';
-            feedback.style.borderRadius = 'var(--border-radius)';
-            feedback.style.opacity = '0';
-            document.body.appendChild(feedback);
-
-            // Animate feedback
-            animate(feedback,
-                { opacity: [0, 1, 1, 0], y: [20, 0, 0, -20] },
-                { duration: 2, times: [0, 0.1, 0.9, 1] }
-            ).then(() => {
-                document.body.removeChild(feedback);
-            });
+            showNotification("Copied to clipboard");
         })
         .catch(err => {
             console.error('Could not copy text: ', err);
+            showNotification("Couldn't copy text");
         });
 } 
