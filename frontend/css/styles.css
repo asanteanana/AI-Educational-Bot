@@ -11,9 +11,9 @@
     --color-gray-500: #54595d;
     --color-gray-600: #202122;
 
-    /* Apple-inspired blue accent */
-    --color-accent: #0077ff;
-    --color-accent-subtle: rgba(0, 119, 255, 0.08);
+    /* Apple-inspired subtle accent color */
+    --color-accent: #0071e3;
+    --color-accent-subtle: rgba(0, 113, 227, 0.07);
 
     /* Message colors */
     --color-user-question: #f8f9fa;
@@ -84,6 +84,7 @@ header .container {
     width: 22px;
     height: 22px;
     color: var(--color-accent);
+    filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.05));
 }
 
 .logo h1 {
@@ -198,7 +199,8 @@ main {
     width: 28px;
     height: 28px;
     border-radius: 50%;
-    background: var(--color-accent);
+    background: linear-gradient(135deg, var(--color-accent), #3395ff);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -209,6 +211,7 @@ main {
     width: 18px;
     height: 18px;
     color: white;
+    filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.1));
 }
 
 .welcome-message p {
@@ -276,7 +279,7 @@ main {
 }
 
 #main-send-button:hover {
-    background-color: #0066dd;
+    background-color: #0062c1;
     transform: translateY(-1px);
 }
 
@@ -431,6 +434,7 @@ footer {
     height: 22px;
     color: var(--color-accent);
     flex-shrink: 0;
+    filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.05));
 }
 
 .answer-text {
@@ -486,7 +490,7 @@ footer {
 }
 
 .play-audio-button:hover {
-    background-color: rgba(0, 119, 255, 0.15);
+    background-color: rgba(0, 113, 227, 0.15);
 }
 
 /* Loading spinner */
