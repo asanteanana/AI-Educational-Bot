@@ -1,6 +1,6 @@
 /* Minimal, clean design inspired by Apple and OpenAI */
 :root {
-    /* Core colors - more subtle, refined palette */
+    /* Core colors - OpenAI inspired neutral palette */
     --color-background: #ffffff;
     --color-foreground: #000000;
     --color-gray-50: #f9f9f9;
@@ -12,9 +12,10 @@
     --color-gray-600: #525252;
     --color-gray-700: #404040;
 
-    /* Subtle accent colors */
-    --color-accent: #0077ed;
-    --color-accent-subtle: rgba(0, 119, 237, 0.1);
+    /* OpenAI-style accent colors (no blue) */
+    --color-accent: #10a37f;
+    /* OpenAI green */
+    --color-accent-subtle: rgba(16, 163, 127, 0.1);
 
     /* Message colors */
     --color-user-question: #f9f9f9;
@@ -57,13 +58,11 @@ body {
     padding: 0 1.5rem;
 }
 
-/* Header */
+/* OpenAI-style header and navigation */
 header {
-    padding: 1rem 0;
+    padding: 0.875rem 0;
     border-bottom: 1px solid var(--color-gray-100);
-    background-color: rgba(255, 255, 255, 0.8);
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
+    background-color: var(--color-background);
     position: sticky;
     top: 0;
     z-index: 100;
@@ -82,18 +81,19 @@ header .container {
 }
 
 .logo .icon {
-    width: 18px;
-    height: 18px;
+    width: 20px;
+    height: 20px;
     color: var(--color-foreground);
 }
 
 .logo h1 {
     font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, sans-serif;
-    font-size: 1.125rem;
-    font-weight: 500;
+    font-size: 1rem;
+    font-weight: 600;
     letter-spacing: -0.01em;
 }
 
+/* Super minimal OpenAI-style navigation */
 nav ul {
     display: flex;
     list-style: none;
@@ -103,28 +103,24 @@ nav ul {
 nav a {
     color: var(--color-gray-500);
     text-decoration: none;
-    font-size: 0.875rem;
-    font-weight: 500;
-    position: relative;
+    font-size: 0.9375rem;
+    font-weight: 450;
+    letter-spacing: -0.01em;
     transition: var(--transition);
+    padding: 0.25rem 0;
 }
 
 nav a:hover {
-    color: var(--color-gray-700);
+    color: var(--color-foreground);
 }
 
 nav a.active {
     color: var(--color-foreground);
+    font-weight: 450;
 }
 
 nav a.active:after {
-    content: '';
-    position: absolute;
-    left: 0;
-    right: 0;
-    bottom: -3px;
-    height: 1px;
-    background-color: var(--color-foreground);
+    display: none;
 }
 
 /* Main content */
@@ -254,6 +250,7 @@ main {
     color: var(--color-gray-400);
 }
 
+/* Override button styles with OpenAI green */
 #main-send-button {
     background-color: var(--color-accent);
     color: white;
@@ -270,11 +267,15 @@ main {
 }
 
 #main-send-button:hover {
-    background-color: #0066cc;
+    background-color: #0d8c6d;
+    /* Darker green on hover */
+    transform: translateY(-1px);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
 #main-send-button:active {
-    transform: scale(0.98);
+    transform: translateY(0);
+    box-shadow: none;
 }
 
 #main-send-button:disabled {
@@ -295,6 +296,7 @@ main {
     transition: var(--transition);
 }
 
+/* OpenAI-style voice button hover */
 #voice-input-button:hover {
     color: var(--color-accent);
     background-color: var(--color-accent-subtle);
@@ -335,6 +337,7 @@ footer {
     border-bottom: 1px solid var(--color-gray-100);
 }
 
+/* Update text-button color to match OpenAI */
 .text-button {
     display: flex;
     align-items: center;
@@ -416,6 +419,7 @@ footer {
     gap: 0.75rem;
 }
 
+/* Update assistant icon color to match OpenAI */
 .assistant-icon {
     width: 24px;
     height: 24px;
@@ -455,6 +459,11 @@ footer {
 .action-button:hover {
     background-color: var(--color-gray-50);
     border-color: var(--color-gray-300);
+    transform: translateY(-1px);
+}
+
+.action-button:active {
+    transform: translateY(0);
 }
 
 .action-button svg {
@@ -599,8 +608,9 @@ footer {
         --color-user-question: #1a1a1a;
         --color-ai-answer: #0e0e0e;
         --color-button-hover: #1e1e1e;
-        --color-accent: #0a84ff;
-        --color-accent-subtle: rgba(10, 132, 255, 0.1);
+        --color-accent: #10a37f;
+        /* Keep OpenAI green in dark mode */
+        --color-accent-subtle: rgba(16, 163, 127, 0.1);
     }
 
     header {
