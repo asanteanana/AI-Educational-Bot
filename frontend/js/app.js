@@ -1,5 +1,5 @@
-// Import Framer Motion for subtle animations
-import { animate } from 'https://cdn.skypack.dev/framer-motion@4.1.17/dist/es/index.mjs';
+// Import Framer Motion for technical animations
+import { animate, spring } from 'https://cdn.skypack.dev/framer-motion@4.1.17/dist/es/index.mjs';
 
 // DOM Elements
 const mainForm = document.getElementById('main-form');
@@ -11,50 +11,50 @@ const qaContainer = document.getElementById('qa-container');
 const newConversationButton = document.getElementById('new-conversation');
 const voiceInputButton = document.getElementById('voice-input-button');
 
-// Demo responses to simulate a backend - using clear, concise language
+// Technical, Wikipedia-like responses
 const demoResponses = {
-    "hello": "Hello! I'm Knowledge, your learning companion. How can I help you today?",
-    "who are you": "I'm Knowledge, an AI assistant designed to help you learn and explore new topics. I provide information, answer questions, and can read responses aloud.",
-    "what can you do": "I can answer questions about various topics, explain concepts, and provide information to help you learn. I can also read my responses aloud for a more accessible experience.",
-    "help": "You can ask me questions about any topic you're interested in learning about. Just type your question, and I'll do my best to provide a helpful answer.",
-    "thanks": "You're welcome! If you have any other questions, feel free to ask.",
+    "hello": "Hello. This is the Knowledge Base system. I'm designed to provide technical information and assistance. How may I help you today?",
+    "who are you": "I am a knowledge retrieval and information processing system. My primary function is to provide factual information, technical explanations, and research assistance through natural language understanding.",
+    "what can you do": "My capabilities include: information retrieval from my knowledge base, explanation of complex topics, providing reference information, and generating audio versions of textual responses for accessibility.",
+    "help": "You can interact with this system by entering queries related to any topic you wish to learn about. The system will attempt to provide factual, relevant information based on available knowledge.",
+    "thanks": "Acknowledged. If you require further information, please submit a new query.",
 };
 
-// Backend API simulation
+// Backend API simulation with technical response
 const simulateAPIResponse = async (question) => {
-    // Simulate network latency (300-800ms)
-    const delay = Math.floor(Math.random() * 500) + 300;
+    // Simulate realistic network latency (400-700ms)
+    const delay = Math.floor(Math.random() * 300) + 400;
     await new Promise(resolve => setTimeout(resolve, delay));
 
-    // Normalize the question
+    // Process input query
     const normalizedQuestion = question.toLowerCase().replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g, "");
 
-    // Check for keywords in the question
+    // Information retrieval logic
     for (const [keyword, response] of Object.entries(demoResponses)) {
         if (normalizedQuestion.includes(keyword)) {
             return response;
         }
     }
 
-    // Fallback responses with clear, helpful tone
+    // Technical fallback responses
     const fallbackResponses = [
-        "That's an interesting question. In a full implementation, I would connect to a knowledge base to provide a comprehensive answer.",
-        "I understand your question. In the complete version, I would provide a detailed answer with reliable information.",
-        "Good question. The full version would access a knowledge database to give you an in-depth response to this topic.",
-        "This is a demo version with limited responses. The full implementation would provide thorough answers on this subject.",
-        "I'd like to help with that. In the complete version, I would provide a detailed answer to your question."
+        "The system does not currently have sufficient information to provide a comprehensive answer to this query. In a production environment, this would connect to a knowledge base with relevant data.",
+        "Query processed. This demonstration has limited data access. A complete implementation would retrieve information from technical documentation and knowledge repositories.",
+        "This query requires access to specialized data sources that are not available in this demonstration. The production system would access scientific and technical databases to provide accurate information.",
+        "This is a limited demonstration environment. The full system would analyze your query against verified information sources to generate a precise technical response.",
+        "Query noted. In a production environment, this system would perform information retrieval from trusted sources to provide a factual, referenced response to your question."
     ];
 
     return fallbackResponses[Math.floor(Math.random() * fallbackResponses.length)];
 };
 
-// Create a minimal typing indicator
+// Create a technical typing indicator
 const createTypingIndicator = () => {
     const typingIndicator = document.createElement('div');
     typingIndicator.className = 'typing-indicator';
-    typingIndicator.setAttribute('aria-label', 'Assistant is thinking');
+    typingIndicator.setAttribute('aria-label', 'Processing query');
 
-    // Create 3 dots for the typing animation
+    // Create dots for the typing animation
     for (let i = 0; i < 3; i++) {
         const dot = document.createElement('span');
         dot.className = 'typing-dot';
@@ -64,7 +64,7 @@ const createTypingIndicator = () => {
     return typingIndicator;
 };
 
-// Clean notification function
+// Clean, minimal notification
 const showNotification = (message, duration = 2000) => {
     // Remove any existing notifications
     const existingNotification = document.querySelector('.notification');
@@ -72,22 +72,36 @@ const showNotification = (message, duration = 2000) => {
         existingNotification.remove();
     }
 
-    // Create new notification
+    // Create notification element
     const notification = document.createElement('div');
     notification.className = 'notification';
     notification.textContent = message;
     notification.setAttribute('role', 'status');
     document.body.appendChild(notification);
 
-    // Show notification
+    // Animate appearance with Framer Motion
     setTimeout(() => {
-        notification.style.opacity = '1';
+        notification.style.opacity = '0';
+        notification.style.transform = 'translate(-50%, 0)';
+
+        animate(notification, {
+            opacity: [0, 1],
+            y: [10, 0]
+        }, {
+            duration: 0.2,
+            ease: [0.4, 0, 0.2, 1]
+        });
     }, 10);
 
     // Remove after duration
     setTimeout(() => {
-        notification.style.opacity = '0';
-        setTimeout(() => notification.remove(), 300);
+        animate(notification, {
+            opacity: [1, 0],
+            y: [0, 10]
+        }, {
+            duration: 0.2,
+            ease: [0.4, 0, 0.2, 1]
+        }).then(() => notification.remove());
     }, duration);
 };
 
@@ -103,24 +117,43 @@ const createQAPair = (question, answer) => {
     return qaPair;
 };
 
-// Handle the submission of a question
+// Handle the submission of a query
 const handleQuestionSubmit = async (question) => {
     if (!question.trim()) return;
 
     // Hide welcome message if visible
     if (welcomeMessage) {
-        welcomeMessage.style.display = 'none';
+        animate(welcomeMessage, { opacity: [1, 0] }, { duration: 0.2 }).then(() => {
+            welcomeMessage.style.display = 'none';
+        });
     }
 
     // Show conversation container
-    conversationContainer.classList.remove('hidden');
+    if (conversationContainer.classList.contains('hidden')) {
+        conversationContainer.classList.remove('hidden');
+        conversationContainer.style.opacity = '0';
+        animate(conversationContainer, { opacity: [0, 1] }, { duration: 0.3 });
+    }
 
     // Create a new QA pair and add it to the container
     const newPair = createQAPair(question, '');
     const qaPairElement = newPair.querySelector('.qa-pair');
 
+    // Set initial opacity to 0 for animation
+    qaPairElement.style.opacity = '0';
+    qaPairElement.style.transform = 'translateY(10px)';
+
     // Add the pair to the container
     qaContainer.appendChild(newPair);
+
+    // Animate the new pair appearing
+    animate(qaPairElement, {
+        opacity: [0, 1],
+        y: [10, 0]
+    }, {
+        duration: 0.3,
+        ease: [0.4, 0, 0.2, 1]
+    });
 
     // Create and add typing indicator to the answer container
     const answerContainer = qaPairElement.querySelector('.answer-container');
@@ -141,12 +174,17 @@ const handleQuestionSubmit = async (question) => {
         // Remove typing indicator
         typingIndicator.remove();
 
-        // Show answer with subtle fade in
+        // Show answer with technical fade in
         answerText.textContent = response;
         answerText.style.opacity = '0';
         answerText.style.display = 'block';
 
-        animate(answerText, { opacity: [0, 1] }, { duration: 0.3 });
+        animate(answerText, {
+            opacity: [0, 1]
+        }, {
+            duration: 0.25,
+            ease: [0.4, 0, 0.2, 1]
+        });
 
         // Show answer actions
         const actionsElement = qaPairElement.querySelector('.answer-actions');
@@ -154,8 +192,13 @@ const handleQuestionSubmit = async (question) => {
         actionsElement.style.display = 'flex';
 
         setTimeout(() => {
-            animate(actionsElement, { opacity: [0, 1] }, { duration: 0.3 });
-        }, 200);
+            animate(actionsElement, {
+                opacity: [0, 1]
+            }, {
+                duration: 0.25,
+                ease: [0.4, 0, 0.2, 1]
+            });
+        }, 150);
 
         // Set up action buttons
         setupActionButtons(qaPairElement, response);
@@ -169,7 +212,7 @@ const handleQuestionSubmit = async (question) => {
 
         // Remove typing indicator and show error message
         typingIndicator.remove();
-        answerText.textContent = "I'm having trouble connecting right now. Please try again later.";
+        answerText.textContent = "System error: Unable to process query at this time. Please try again later.";
         answerText.style.display = 'block';
     }
 };
@@ -191,12 +234,23 @@ const setupActionButtons = (qaPairElement, answerText) => {
         const answerTextElement = qaPairElement.querySelector('.answer-text');
         const actionsElement = qaPairElement.querySelector('.answer-actions');
 
-        // Hide answer and actions
-        await animate(answerTextElement, { opacity: [1, 0] }, { duration: 0.2 }).then(() => {
+        // Hide answer and actions with technical animation
+        await animate(answerTextElement, {
+            opacity: [1, 0],
+            y: [0, -5]
+        }, {
+            duration: 0.2,
+            ease: [0.4, 0, 0.2, 1]
+        }).then(() => {
             answerTextElement.style.display = 'none';
         });
 
-        await animate(actionsElement, { opacity: [1, 0] }, { duration: 0.2 }).then(() => {
+        await animate(actionsElement, {
+            opacity: [1, 0]
+        }, {
+            duration: 0.2,
+            ease: [0.4, 0, 0.2, 1]
+        }).then(() => {
             actionsElement.style.display = 'none';
         });
 
@@ -206,33 +260,46 @@ const setupActionButtons = (qaPairElement, answerText) => {
         answerContainer.insertBefore(typingIndicator, answerContainer.firstChild);
 
         try {
-            // Get a new response
-            await new Promise(resolve => setTimeout(resolve, 500));
+            // Get a new response with appropriate delay for realism
+            await new Promise(resolve => setTimeout(resolve, 600));
             const newResponse = await simulateAPIResponse(questionText);
 
             // Remove typing indicator
             typingIndicator.remove();
 
-            // Update answer text
+            // Update answer text with technical animation
             answerTextElement.textContent = newResponse;
             answerTextElement.style.display = 'block';
-            animate(answerTextElement, { opacity: [0, 1] }, { duration: 0.3 });
+            answerTextElement.style.transform = 'translateY(5px)';
+
+            animate(answerTextElement, {
+                opacity: [0, 1],
+                y: [5, 0]
+            }, {
+                duration: 0.25,
+                ease: [0.4, 0, 0.2, 1]
+            });
 
             // Show answer actions
             setTimeout(() => {
                 actionsElement.style.display = 'flex';
-                animate(actionsElement, { opacity: [0, 1] }, { duration: 0.3 });
-            }, 200);
+                animate(actionsElement, {
+                    opacity: [0, 1]
+                }, {
+                    duration: 0.25,
+                    ease: [0.4, 0, 0.2, 1]
+                });
+            }, 150);
 
             // Update the action buttons with the new response
             playButton.onclick = () => speak(newResponse);
             downloadButton.onclick = () => downloadAudio(newResponse);
 
-            showNotification('Response updated');
+            showNotification("Response regenerated");
         } catch (error) {
             console.error('Error regenerating response:', error);
             typingIndicator.remove();
-            answerTextElement.textContent = "I'm having trouble generating a response. Please try again.";
+            answerTextElement.textContent = "System error: Unable to regenerate response at this time.";
             answerTextElement.style.display = 'block';
             actionsElement.style.display = 'flex';
         }
@@ -244,10 +311,10 @@ const setupActionButtons = (qaPairElement, answerText) => {
     });
 };
 
-// Accessible text-to-speech function
+// Technical text-to-speech implementation
 const speak = (text) => {
     if (!window.speechSynthesis) {
-        showNotification("Text-to-speech is not supported in your browser");
+        showNotification("Text-to-speech functionality unavailable in this browser");
         return;
     }
 
@@ -259,7 +326,7 @@ const speak = (text) => {
     // Get available voices
     const voices = window.speechSynthesis.getVoices();
 
-    // Find a good voice
+    // Find an appropriate voice for technical content
     const findVoiceByName = (nameFragment) => {
         return voices.find(voice =>
             voice.name.toLowerCase().includes(nameFragment.toLowerCase())
@@ -267,7 +334,7 @@ const speak = (text) => {
     };
 
     // Prefer high-quality voices
-    const selectedVoice = findVoiceByName('Samantha') ||
+    const selectedVoice = findVoiceByName('Daniel') ||
         findVoiceByName('Google US English') ||
         voices.find(voice => voice.lang === 'en-US') ||
         voices[0];
@@ -276,34 +343,43 @@ const speak = (text) => {
         utterance.voice = selectedVoice;
     }
 
+    // Technical parameters
+    utterance.rate = 0.95; // Slightly slower for clarity
+    utterance.pitch = 1.0; // Natural pitch
+
     // Show notification
     utterance.onstart = () => {
-        showNotification("Playing audio...");
+        showNotification("Audio playback initiated");
     };
 
     utterance.onend = () => {
-        showNotification("Audio complete", 1500);
+        showNotification("Audio playback complete");
     };
 
     window.speechSynthesis.speak(utterance);
 };
 
-// Download audio function
+// Technical download audio implementation
 const downloadAudio = async (text) => {
     try {
-        showNotification("Preparing audio download...");
+        showNotification("Preparing audio file...");
 
         // In a real implementation, this would connect to a backend
         setTimeout(() => {
-            showNotification("Audio ready to download", 2000);
-        }, 1000);
+            showNotification("Audio file prepared and ready for download", 2000);
+        }, 1200);
 
         // Real implementation would use:
         /*
         const response = await fetch('/api/text-to-speech', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ text })
+            body: JSON.stringify({ 
+                text,
+                format: 'mp3',
+                quality: 'high',
+                voice: 'en-US-Neural2-D'
+            })
         });
         
         const audioBlob = await response.blob();
@@ -318,11 +394,11 @@ const downloadAudio = async (text) => {
         */
     } catch (error) {
         console.error('Error downloading audio:', error);
-        showNotification("Could not prepare audio for download");
+        showNotification("Unable to prepare audio file for download");
     }
 };
 
-// Set up voice input
+// Technical voice input setup
 const setupVoiceInput = () => {
     if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
         voiceInputButton.style.display = 'none';
@@ -337,7 +413,7 @@ const setupVoiceInput = () => {
 
     recognition.onstart = () => {
         voiceInputButton.classList.add('recording');
-        showNotification("Listening...");
+        showNotification("Voice input active");
     };
 
     recognition.onresult = (event) => {
@@ -354,7 +430,7 @@ const setupVoiceInput = () => {
     recognition.onerror = (event) => {
         console.error('Speech recognition error', event.error);
         voiceInputButton.classList.remove('recording');
-        showNotification("Couldn't understand speech. Please try again.");
+        showNotification("Voice input error: Unable to process speech");
     };
 
     voiceInputButton.addEventListener('click', () => {
@@ -366,7 +442,7 @@ const setupVoiceInput = () => {
     });
 };
 
-// Initialize the app
+// Initialize the app with technical focus
 const initApp = () => {
     // Focus on input field
     mainQuestionInput.focus();
@@ -395,26 +471,32 @@ const initApp = () => {
             });
     });
 
-    // Set up new conversation button
+    // Set up new conversation button with technical animation
     newConversationButton.addEventListener('click', () => {
         // Fade out the conversation container
-        animate(qaContainer, { opacity: [1, 0] }, { duration: 0.3 })
-            .then(() => {
-                // Clear the QA container
-                qaContainer.innerHTML = '';
+        animate(qaContainer, {
+            opacity: [1, 0]
+        }, {
+            duration: 0.3,
+            ease: [0.4, 0, 0.2, 1]
+        }).then(() => {
+            // Clear the QA container
+            qaContainer.innerHTML = '';
 
-                // Show welcome message, hide conversation container
-                if (welcomeMessage) {
-                    welcomeMessage.style.display = 'flex';
-                }
-                conversationContainer.classList.add('hidden');
+            // Show welcome message, hide conversation container
+            if (welcomeMessage) {
+                welcomeMessage.style.display = 'flex';
+                welcomeMessage.style.opacity = '0';
+                animate(welcomeMessage, { opacity: [0, 1] }, { duration: 0.3 });
+            }
+            conversationContainer.classList.add('hidden');
 
-                // Reset the view
-                window.scrollTo({ top: 0, behavior: 'smooth' });
+            // Reset the view
+            window.scrollTo({ top: 0, behavior: 'smooth' });
 
-                // Focus on input
-                mainQuestionInput.focus();
-            });
+            // Focus on input
+            mainQuestionInput.focus();
+        });
     });
 
     // Set up voice input if available
@@ -423,7 +505,7 @@ const initApp = () => {
 
 // Wait for document to load
 document.addEventListener('DOMContentLoaded', () => {
-    console.log('Knowledge app initialized');
+    console.log('Knowledge Base system initialized');
 
     // Initialize app
     initApp();
