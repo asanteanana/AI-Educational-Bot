@@ -4,16 +4,18 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Knowledge Base | AI-Powered Learning</title>
+  <title>Knowledge Wiki</title>
   <meta name="description"
-    content="An AI knowledge base for information retrieval, education, and research. Technical information with text and audio responses." />
+    content="A collaborative knowledge system with audio responses and natural language processing." />
   <link rel="icon"
-    href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%2310a37f'%3E%3Ccircle cx='12' cy='12' r='10' /%3E%3C/svg%3E"
+    href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23333'%3E%3Ccircle cx='12' cy='12' r='10' /%3E%3C/svg%3E"
     type="image/svg+xml">
   <link rel="stylesheet" href="css/styles.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:wght@400;700&family=Roboto:wght@400;500&display=swap"
+    rel="stylesheet">
 </head>
 
 <body>
@@ -23,26 +25,50 @@
         <svg class="icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
           <circle cx="12" cy="12" r="10" fill="currentColor" />
         </svg>
-        <h1>Knowledge Base</h1>
+        <h1>Knowledge Wiki</h1>
       </div>
       <nav>
         <ul>
-          <li><a href="#" class="active">Home</a></li>
-          <li><a href="#">Documentation</a></li>
+          <li><a href="#" class="active">Main</a></li>
+          <li><a href="#">Reference</a></li>
         </ul>
       </nav>
     </div>
   </header>
 
+  <!-- Theme toggle -->
+  <div class="theme-toggle">
+    <button id="light-mode-button" class="active" aria-label="Switch to light mode">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+        stroke-linejoin="round">
+        <circle cx="12" cy="12" r="5"></circle>
+        <line x1="12" y1="1" x2="12" y2="3"></line>
+        <line x1="12" y1="21" x2="12" y2="23"></line>
+        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+        <line x1="1" y1="12" x2="3" y2="12"></line>
+        <line x1="21" y1="12" x2="23" y2="12"></line>
+        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+      </svg>
+    </button>
+    <button id="dark-mode-button" aria-label="Switch to dark mode">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+        stroke-linejoin="round">
+        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+      </svg>
+    </button>
+  </div>
+
   <main>
     <div class="container">
       <section class="hero">
-        <h1 class="hero-title">AI-powered information retrieval</h1>
-        <p class="hero-subtitle">A technical knowledge system designed to provide accurate information, explanations,
-          and research assistance through structured query processing and natural language responses.</p>
+        <h1 class="hero-title">Interactive Knowledge System</h1>
+        <p class="hero-subtitle">Access information through natural language queries with both text and audio responses.
+          Ask questions to retrieve information on any topic.</p>
 
         <div class="divider">
-          <span>Current Session</span>
+          <span>Current Dialog</span>
         </div>
 
         <div id="welcome-message" class="welcome-message">
@@ -51,15 +77,14 @@
               <circle cx="12" cy="12" r="10" fill="currentColor" />
             </svg>
           </div>
-          <p>This is an AI knowledge system designed to answer queries with factual information. What would you like to
-            know?</p>
+          <p>Welcome to the knowledge system. You can type a question or use voice input to retrieve information.</p>
         </div>
 
         <div class="main-input-container">
           <form id="main-form" class="main-input">
             <input type="text" id="main-question-input" placeholder="Enter your query..." autocomplete="off">
             <button type="submit" id="main-send-button">
-              <span class="button-text">Submit</span>
+              <span class="button-text">Search</span>
               <span class="loading-spinner"></span>
             </button>
             <button type="button" id="voice-input-button" aria-label="Use voice input">
@@ -83,7 +108,7 @@
               <line x1="12" y1="5" x2="12" y2="19"></line>
               <line x1="5" y1="12" x2="19" y2="12"></line>
             </svg>
-            New Session
+            New Dialog
           </button>
         </div>
 
@@ -96,7 +121,7 @@
 
   <footer>
     <div class="container">
-      <p>© 2025 Knowledge Base | Technical Assistance System | Version 1.0.4</p>
+      <p>Knowledge Wiki | Text & Audio Information Retrieval | CC BY-SA 4.0</p>
     </div>
   </footer>
 
@@ -130,7 +155,7 @@
               <path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path>
               <path d="M19.07 4.93a10 10 0 0 1 0 14.14"></path>
             </svg>
-            <span>Audio</span>
+            <span>Listen</span>
           </button>
 
           <button class="action-button regenerate-button" aria-label="Regenerate response">
@@ -140,7 +165,7 @@
               <path d="M1 20v-6h6"></path>
               <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path>
             </svg>
-            <span>Regenerate</span>
+            <span>Refresh</span>
           </button>
 
           <button class="action-button download-audio-button" aria-label="Download audio">
@@ -150,7 +175,7 @@
               <polyline points="7 10 12 15 17 10"></polyline>
               <line x1="12" y1="15" x2="12" y2="3"></line>
             </svg>
-            <span>Download</span>
+            <span>Save Audio</span>
           </button>
         </div>
       </div>
