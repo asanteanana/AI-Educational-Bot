@@ -5,8 +5,8 @@
     --color-card: #ffffff;
     --color-foreground: #1d1d1f;
     --color-foreground-secondary: #86868b;
-    --color-accent: #6e6ef9;
-    --color-accent-light: rgba(110, 110, 249, 0.08);
+    --color-accent: #0071e3;
+    --color-accent-light: rgba(0, 113, 227, 0.08);
     --color-success: #34c759;
     --color-error: #ff3b30;
 
@@ -133,16 +133,15 @@ body {
     display: flex;
     align-items: center;
     background-color: var(--color-input-bg);
-    border: 1px solid var(--color-border);
+    border: none;
     border-radius: var(--radius-full);
     padding: var(--space-2) var(--space-2) var(--space-2) var(--space-4);
     transition: var(--transition-fast);
-    box-shadow: var(--shadow-sm);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1), 0 0 0 1px rgba(0, 0, 0, 0.05);
 }
 
 .input-wrapper:focus-within {
     box-shadow: 0 0 0 4px var(--color-accent-light);
-    border-color: var(--color-accent);
 }
 
 .input-field {
@@ -546,8 +545,8 @@ body {
     --color-card: #2c2c2e;
     --color-foreground: #f5f5f7;
     --color-foreground-secondary: #a1a1a6;
-    --color-accent: #7575ff;
-    --color-accent-light: rgba(117, 117, 255, 0.12);
+    --color-accent: #0a84ff;
+    --color-accent-light: rgba(10, 132, 255, 0.12);
     --color-border: rgba(255, 255, 255, 0.1);
     --color-input-bg: rgba(255, 255, 255, 0.05);
 
