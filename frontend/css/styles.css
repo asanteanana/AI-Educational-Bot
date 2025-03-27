@@ -8,15 +8,20 @@
 
     /* Status colors */
     --color-success: #34c759;
+    /* Green for completed */
     --color-error: #ff3b30;
+    /* Red for errors */
     --color-warning: #ffcc00;
+    /* Yellow for pending */
     --color-info: #0071e3;
-    /* Apple blue */
+    /* Apple blue for info */
     --color-neutral: #8e8e93;
+    /* Gray for inactive */
+    --color-submitting: #64d2ff;
+    /* Light blue for submitting */
 
     /* Accent colors */
     --color-accent: #0071e3;
-    /* Apple blue */
     --color-accent-light: rgba(0, 113, 227, 0.08);
 
     /* Status background colors */
@@ -25,6 +30,7 @@
     --color-warning-bg: rgba(255, 204, 0, 0.1);
     --color-info-bg: rgba(0, 113, 227, 0.08);
     --color-neutral-bg: rgba(142, 142, 147, 0.1);
+    --color-submitting-bg: rgba(100, 210, 255, 0.1);
 
     /* UI colors */
     --color-border: rgba(0, 0, 0, 0.06);
@@ -85,7 +91,7 @@ body {
 
 /* Main container - more Apple-like container */
 .app-container {
-    max-width: 780px;
+    max-width: 740px;
     width: 100%;
     margin: 0 auto;
     padding: 0;
@@ -105,7 +111,7 @@ body {
     flex-direction: column;
     align-items: center;
     text-align: center;
-    padding: var(--space-8) var(--space-6) var(--space-6);
+    padding: var(--space-6) var(--space-6) var(--space-5);
     border-bottom: 1px solid var(--color-border);
     background-color: var(--color-card);
     transition: background-color 0.3s ease, border-color 0.3s ease;
@@ -115,26 +121,26 @@ body {
     display: flex;
     align-items: center;
     gap: var(--space-2);
-    margin-bottom: var(--space-4);
+    margin-bottom: var(--space-3);
 }
 
 .app-logo svg {
-    width: 24px;
-    height: 24px;
+    width: 20px;
+    height: 20px;
     color: var(--color-accent);
 }
 
 .app-logo-text {
     font-family: var(--font-display);
-    font-size: 17px;
+    font-size: 15px;
     font-weight: 600;
     color: var(--color-foreground);
-    margin-left: var(--space-2);
+    margin-left: var(--space-1);
 }
 
 .app-title {
     font-family: var(--font-display);
-    font-size: 28px;
+    font-size: 24px;
     font-weight: 600;
     color: var(--color-foreground);
     margin-bottom: var(--space-2);
@@ -152,7 +158,7 @@ body {
 
 /* Input container - styled more like Apple search */
 .input-container {
-    padding: var(--space-6);
+    padding: var(--space-5);
     border-bottom: 1px solid var(--color-border);
 }
 
@@ -176,7 +182,7 @@ body {
     flex: 1;
     border: none;
     background: transparent;
-    font-size: 16px;
+    font-size: 15px;
     padding: var(--space-2);
     color: var(--color-foreground);
     font-family: var(--font-primary);
@@ -208,18 +214,16 @@ body {
 }
 
 .send-button svg {
-    width: 14px;
-    height: 14px;
+    width: 13px;
+    height: 13px;
 }
 
 .voice-button {
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 28px;
-    /* Reduced from 32px */
-    height: 28px;
-    /* Reduced from 32px */
+    width: 26px;
+    height: 26px;
     border-radius: var(--radius-full);
     background-color: transparent;
     color: var(--color-foreground-secondary);
@@ -235,10 +239,8 @@ body {
 }
 
 .voice-button svg {
-    width: 14px;
-    /* Reduced from 16px */
-    height: 14px;
-    /* Reduced from 16px */
+    width: 13px;
+    height: 13px;
 }
 
 .voice-button.recording {
@@ -246,141 +248,105 @@ body {
     animation: pulse 2s infinite;
 }
 
-/* Topic section - styled like Apple cards */
-.topic-section {
-    padding: var(--space-6);
-    border-bottom: 1px solid var(--color-border);
-}
-
-.or-divider {
-    display: flex;
-    align-items: center;
-    margin-bottom: var(--space-5);
-    color: var(--color-foreground-secondary);
-    font-size: 13px;
-    font-weight: 500;
-}
-
-.or-divider::before,
-.or-divider::after {
-    content: "";
-    flex: 1;
-    height: 1px;
-    background-color: var(--color-border);
-    margin: 0 var(--space-3);
-}
-
-.topics-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: var(--space-3);
-}
-
-.topic-button {
-    display: flex;
-    align-items: center;
-    padding: var(--space-4);
-    background-color: var(--color-input-bg);
-    border-radius: var(--radius-md);
-    transition: all var(--transition-fast);
-    cursor: pointer;
-    border: none;
-}
-
-.topic-button:hover {
-    background-color: var(--color-accent-light);
-    transform: translateY(-2px);
-}
-
-.topic-icon {
-    width: 20px;
-    height: 20px;
-    color: var(--color-accent);
-    margin-right: var(--space-3);
-    flex-shrink: 0;
-}
-
-.topic-label {
-    font-size: 14px;
-    font-weight: 600;
-    color: var(--color-foreground);
-    margin-bottom: var(--space-1);
-}
-
-.topic-description {
-    font-size: 12px;
-    color: var(--color-foreground-secondary);
-}
-
-/* Conversation display - styled more like Apple Messages */
+/* Conversation display - styled like visa status table */
 .conversation {
     display: flex;
     flex-direction: column;
-    padding: var(--space-4) 0;
+    padding: 0;
+    overflow-y: auto;
+    max-height: 500px;
+}
+
+.conversation-header {
+    display: flex;
+    padding: var(--space-3) var(--space-5);
+    border-bottom: 1px solid var(--color-border);
+    background-color: var(--color-input-bg);
+    font-weight: 600;
+    font-size: 13px;
+    color: var(--color-foreground-secondary);
 }
 
 .message {
     display: flex;
-    padding: var(--space-3) var(--space-6);
-    border-bottom: none;
+    padding: var(--space-3) var(--space-5);
+    border-bottom: 1px solid var(--color-border);
 }
 
-.message:nth-child(odd) {
-    background-color: transparent;
-}
-
-.message-avatar {
-    width: 28px;
-    height: 28px;
-    border-radius: var(--radius-full);
-    background-color: var(--color-info-bg);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-    margin-right: var(--space-4);
-}
-
-.message-avatar.user {
-    background-color: var(--color-accent);
-    color: white;
-}
-
-.message-avatar svg {
-    width: 16px;
-    height: 16px;
+.message:nth-child(even) {
+    background-color: var(--color-table-row-alt);
 }
 
 .message-content {
     flex: 1;
-    font-size: 15px;
+    font-size: 14px;
     line-height: 1.5;
 }
 
 .message-text {
-    background-color: var(--color-input-bg);
-    padding: var(--space-3) var(--space-4);
-    border-radius: var(--radius-lg);
-    box-shadow: var(--shadow-sm);
-    border: none;
+    padding: 0;
     margin-bottom: var(--space-3);
-    transition: background-color 0.3s ease;
 }
 
-.user .message-text {
-    background-color: var(--color-accent-light);
+/* Status Pills - inspired by visa application status */
+.status-pill {
+    display: inline-flex;
+    align-items: center;
+    border-radius: var(--radius-full);
+    padding: var(--space-1) var(--space-3);
+    font-size: 13px;
+    font-weight: 500;
+    margin-right: var(--space-2);
 }
 
+.status-pill svg {
+    width: 14px;
+    height: 14px;
+    margin-right: var(--space-1);
+}
+
+.status-success {
+    background-color: var(--color-success-bg);
+    color: var(--color-success);
+}
+
+.status-warning {
+    background-color: var(--color-warning-bg);
+    color: var(--color-warning);
+}
+
+.status-error {
+    background-color: var(--color-error-bg);
+    color: var(--color-error);
+}
+
+.status-info {
+    background-color: var(--color-info-bg);
+    color: var(--color-info);
+}
+
+.status-neutral {
+    background-color: var(--color-neutral-bg);
+    color: var(--color-neutral);
+}
+
+.status-submitting {
+    background-color: var(--color-submitting-bg);
+    color: var(--color-submitting);
+}
+
+/* Message actions */
 .message-actions {
     display: flex;
     gap: var(--space-2);
+    margin-top: var(--space-2);
 }
 
-/* Status-like buttons for the actions - more Apple style */
+/* Action buttons - flat like the Apple documentation buttons */
 .action-button {
     display: flex;
     align-items: center;
-    padding: var(--space-2) var(--space-3);
+    padding: var(--space-1) var(--space-3);
     border-radius: var(--radius-full);
     font-size: 13px;
     font-weight: 500;
@@ -403,7 +369,7 @@ body {
     transform: translateY(-1px);
 }
 
-/* Style buttons like Apple pills */
+/* Primary button */
 .action-button.primary {
     background-color: var(--color-accent);
     color: white;
@@ -414,23 +380,11 @@ body {
     color: white;
 }
 
-.regenerate-button {
-    background-color: var(--color-input-bg);
-    color: var(--color-foreground);
-}
-
-.download-audio-button {
-    background-color: var(--color-input-bg);
-    color: var(--color-foreground);
-}
-
 /* Loading animation */
 .typing {
     display: flex;
     gap: var(--space-1);
     padding: var(--space-2) var(--space-4);
-    background-color: var(--color-input-bg);
-    border-radius: var(--radius-lg);
     width: fit-content;
 }
 
@@ -522,6 +476,7 @@ body {
     --color-warning-bg: rgba(255, 204, 0, 0.2);
     --color-info-bg: rgba(10, 132, 255, 0.2);
     --color-neutral-bg: rgba(142, 142, 147, 0.2);
+    --color-submitting-bg: rgba(100, 210, 255, 0.2);
 }
 
 /* Notification */
@@ -570,6 +525,32 @@ body {
     }
 }
 
+/* Welcome message */
+.welcome-container {
+    padding: var(--space-8) var(--space-5);
+    text-align: center;
+    color: var(--color-foreground-secondary);
+}
+
+.welcome-title {
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: var(--space-3);
+    color: var(--color-foreground);
+}
+
+.welcome-text {
+    font-size: 14px;
+    line-height: 1.5;
+    margin-bottom: var(--space-5);
+}
+
+.welcome-icon {
+    font-size: 32px;
+    margin-bottom: var(--space-4);
+    color: var(--color-accent);
+}
+
 /* Responsiveness */
 @media (max-width: 768px) {
     body {
@@ -582,7 +563,7 @@ body {
     }
 
     .app-header {
-        padding: var(--space-6) var(--space-4) var(--space-4);
+        padding: var(--space-5) var(--space-4) var(--space-4);
     }
 
     .app-title {
@@ -597,15 +578,11 @@ body {
         padding: var(--space-4);
     }
 
-    .topic-section {
-        padding: var(--space-4);
-    }
-
-    .topics-grid {
-        grid-template-columns: repeat(2, 1fr);
-    }
-
     .message {
+        padding: var(--space-3) var(--space-4);
+    }
+
+    .conversation-header {
         padding: var(--space-3) var(--space-4);
     }
 
@@ -616,10 +593,6 @@ body {
 }
 
 @media (max-width: 480px) {
-    .topics-grid {
-        grid-template-columns: 1fr;
-    }
-
     .message-actions {
         flex-wrap: wrap;
     }

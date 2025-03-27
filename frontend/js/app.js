@@ -5,25 +5,20 @@ import { animate, motion, spring } from 'https://cdn.skypack.dev/framer-motion@4
 const mainForm = document.getElementById('main-form');
 const mainQuestionInput = document.getElementById('main-question-input');
 const mainSendButton = document.getElementById('main-send-button');
-const welcomeMessage = document.getElementById('welcome-message');
-const conversationContainer = document.getElementById('conversation-container');
-const qaContainer = document.getElementById('qa-container');
-const newConversationButton = document.getElementById('new-conversation');
 const voiceInputButton = document.getElementById('voice-input-button');
 const lightModeButton = document.getElementById('light-mode-button');
 const darkModeButton = document.getElementById('dark-mode-button');
 const conversation = document.getElementById('conversation');
+const welcomeContainer = document.querySelector('.welcome-container');
+const conversationHeader = document.querySelector('.conversation-header');
 
-// Topic buttons
-const topicButtons = document.querySelectorAll('.topic-button');
-
-// Educational-focused responses with clear, helpful language
+// Friendly responses
 const demoResponses = {
     "hello": "Hello! I'm your personal assistant. How can I help you today?",
-    "who are you": "I'm an AI assistant designed to help you with information, answer questions, and assist with various tasks.",
-    "what can you do": "I can answer questions on many topics, provide explanations, suggest ideas, and offer information in both text and audio formats.",
-    "help": "I'd be happy to help! Just ask me any question or tell me what you need assistance with. I can explain concepts, provide information, or help you solve problems.",
-    "thanks": "You're welcome! If you need anything else, feel free to ask. I'm here to help.",
+    "who are you": "I'm an AI assistant designed to help you find information, answer questions, and assist with various tasks.",
+    "what can you do": "I can answer questions on many topics, provide explanations, suggest ideas, and offer information. If you'd like to hear my responses, I can also read them aloud.",
+    "help": "I'd be happy to help! Just ask me any question or tell me what you'd like assistance with. I can explain concepts, provide information, or help you solve problems.",
+    "thanks": "You're welcome! I'm glad I could help. If you need anything else, feel free to ask. I'm here anytime you need assistance.",
 };
 
 // Simulate retrieval of information
@@ -42,7 +37,7 @@ const simulateAPIResponse = async (question) => {
         }
     }
 
-    // Fallback responses
+    // Friendly fallback responses
     const fallbackResponses = [
         "That's an interesting question! While I don't have specific information on this topic right now, I'd be happy to help with something else.",
         "Great question! In a fully developed system, I'd provide you with a detailed answer about this topic.",
@@ -124,6 +119,30 @@ const createAssistantMessage = (answer) => {
 const handleQuestionSubmit = async (question) => {
     if (!question.trim()) return;
 
+    // Hide welcome message and show header if this is the first message
+    if (welcomeContainer && welcomeContainer.style.display !== 'none') {
+        animate(welcomeContainer, {
+            opacity: [1, 0],
+            height: [welcomeContainer.offsetHeight, 0]
+        }, {
+            duration: 0.3,
+            ease: [0.4, 0, 0.2, 1]
+        }).then(() => {
+            welcomeContainer.style.display = 'none';
+
+            // Show the conversation header
+            if (conversationHeader) {
+                conversationHeader.style.display = 'flex';
+                conversationHeader.style.opacity = '0';
+                animate(conversationHeader, {
+                    opacity: [0, 1]
+                }, {
+                    duration: 0.3
+                });
+            }
+        });
+    }
+
     // Add user message
     const userMessage = createUserMessage(question);
     conversation.appendChild(userMessage);
@@ -140,7 +159,7 @@ const handleQuestionSubmit = async (question) => {
         const response = await simulateAPIResponse(question);
 
         // Remove typing indicator
-        const typingElement = conversation.querySelector('.typing').parentNode.parentNode;
+        const typingElement = conversation.querySelector('.status-warning').closest('.message');
         conversation.removeChild(typingElement);
 
         // Add assistant message
@@ -169,7 +188,7 @@ const handleQuestionSubmit = async (question) => {
 
     } catch (error) {
         // Handle errors gracefully
-        const typingElement = conversation.querySelector('.typing').parentNode.parentNode;
+        const typingElement = conversation.querySelector('.status-warning').closest('.message');
         conversation.removeChild(typingElement);
 
         showNotification("An error occurred. Please try again.");
@@ -189,9 +208,27 @@ const setupActionButtons = (messageContent, answerText) => {
         if (isSpeaking) {
             window.speechSynthesis.cancel();
             isSpeaking = false;
-            playAudioButton.textContent = 'Listen';
+            playAudioButton.innerHTML = `
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                stroke-linejoin="round">
+                <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+                <path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+                <path d="M19.07 4.93a10 10 0 0 1 0 14.14"></path>
+            </svg>
+            Listen`;
             return;
         }
+
+        // Change status pill to show playing
+        const statusPill = messageContent.querySelector('.status-pill');
+        statusPill.className = 'status-pill status-info';
+        statusPill.innerHTML = `
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+            stroke-linejoin="round">
+            <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+            <path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+        </svg>
+        Playing audio`;
 
         try {
             await speak(answerText);
@@ -215,18 +252,48 @@ const setupActionButtons = (messageContent, answerText) => {
                     <path d="M19.07 4.93a10 10 0 0 1 0 14.14"></path>
                 </svg>
                 Listen`;
+
+                // Reset status pill
+                statusPill.className = 'status-pill status-success';
+                statusPill.innerHTML = `
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                    <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                </svg>
+                Complete`;
             }, { once: true });
 
         } catch (error) {
+            // Reset status pill
+            statusPill.className = 'status-pill status-success';
+            statusPill.innerHTML = `
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                <polyline points="22 4 12 14.01 9 11.01"></polyline>
+            </svg>
+            Complete`;
+
             showNotification('Could not play audio. Please try again.');
         }
     });
 
     // Set up regenerate button
     regenerateButton.addEventListener('click', async () => {
+        // Change status pill to show regenerating
+        const statusPill = messageContent.querySelector('.status-pill');
+        statusPill.className = 'status-pill status-warning';
+        statusPill.innerHTML = `
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M23 4v6h-6"></path>
+            <path d="M1 20v-6h6"></path>
+            <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path>
+        </svg>
+        Regenerating...`;
+
         try {
-            // Get the question from the previous message
-            const question = messageContent.parentNode.previousElementSibling.querySelector('.message-text').textContent;
+            // Get the question (first element before this one)
+            const questionElement = messageContent.closest('.message').previousElementSibling;
+            const question = questionElement.querySelector('.message-text').textContent;
 
             // Get new response
             const newResponse = await simulateAPIResponse(question);
@@ -237,17 +304,67 @@ const setupActionButtons = (messageContent, answerText) => {
             // Show notification
             showNotification('Response regenerated');
 
+            // Reset status pill
+            statusPill.className = 'status-pill status-success';
+            statusPill.innerHTML = `
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                <polyline points="22 4 12 14.01 9 11.01"></polyline>
+            </svg>
+            Complete`;
+
         } catch (error) {
+            // Reset status pill
+            statusPill.className = 'status-pill status-success';
+            statusPill.innerHTML = `
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                <polyline points="22 4 12 14.01 9 11.01"></polyline>
+            </svg>
+            Complete`;
+
             showNotification('Could not regenerate response. Please try again.');
         }
     });
 
     // Set up download audio button
     downloadAudioButton.addEventListener('click', async () => {
+        // Change status pill to show downloading
+        const statusPill = messageContent.querySelector('.status-pill');
+        statusPill.className = 'status-pill status-neutral';
+        statusPill.innerHTML = `
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+            <polyline points="7 10 12 15 17 10"></polyline>
+            <line x1="12" y1="15" x2="12" y2="3"></line>
+        </svg>
+        Downloading...`;
+
         try {
             await downloadAudio(answerText);
+
+            // Show notification
             showNotification('Audio file downloaded');
+
+            // Reset status pill
+            statusPill.className = 'status-pill status-success';
+            statusPill.innerHTML = `
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                <polyline points="22 4 12 14.01 9 11.01"></polyline>
+            </svg>
+            Complete`;
+
         } catch (error) {
+            // Reset status pill
+            statusPill.className = 'status-pill status-success';
+            statusPill.innerHTML = `
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                <polyline points="22 4 12 14.01 9 11.01"></polyline>
+            </svg>
+            Complete`;
+
             showNotification('Could not download audio. Please try again.');
         }
     });
@@ -292,7 +409,7 @@ const downloadAudio = async (text) => {
                 const url = URL.createObjectURL(blob);
                 const a = document.createElement('a');
                 a.href = url;
-                a.download = `response-${Date.now()}.txt`;
+                a.download = `assistant-response-${Date.now()}.txt`;
                 document.body.appendChild(a);
                 a.click();
 
@@ -339,6 +456,8 @@ const setupVoiceInput = () => {
 
         recognition.start();
         isListening = true;
+
+        showNotification('Listening... Speak clearly');
     });
 
     recognition.onresult = (event) => {
@@ -352,20 +471,24 @@ const setupVoiceInput = () => {
     recognition.onend = () => {
         isListening = false;
         voiceInputButton.classList.remove('recording');
-        mainQuestionInput.placeholder = 'What would you like to know?';
+        mainQuestionInput.placeholder = 'Type your question here...';
 
         if (mainQuestionInput.value.trim()) {
             // If we captured something, submit after a short delay
             setTimeout(() => {
                 mainForm.dispatchEvent(new Event('submit'));
             }, 300);
+        } else {
+            showNotification('No speech detected. Please try again.');
         }
     };
 
     recognition.onerror = () => {
         isListening = false;
         voiceInputButton.classList.remove('recording');
-        mainQuestionInput.placeholder = 'What would you like to know?';
+        mainQuestionInput.placeholder = 'Type your question here...';
+
+        showNotification('Speech recognition error. Please try again.');
     };
 };
 
@@ -414,19 +537,13 @@ const setupThemeToggle = () => {
     });
 };
 
-// Setup topic buttons
-const setupTopicButtons = () => {
-    topicButtons.forEach(button => {
-        button.addEventListener('click', () => {
-            const topic = button.getAttribute('data-topic');
-            mainQuestionInput.value = `Tell me about ${topic}`;
-            mainForm.dispatchEvent(new Event('submit'));
-        });
-    });
-};
-
 // Initialize the application
 const initApp = () => {
+    // Hide conversation header initially
+    if (conversationHeader) {
+        conversationHeader.style.display = 'none';
+    }
+
     // Setup event listeners
     mainForm.addEventListener('submit', (e) => {
         e.preventDefault();
@@ -442,9 +559,6 @@ const initApp = () => {
 
     // Setup theme toggle
     setupThemeToggle();
-
-    // Setup topic buttons
-    setupTopicButtons();
 
     // Focus input after load
     setTimeout(() => {

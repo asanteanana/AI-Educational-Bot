@@ -4,8 +4,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Ask - Friendly AI Assistant</title>
-  <meta name="description" content="Get friendly, helpful answers to your questions in seconds." />
+  <title>Ask - Personal Assistant</title>
+  <meta name="description" content="Your friendly personal assistant for quick answers and helpful information." />
   <link rel="icon"
     href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%230071e3'%3E%3Ccircle cx='12' cy='12' r='10' /%3E%3C/svg%3E"
     type="image/svg+xml">
@@ -47,17 +47,17 @@
         <svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
           <circle cx="12" cy="12" r="10" />
         </svg>
-        <span class="app-logo-text">Ask</span>
+        <span class="app-logo-text">Assistant</span>
       </div>
 
-      <h1 class="app-title">Your Personal Assistant</h1>
-      <p class="app-subtitle">Ask me anything and get helpful, accurate answers in seconds</p>
+      <h1 class="app-title">How can I help you today?</h1>
+      <p class="app-subtitle">Ask me a question or request information on any topic</p>
     </div>
 
     <div class="input-container">
       <form id="main-form">
         <div class="input-wrapper">
-          <input type="text" class="input-field" id="main-question-input" placeholder="What would you like to know?"
+          <input type="text" class="input-field" id="main-question-input" placeholder="Type your question here..."
             autocomplete="off">
           <button type="button" id="voice-input-button" class="voice-button" aria-label="Use voice input">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
@@ -79,137 +79,54 @@
       </form>
     </div>
 
-    <div class="topic-section">
-      <div class="or-divider">Popular topics</div>
-      <div class="topics-grid">
-        <div class="topic-button" data-topic="Today">
-          <svg class="topic-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-            stroke-linecap="round" stroke-linejoin="round">
-            <circle cx="12" cy="12" r="10"></circle>
-            <polyline points="12 6 12 12 16 14"></polyline>
-          </svg>
-          <div>
-            <div class="topic-label">Today</div>
-            <div class="topic-description">News and current topics</div>
-          </div>
-        </div>
-        <div class="topic-button" data-topic="Technology">
-          <svg class="topic-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-            stroke-linecap="round" stroke-linejoin="round">
-            <path
-              d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z">
-            </path>
-          </svg>
-          <div>
-            <div class="topic-label">Technology</div>
-            <div class="topic-description">Devices, apps, and trends</div>
-          </div>
-        </div>
-        <div class="topic-button" data-topic="Creativity">
-          <svg class="topic-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-            stroke-linecap="round" stroke-linejoin="round">
-            <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
-            <line x1="8" y1="21" x2="16" y2="21"></line>
-            <line x1="12" y1="17" x2="12" y2="21"></line>
-          </svg>
-          <div>
-            <div class="topic-label">Creativity</div>
-            <div class="topic-description">Art, design, and expression</div>
-          </div>
-        </div>
-      </div>
-    </div>
-
     <div id="conversation" class="conversation">
-      <!-- Example message for design purposes -->
-      <div class="message">
-        <div class="message-avatar user">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-            stroke-linejoin="round">
-            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-            <circle cx="12" cy="7" r="4"></circle>
-          </svg>
-        </div>
-        <div class="message-content">
-          <div class="message-text">How can I be more productive with my time?</div>
-        </div>
+      <!-- Welcome message -->
+      <div class="welcome-container">
+        <div class="welcome-icon">💬</div>
+        <h2 class="welcome-title">Welcome to your personal assistant</h2>
+        <p class="welcome-text">I'm here to help answer your questions and provide useful information. Type a question
+          in the field above or use the microphone button to ask with your voice.</p>
       </div>
 
-      <div class="message">
-        <div class="message-avatar">
-          <svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-            <circle cx="12" cy="12" r="10" />
-          </svg>
-        </div>
-        <div class="message-content">
-          <div class="message-text">Being more productive is about working smarter, not harder. Here are some effective
-            strategies:
-            <br><br>1. <strong>Time blocking</strong>: Schedule specific time blocks for different tasks
-            <br>2. <strong>Prioritize</strong>: Use the Eisenhower matrix to identify what's urgent and important
-            <br>3. <strong>Minimize distractions</strong>: Turn off notifications during focused work
-            <br>4. <strong>Take breaks</strong>: Use the Pomodoro technique (25 minutes of work, 5 minute break)
-            <br>5. <strong>Sleep well</strong>: Quality sleep improves focus and cognitive function
-            <br><br>Would you like more specific advice on any of these strategies?
-          </div>
-          <div class="message-actions">
-            <button class="action-button primary play-audio-button">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                stroke-linejoin="round">
-                <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
-                <path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path>
-                <path d="M19.07 4.93a10 10 0 0 1 0 14.14"></path>
-              </svg>
-              Listen
-            </button>
-            <button class="action-button regenerate-button">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                stroke-linejoin="round">
-                <path d="M23 4v6h-6"></path>
-                <path d="M1 20v-6h6"></path>
-                <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path>
-              </svg>
-              Try Again
-            </button>
-            <button class="action-button download-audio-button">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                stroke-linejoin="round">
-                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-                <polyline points="7 10 12 15 17 10"></polyline>
-                <line x1="12" y1="15" x2="12" y2="3"></line>
-              </svg>
-              Save Audio
-            </button>
-          </div>
-        </div>
+      <!-- Status-based header -->
+      <div class="conversation-header">
+        <span style="flex: 3;">Question</span>
+        <span style="flex: 1; text-align: right;">Status</span>
       </div>
+
+      <!-- Conversation will be populated here dynamically -->
     </div>
   </div>
 
   <!-- Message templates -->
   <template id="user-message-template">
     <div class="message">
-      <div class="message-avatar user">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-          stroke-linejoin="round">
-          <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-          <circle cx="12" cy="7" r="4"></circle>
-        </svg>
-      </div>
       <div class="message-content">
         <div class="message-text"></div>
+        <div class="status-pill status-submitting">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+            stroke-linejoin="round">
+            <path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"></path>
+            <path d="M12 6v6l4 2"></path>
+          </svg>
+          Submitting...
+        </div>
       </div>
     </div>
   </template>
 
   <template id="assistant-message-template">
     <div class="message">
-      <div class="message-avatar">
-        <svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-          <circle cx="12" cy="12" r="10" />
-        </svg>
-      </div>
       <div class="message-content">
         <div class="message-text"></div>
+        <div class="status-pill status-success">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+            stroke-linejoin="round">
+            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+            <polyline points="22 4 12 14.01 9 11.01"></polyline>
+          </svg>
+          Complete
+        </div>
         <div class="message-actions">
           <button class="action-button primary play-audio-button">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
@@ -245,12 +162,17 @@
 
   <template id="typing-indicator-template">
     <div class="message">
-      <div class="message-avatar">
-        <svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-          <circle cx="12" cy="12" r="10" />
-        </svg>
-      </div>
       <div class="message-content">
+        <div class="message-text">Finding your answer...</div>
+        <div class="status-pill status-warning">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+            stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"></circle>
+            <line x1="12" y1="8" x2="12" y2="12"></line>
+            <line x1="12" y1="16" x2="12.01" y2="16"></line>
+          </svg>
+          Processing
+        </div>
         <div class="typing">
           <span class="typing-dot"></span>
           <span class="typing-dot"></span>
