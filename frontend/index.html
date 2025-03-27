@@ -4,10 +4,10 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>AI Assistant | Knowledge Database</title>
-  <meta name="description" content="Access information with a simple, intuitive interface." />
+  <title>Ask - Friendly AI Assistant</title>
+  <meta name="description" content="Get friendly, helpful answers to your questions in seconds." />
   <link rel="icon"
-    href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23007aff'%3E%3Ccircle cx='12' cy='12' r='10' /%3E%3C/svg%3E"
+    href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%230071e3'%3E%3Ccircle cx='12' cy='12' r='10' /%3E%3C/svg%3E"
     type="image/svg+xml">
   <link rel="stylesheet" href="css/styles.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -47,17 +47,17 @@
         <svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
           <circle cx="12" cy="12" r="10" />
         </svg>
-        <span class="app-logo-text">AI assistant</span>
+        <span class="app-logo-text">Ask</span>
       </div>
 
-      <h1 class="app-title">Knowledge Database</h1>
-      <p class="app-subtitle">Ask questions about any topic to receive clear, concise information</p>
+      <h1 class="app-title">Your Personal Assistant</h1>
+      <p class="app-subtitle">Ask me anything and get helpful, accurate answers in seconds</p>
     </div>
 
     <div class="input-container">
       <form id="main-form">
         <div class="input-wrapper">
-          <input type="text" class="input-field" id="main-question-input" placeholder="What do you want to learn about?"
+          <input type="text" class="input-field" id="main-question-input" placeholder="What would you like to know?"
             autocomplete="off">
           <button type="button" id="voice-input-button" class="voice-button" aria-label="Use voice input">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
@@ -80,20 +80,20 @@
     </div>
 
     <div class="topic-section">
-      <div class="or-divider">Or browse by topic</div>
+      <div class="or-divider">Popular topics</div>
       <div class="topics-grid">
-        <div class="topic-button" data-topic="History">
+        <div class="topic-button" data-topic="Today">
           <svg class="topic-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
             stroke-linecap="round" stroke-linejoin="round">
             <circle cx="12" cy="12" r="10"></circle>
             <polyline points="12 6 12 12 16 14"></polyline>
           </svg>
           <div>
-            <div class="topic-label">History</div>
-            <div class="topic-description">Historical events and people</div>
+            <div class="topic-label">Today</div>
+            <div class="topic-description">News and current topics</div>
           </div>
         </div>
-        <div class="topic-button" data-topic="Science">
+        <div class="topic-button" data-topic="Technology">
           <svg class="topic-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
             stroke-linecap="round" stroke-linejoin="round">
             <path
@@ -101,11 +101,11 @@
             </path>
           </svg>
           <div>
-            <div class="topic-label">Science</div>
-            <div class="topic-description">Scientific discoveries and concepts</div>
+            <div class="topic-label">Technology</div>
+            <div class="topic-description">Devices, apps, and trends</div>
           </div>
         </div>
-        <div class="topic-button" data-topic="Technology">
+        <div class="topic-button" data-topic="Creativity">
           <svg class="topic-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
             stroke-linecap="round" stroke-linejoin="round">
             <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
@@ -113,8 +113,8 @@
             <line x1="12" y1="17" x2="12" y2="21"></line>
           </svg>
           <div>
-            <div class="topic-label">Technology</div>
-            <div class="topic-description">Innovations and digital knowledge</div>
+            <div class="topic-label">Creativity</div>
+            <div class="topic-description">Art, design, and expression</div>
           </div>
         </div>
       </div>
@@ -131,7 +131,7 @@
           </svg>
         </div>
         <div class="message-content">
-          <div class="message-text">What was the impact of the Industrial Revolution?</div>
+          <div class="message-text">How can I be more productive with my time?</div>
         </div>
       </div>
 
@@ -142,8 +142,15 @@
           </svg>
         </div>
         <div class="message-content">
-          <div class="message-text">The Industrial Revolution, which began in Britain in the late 18th century, had
-            profound economic, social, and cultural impacts across the world. Key impacts included:</div>
+          <div class="message-text">Being more productive is about working smarter, not harder. Here are some effective
+            strategies:
+            <br><br>1. <strong>Time blocking</strong>: Schedule specific time blocks for different tasks
+            <br>2. <strong>Prioritize</strong>: Use the Eisenhower matrix to identify what's urgent and important
+            <br>3. <strong>Minimize distractions</strong>: Turn off notifications during focused work
+            <br>4. <strong>Take breaks</strong>: Use the Pomodoro technique (25 minutes of work, 5 minute break)
+            <br>5. <strong>Sleep well</strong>: Quality sleep improves focus and cognitive function
+            <br><br>Would you like more specific advice on any of these strategies?
+          </div>
           <div class="message-actions">
             <button class="action-button primary play-audio-button">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
@@ -161,7 +168,7 @@
                 <path d="M1 20v-6h6"></path>
                 <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path>
               </svg>
-              Regenerate
+              Try Again
             </button>
             <button class="action-button download-audio-button">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
@@ -220,7 +227,7 @@
               <path d="M1 20v-6h6"></path>
               <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path>
             </svg>
-            Regenerate
+            Try Again
           </button>
           <button class="action-button download-audio-button">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
@@ -256,7 +263,5 @@
   <script src="https://cdn.skypack.dev/framer-motion@4.1.17/dist/es/index.mjs" type="module"></script>
   <script src="js/app.js" type="module"></script>
 </body>
-
-</html>
 
 </html>

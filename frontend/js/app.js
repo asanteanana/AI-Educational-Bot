@@ -12,61 +12,55 @@ const newConversationButton = document.getElementById('new-conversation');
 const voiceInputButton = document.getElementById('voice-input-button');
 const lightModeButton = document.getElementById('light-mode-button');
 const darkModeButton = document.getElementById('dark-mode-button');
+const conversation = document.getElementById('conversation');
+
+// Topic buttons
+const topicButtons = document.querySelectorAll('.topic-button');
 
 // Educational-focused responses with clear, helpful language
 const demoResponses = {
-    "hello": "Hello! Welcome to Insight. I'm your educational companion designed to make learning more accessible. How can I help you learn today?",
-    "who are you": "I'm Insight, your AI learning companion. I'm designed to make education more accessible by providing clear explanations that you can read or listen to. I combine text and audio capabilities to support different learning preferences.",
-    "what can you do": "I can help you learn about various topics through conversation, explain concepts in clear language, and provide information in both text and audio formats. I'm particularly helpful for those who prefer listening over reading or need more accessible ways to engage with educational content.",
-    "help": "I'd be happy to help you learn! To get the most out of our conversation, try asking specific questions about topics you're curious about. I can explain concepts, provide definitions, or explore subjects in depth. You can also use the voice button to ask questions by speaking.",
-    "thanks": "You're welcome! I'm glad I could help with your learning. If you have more questions or want to explore other topics, just ask. Learning is a journey we're on together.",
+    "hello": "Hello! I'm your personal assistant. How can I help you today?",
+    "who are you": "I'm an AI assistant designed to help you with information, answer questions, and assist with various tasks.",
+    "what can you do": "I can answer questions on many topics, provide explanations, suggest ideas, and offer information in both text and audio formats.",
+    "help": "I'd be happy to help! Just ask me any question or tell me what you need assistance with. I can explain concepts, provide information, or help you solve problems.",
+    "thanks": "You're welcome! If you need anything else, feel free to ask. I'm here to help.",
 };
 
-// Simulate retrieval of educational information
+// Simulate retrieval of information
 const simulateAPIResponse = async (question) => {
-    // Simulate network latency (300-800ms for realistic educational API response)
+    // Simulate network latency (300-800ms for realistic response)
     const delay = Math.floor(Math.random() * 500) + 300;
     await new Promise(resolve => setTimeout(resolve, delay));
 
     // Process query
     const normalizedQuestion = question.toLowerCase().replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g, "");
 
-    // Educational information lookup
+    // Information lookup
     for (const [keyword, response] of Object.entries(demoResponses)) {
         if (normalizedQuestion.includes(keyword)) {
             return response;
         }
     }
 
-    // Educational fallback responses
+    // Fallback responses
     const fallbackResponses = [
-        "That's an interesting question! While I don't have specific information on this topic in my current knowledge base, in a complete implementation I would connect to educational resources to provide you with an accurate answer. The best learning happens when we have access to reliable information.",
-        "Great question! This particular topic would require me to access educational databases that aren't connected in this demonstration. In a fully developed system, I would provide information from trusted academic sources to help you learn about this subject.",
-        "I appreciate your curiosity! Learning involves asking questions like yours. In a complete system, I would access scholarly sources to give you a well-researched answer about this topic.",
-        "Thanks for asking! Your question shows a desire to learn. While this demonstration has limited reference materials, a complete educational system would provide detailed information drawn from textbooks and educational resources.",
-        "That's exactly the kind of question that helps learning! In a fully implemented system, I would connect to educational databases to provide you with clear, accurate information on this topic, complete with the option to listen to the response."
+        "That's an interesting question! While I don't have specific information on this topic right now, I'd be happy to help with something else.",
+        "Great question! In a fully developed system, I'd provide you with a detailed answer about this topic.",
+        "I appreciate your curiosity! If you'd like to know about something else, just let me know.",
+        "Thanks for asking! While I can't provide a complete answer to this specific question right now, I'd be glad to help with other topics.",
+        "That's a thoughtful question. While I don't have all the details on this particular topic, feel free to ask me about something else."
     ];
 
     return fallbackResponses[Math.floor(Math.random() * fallbackResponses.length)];
 };
 
-// Create a more engaging typing indicator with Framer Motion
+// Create a minimal typing indicator
 const createTypingIndicator = () => {
-    const typingIndicator = document.createElement('div');
-    typingIndicator.className = 'typing-indicator';
-    typingIndicator.setAttribute('aria-label', 'Finding information for your learning');
-
-    // Create dots for the animation
-    for (let i = 0; i < 3; i++) {
-        const dot = document.createElement('span');
-        dot.className = 'typing-dot';
-        typingIndicator.appendChild(dot);
-    }
-
-    return typingIndicator;
+    const template = document.getElementById('typing-indicator-template');
+    return template.content.cloneNode(true);
 };
 
-// Enhanced notification with more engaging animation
+// Enhanced notification with subtle animation
 const showNotification = (message, duration = 2500) => {
     // Remove any existing notifications
     const existingNotification = document.querySelector('.notification');
@@ -106,325 +100,160 @@ const showNotification = (message, duration = 2500) => {
     }, duration);
 };
 
-// Create a new QA pair from the template
-const createQAPair = (question, answer) => {
-    const template = document.getElementById('qa-pair-template');
-    const qaPair = template.content.cloneNode(true);
+// Create a user message
+const createUserMessage = (question) => {
+    const template = document.getElementById('user-message-template');
+    const message = template.content.cloneNode(true);
 
-    // Set question and answer text
-    qaPair.querySelector('.question-text').textContent = question;
-    qaPair.querySelector('.answer-text').textContent = answer;
+    message.querySelector('.message-text').textContent = question;
 
-    return qaPair;
+    return message;
 };
 
-// Handle the submission of a learning query with enhanced animations
+// Create an assistant message
+const createAssistantMessage = (answer) => {
+    const template = document.getElementById('assistant-message-template');
+    const message = template.content.cloneNode(true);
+
+    message.querySelector('.message-text').textContent = answer;
+
+    return message;
+};
+
+// Handle the submission of a question with subtle animations
 const handleQuestionSubmit = async (question) => {
     if (!question.trim()) return;
 
-    // Hide welcome message with improved animation
-    if (welcomeMessage && welcomeMessage.style.display !== 'none') {
-        animate(welcomeMessage, {
-            opacity: [1, 0],
-            y: [0, -10]
-        }, {
-            duration: 0.4,
-            ease: [0.4, 0, 0.2, 1]
-        }).then(() => {
-            welcomeMessage.style.display = 'none';
-        });
-    }
-
-    // Show conversation container with staggered animation
-    if (conversationContainer.classList.contains('hidden')) {
-        conversationContainer.classList.remove('hidden');
-        conversationContainer.style.opacity = '0';
-        animate(conversationContainer, {
-            opacity: [0, 1],
-            y: [20, 0]
-        }, {
-            duration: 0.5,
-            ease: [0.34, 1.56, 0.64, 1] // Spring effect
-        });
-    }
-
-    // Create a new QA pair and add it to the container
-    const newPair = createQAPair(question, '');
-    const qaPairElement = newPair.querySelector('.qa-pair');
-
-    // Set initial opacity for animation
-    qaPairElement.style.opacity = '0';
-    qaPairElement.style.transform = 'translateY(20px)';
-
-    // Add the pair to the container
-    qaContainer.appendChild(newPair);
-
-    // Animate the new pair appearing with spring effect
-    animate(qaPairElement, {
-        opacity: [0, 1],
-        y: [20, 0]
-    }, {
-        duration: 0.5,
-        ease: [0.34, 1.56, 0.64, 1] // Spring physics for more engaging animation
-    });
-
-    // Create and add typing indicator
-    const answerContainer = qaPairElement.querySelector('.answer-container');
-    const answerText = qaPairElement.querySelector('.answer-text');
-    const typingIndicator = createTypingIndicator();
-
-    // Hide answer text and actions initially
-    answerText.style.display = 'none';
-    qaPairElement.querySelector('.answer-actions').style.display = 'none';
+    // Add user message
+    const userMessage = createUserMessage(question);
+    conversation.appendChild(userMessage);
 
     // Add typing indicator
-    answerContainer.insertBefore(typingIndicator, answerContainer.firstChild);
+    const typingIndicator = createTypingIndicator();
+    conversation.appendChild(typingIndicator);
+
+    // Scroll to bottom
+    conversation.scrollTop = conversation.scrollHeight;
 
     try {
-        // Simulate information retrieval for educational content
+        // Simulate information retrieval
         const response = await simulateAPIResponse(question);
 
-        // Remove typing indicator with fade
-        animate(typingIndicator, {
-            opacity: [1, 0],
-            y: [0, -5]
+        // Remove typing indicator
+        const typingElement = conversation.querySelector('.typing').parentNode.parentNode;
+        conversation.removeChild(typingElement);
+
+        // Add assistant message
+        const assistantMessage = createAssistantMessage(response);
+        conversation.appendChild(assistantMessage);
+
+        // Animate the new message
+        const messageElement = assistantMessage.querySelector('.message');
+        messageElement.style.opacity = '0';
+        messageElement.style.transform = 'translateY(10px)';
+
+        animate(messageElement, {
+            opacity: [0, 1],
+            y: [10, 0]
         }, {
-            duration: 0.3
-        }).then(() => typingIndicator.remove());
+            duration: 0.4,
+            delay: 0.1,
+            ease: [0.34, 1.56, 0.64, 1]
+        });
 
-        // Show answer with typewriter-like effect for educational emphasis
-        answerText.textContent = '';
-        answerText.style.display = 'block';
+        // Setup action buttons
+        setupActionButtons(messageElement.querySelector('.message-content'), response);
 
-        // Split text into characters for typewriter effect
-        const characters = response.split('');
-        let index = 0;
-
-        // Function to add next character
-        const typeNextCharacter = () => {
-            if (index < characters.length) {
-                answerText.textContent += characters[index];
-                index++;
-
-                // Randomize the delay slightly for natural effect
-                const randomDelay = Math.random() * 10 + 25; // 25-35ms
-                setTimeout(typeNextCharacter, randomDelay);
-            } else {
-                // Show answer actions with emphasis on audio accessibility
-                const actionsElement = qaPairElement.querySelector('.answer-actions');
-                actionsElement.style.opacity = '0';
-                actionsElement.style.display = 'flex';
-
-                // Stagger animate the actions buttons
-                animate(actionsElement, {
-                    opacity: [0, 1],
-                    y: [10, 0]
-                }, {
-                    duration: 0.4,
-                    ease: [0.34, 1.56, 0.64, 1]
-                });
-
-                // Setup action buttons (audio player, regenerate, etc)
-                setupActionButtons(qaPairElement, response);
-            }
-        };
-
-        // Start typewriter effect
-        typeNextCharacter();
+        // Scroll to bottom
+        conversation.scrollTop = conversation.scrollHeight;
 
     } catch (error) {
-        // Handle errors gracefully for better user experience
-        typingIndicator.remove();
-        answerText.textContent = "I'm sorry, but I couldn't process your question right now. Please try again in a moment.";
-        answerText.style.display = 'block';
+        // Handle errors gracefully
+        const typingElement = conversation.querySelector('.typing').parentNode.parentNode;
+        conversation.removeChild(typingElement);
+
         showNotification("An error occurred. Please try again.");
     }
 };
 
-// Setup action buttons with enhanced interactivity
-const setupActionButtons = (qaPairElement, answerText) => {
-    const playAudioButton = qaPairElement.querySelector('.play-audio-button');
-    const regenerateButton = qaPairElement.querySelector('.regenerate-button');
-    const downloadAudioButton = qaPairElement.querySelector('.download-audio-button');
+// Setup action buttons with subtle animations
+const setupActionButtons = (messageContent, answerText) => {
+    const playAudioButton = messageContent.querySelector('.play-audio-button');
+    const regenerateButton = messageContent.querySelector('.regenerate-button');
+    const downloadAudioButton = messageContent.querySelector('.download-audio-button');
 
-    // Add audio visualization to the play button
-    const addAudioWave = (button) => {
-        const audioWave = document.createElement('div');
-        audioWave.className = 'audio-wave';
-        audioWave.setAttribute('aria-hidden', 'true');
-
-        // Add bars for visualization
-        for (let i = 0; i < 3; i++) {
-            const bar = document.createElement('span');
-            bar.className = 'bar';
-            audioWave.appendChild(bar);
-        }
-
-        // Insert at beginning of button
-        button.insertBefore(audioWave, button.firstChild);
-        return audioWave;
-    };
-
-    const audioWave = addAudioWave(playAudioButton);
-
-    // Set up audio playback with visualization
+    // Set up audio playback
     let isSpeaking = false;
-    let audioContext;
-    let animation;
 
     playAudioButton.addEventListener('click', async () => {
         if (isSpeaking) {
             window.speechSynthesis.cancel();
             isSpeaking = false;
-            playAudioButton.querySelector('span').textContent = 'Listen';
-
-            // Reset visualization
-            const bars = audioWave.querySelectorAll('.bar');
-            bars.forEach(bar => {
-                bar.style.height = '3px';
-            });
-
-            if (animation) {
-                animation.stop();
-            }
-
+            playAudioButton.textContent = 'Listen';
             return;
         }
 
-        playAudioButton.classList.add('loading');
-
         try {
             await speak(answerText);
-            playAudioButton.classList.remove('loading');
             isSpeaking = true;
-            playAudioButton.querySelector('span').textContent = 'Stop';
-
-            // Animate audio wave
-            const bars = audioWave.querySelectorAll('.bar');
-
-            // Use Framer Motion to animate the audio bars
-            bars.forEach((bar, index) => {
-                const randomHeight = () => Math.floor(Math.random() * 12) + 3;
-                const randomDuration = () => (Math.random() * 0.7) + 0.5;
-
-                animation = animate(bar,
-                    { height: [randomHeight(), randomHeight(), randomHeight(), randomHeight()] },
-                    {
-                        duration: randomDuration(),
-                        ease: "easeInOut",
-                        repeat: Infinity,
-                        repeatType: "reverse"
-                    }
-                );
-            });
+            playAudioButton.innerHTML = `
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                stroke-linejoin="round">
+                <rect x="4" y="4" width="16" height="16" rx="2" ry="2"></rect>
+                <rect x="9" y="9" width="6" height="6"></rect>
+            </svg>
+            Stop`;
 
             // Reset when speech ends
             window.speechSynthesis.addEventListener('end', () => {
                 isSpeaking = false;
-                playAudioButton.querySelector('span').textContent = 'Listen';
-
-                // Reset visualization
-                bars.forEach(bar => {
-                    if (animation) {
-                        animation.stop();
-                    }
-                    bar.style.height = '3px';
-                });
+                playAudioButton.innerHTML = `
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                    stroke-linejoin="round">
+                    <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+                    <path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+                    <path d="M19.07 4.93a10 10 0 0 1 0 14.14"></path>
+                </svg>
+                Listen`;
             }, { once: true });
 
         } catch (error) {
-            playAudioButton.classList.remove('loading');
             showNotification('Could not play audio. Please try again.');
         }
     });
 
     // Set up regenerate button
     regenerateButton.addEventListener('click', async () => {
-        regenerateButton.classList.add('loading');
-
         try {
-            // Get the question text
-            const questionText = qaPairElement.querySelector('.question-text').textContent;
-
-            // Clear and hide the answer
-            const answerTextElement = qaPairElement.querySelector('.answer-text');
-            answerTextElement.style.display = 'none';
-
-            // Show typing indicator
-            const answerContent = qaPairElement.querySelector('.answer-content');
-            const typingIndicator = createTypingIndicator();
-            answerContent.appendChild(typingIndicator);
-
-            // Hide action buttons
-            const actionsElement = qaPairElement.querySelector('.answer-actions');
-            animate(actionsElement, { opacity: [1, 0] }, { duration: 0.3 })
-                .then(() => { actionsElement.style.display = 'none'; });
+            // Get the question from the previous message
+            const question = messageContent.parentNode.previousElementSibling.querySelector('.message-text').textContent;
 
             // Get new response
-            const newResponse = await simulateAPIResponse(questionText);
+            const newResponse = await simulateAPIResponse(question);
 
-            // Remove typing indicator
-            typingIndicator.remove();
+            // Update answer text
+            messageContent.querySelector('.message-text').textContent = newResponse;
 
-            // Show new answer with typewriter effect
-            answerTextElement.textContent = '';
-            answerTextElement.style.display = 'block';
-
-            // Split text into characters for typewriter effect
-            const characters = newResponse.split('');
-            let index = 0;
-
-            // Function to add next character
-            const typeNextCharacter = () => {
-                if (index < characters.length) {
-                    answerTextElement.textContent += characters[index];
-                    index++;
-
-                    // Randomize the delay slightly for natural effect
-                    const randomDelay = Math.random() * 10 + 25; // 25-35ms
-                    setTimeout(typeNextCharacter, randomDelay);
-                } else {
-                    // Show answer actions
-                    actionsElement.style.display = 'flex';
-                    animate(actionsElement, { opacity: [0, 1] }, { duration: 0.4 });
-
-                    // Update action buttons
-                    setupActionButtons(qaPairElement, newResponse);
-                }
-            };
-
-            // Start typewriter effect
-            typeNextCharacter();
-
-            regenerateButton.classList.remove('loading');
+            // Show notification
+            showNotification('Response regenerated');
 
         } catch (error) {
-            regenerateButton.classList.remove('loading');
             showNotification('Could not regenerate response. Please try again.');
         }
     });
 
     // Set up download audio button
     downloadAudioButton.addEventListener('click', async () => {
-        downloadAudioButton.classList.add('loading');
         try {
             await downloadAudio(answerText);
-            downloadAudioButton.classList.remove('loading');
-
-            // Animation feedback for successful download
-            animate(downloadAudioButton,
-                { scale: [1, 1.05, 1] },
-                { duration: 0.4, ease: "easeInOut" }
-            );
-
+            showNotification('Audio file downloaded');
         } catch (error) {
-            downloadAudioButton.classList.remove('loading');
             showNotification('Could not download audio. Please try again.');
         }
     });
 };
 
-// Enhanced text-to-speech with better voice selection for education
+// Text-to-speech functionality
 const speak = (text) => {
     return new Promise((resolve, reject) => {
         if (!window.speechSynthesis) {
@@ -436,27 +265,13 @@ const speak = (text) => {
 
         // Use a more natural voice if available
         const voices = window.speechSynthesis.getVoices();
-        const findVoiceByName = (nameFragment) => {
-            return voices.find(voice =>
-                voice.name.toLowerCase().includes(nameFragment.toLowerCase()) &&
-                voice.lang.startsWith('en')
-            );
-        };
+        const preferredVoice = voices.find(voice =>
+            voice.lang.startsWith('en') &&
+            (voice.name.includes('Female') || voice.name.includes('Samantha'))
+        );
 
-        // Try to find a natural sounding voice for educational content
-        const preferredVoices = [
-            findVoiceByName('samantha'),
-            findVoiceByName('daniel'),
-            findVoiceByName('premium'),
-            findVoiceByName('enhanced'),
-            findVoiceByName('neural'),
-            voices.find(voice => voice.name.includes('Google') && voice.lang.startsWith('en')),
-            voices.find(voice => voice.lang.startsWith('en-US')),
-            voices.find(voice => voice.lang.startsWith('en'))
-        ];
-
-        utterance.voice = preferredVoices.find(Boolean) || voices[0];
-        utterance.rate = 0.95; // Slightly slower for educational clarity
+        utterance.voice = preferredVoice || voices.find(voice => voice.lang.startsWith('en')) || voices[0];
+        utterance.rate = 1;
         utterance.pitch = 1;
 
         utterance.onend = () => resolve();
@@ -466,22 +281,18 @@ const speak = (text) => {
     });
 };
 
-// Download audio file for offline learning
+// Download audio file
 const downloadAudio = async (text) => {
     return new Promise((resolve, reject) => {
         try {
-            // Create audio context
-            const AudioContext = window.AudioContext || window.webkitAudioContext;
-            if (!AudioContext) {
-                throw new Error('AudioContext not supported');
-            }
-
-            // Generate audio and create download
-            const createDownload = (audioBlob) => {
-                const url = URL.createObjectURL(audioBlob);
+            // In a real implementation, this would convert text to an audio file
+            // For demo purposes, we'll just simulate the download
+            setTimeout(() => {
+                const blob = new Blob([text], { type: 'text/plain' });
+                const url = URL.createObjectURL(blob);
                 const a = document.createElement('a');
                 a.href = url;
-                a.download = `insight-response-${Date.now()}.mp3`;
+                a.download = `response-${Date.now()}.txt`;
                 document.body.appendChild(a);
                 a.click();
 
@@ -491,29 +302,14 @@ const downloadAudio = async (text) => {
                     URL.revokeObjectURL(url);
                     resolve();
                 }, 100);
-            };
-
-            // For demonstration, use browser TTS then download
-            if (window.speechSynthesis) {
-                showNotification('Preparing audio file for download...');
-
-                // In a real app, we would use proper TTS-to-file conversion here
-                // This is a simulation to demonstrate the feature
-                setTimeout(() => {
-                    const dummyBlob = new Blob(['audio-data-placeholder'], { type: 'audio/mpeg' });
-                    createDownload(dummyBlob);
-                    showNotification('Audio file downloaded successfully!');
-                }, 1200);
-            } else {
-                reject(new Error('Speech synthesis not supported'));
-            }
+            }, 800);
         } catch (error) {
             reject(error);
         }
     });
 };
 
-// Setup voice input with animated feedback
+// Setup voice input with visual feedback
 const setupVoiceInput = () => {
     if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
         voiceInputButton.style.display = 'none';
@@ -538,23 +334,11 @@ const setupVoiceInput = () => {
         mainQuestionInput.value = '';
         mainQuestionInput.placeholder = 'Listening...';
 
-        // Show recording state with animation
+        // Show recording state
         voiceInputButton.classList.add('recording');
-
-        // Pulse animation using Framer Motion
-        animate(voiceInputButton,
-            { scale: [1, 1.05, 1] },
-            {
-                duration: 1.5,
-                ease: "easeInOut",
-                repeat: Infinity
-            }
-        );
 
         recognition.start();
         isListening = true;
-
-        showNotification('Listening... Speak clearly');
     });
 
     recognition.onresult = (event) => {
@@ -568,34 +352,24 @@ const setupVoiceInput = () => {
     recognition.onend = () => {
         isListening = false;
         voiceInputButton.classList.remove('recording');
-        mainQuestionInput.placeholder = 'What would you like to learn about?';
-
-        // Stop animation
-        animate(voiceInputButton, { scale: 1 });
+        mainQuestionInput.placeholder = 'What would you like to know?';
 
         if (mainQuestionInput.value.trim()) {
             // If we captured something, submit after a short delay
             setTimeout(() => {
                 mainForm.dispatchEvent(new Event('submit'));
             }, 300);
-        } else {
-            showNotification('No speech detected. Please try again.');
         }
     };
 
-    recognition.onerror = (event) => {
+    recognition.onerror = () => {
         isListening = false;
         voiceInputButton.classList.remove('recording');
-        mainQuestionInput.placeholder = 'What would you like to learn about?';
-
-        // Stop animation
-        animate(voiceInputButton, { scale: 1 });
-
-        showNotification(`Speech recognition error: ${event.error}`);
+        mainQuestionInput.placeholder = 'What would you like to know?';
     };
 };
 
-// Setup theme toggle with improved transition
+// Setup theme toggle with smooth transitions
 const setupThemeToggle = () => {
     // Check for saved theme preference or use system preference
     const savedTheme = localStorage.getItem('theme');
@@ -640,7 +414,18 @@ const setupThemeToggle = () => {
     });
 };
 
-// Initialize the application with improved animations
+// Setup topic buttons
+const setupTopicButtons = () => {
+    topicButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            const topic = button.getAttribute('data-topic');
+            mainQuestionInput.value = `Tell me about ${topic}`;
+            mainForm.dispatchEvent(new Event('submit'));
+        });
+    });
+};
+
+// Initialize the application
 const initApp = () => {
     // Setup event listeners
     mainForm.addEventListener('submit', (e) => {
@@ -652,81 +437,19 @@ const initApp = () => {
         }
     });
 
-    newConversationButton.addEventListener('click', () => {
-        // Confirmation for better UX
-        if (qaContainer.children.length > 0) {
-            const isConfirmed = confirm('Start a new conversation? This will clear your current session.');
-            if (!isConfirmed) return;
-        }
-
-        // Clear conversation with fade out animation
-        if (qaContainer.children.length > 0) {
-            animate(qaContainer, { opacity: [1, 0] }, { duration: 0.3 })
-                .then(() => {
-                    qaContainer.innerHTML = '';
-
-                    // Show welcome message again
-                    welcomeMessage.style.display = 'flex';
-                    welcomeMessage.style.opacity = '0';
-                    animate(welcomeMessage, { opacity: [0, 1], y: [-10, 0] }, { duration: 0.4 });
-
-                    // Hide conversation container
-                    animate(conversationContainer, { opacity: [1, 0] }, { duration: 0.3 })
-                        .then(() => {
-                            conversationContainer.classList.add('hidden');
-                        });
-                });
-        }
-    });
-
-    // Setup voice input for accessibility
+    // Setup voice input
     setupVoiceInput();
 
-    // Setup theme toggle for personalization
+    // Setup theme toggle
     setupThemeToggle();
 
-    // Animation for initial page load
-    const elementsToAnimate = [
-        document.querySelector('header'),
-        document.querySelector('.hero-title'),
-        document.querySelector('.hero-subtitle'),
-        document.querySelector('.divider'),
-        welcomeMessage,
-        document.querySelector('.main-input-container')
-    ];
+    // Setup topic buttons
+    setupTopicButtons();
 
-    // Staggered animation for page elements
-    elementsToAnimate.forEach((element, index) => {
-        if (element) {
-            element.style.opacity = '0';
-            element.style.transform = 'translateY(15px)';
-
-            setTimeout(() => {
-                animate(element, {
-                    opacity: [0, 1],
-                    y: [15, 0]
-                }, {
-                    duration: 0.5,
-                    ease: [0.34, 1.56, 0.64, 1]
-                });
-            }, index * 100); // Stagger animations
-        }
-    });
-
-    // Focus input after animations complete
+    // Focus input after load
     setTimeout(() => {
         mainQuestionInput.focus();
-    }, elementsToAnimate.length * 100 + 100);
-
-    // If speechSynthesis is available, load voices
-    if (window.speechSynthesis) {
-        if (speechSynthesis.onvoiceschanged !== undefined) {
-            speechSynthesis.onvoiceschanged = () => {
-                // Voices loaded and ready for use
-                console.log('Text-to-speech voices loaded');
-            };
-        }
-    }
+    }, 500);
 };
 
 // Start the application
