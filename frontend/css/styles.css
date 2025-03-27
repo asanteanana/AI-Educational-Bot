@@ -1,36 +1,37 @@
-/* Modern design with Apple principles */
+/* Modern design with refined educational focus */
 :root {
-    /* Core colors - refined neutral palette */
-    --color-background: #ffffff;
+    /* Core colors - refined palette inspired by accessible learning */
+    --color-background: #FFFFFF;
     --color-foreground: #1d1d1f;
-    --color-gray-50: #f5f5f7;
-    --color-gray-100: #e8e8ed;
-    --color-gray-200: #d2d2d7;
-    --color-gray-300: #a1a1a6;
-    --color-gray-400: #86868b;
-    --color-gray-500: #6e6e73;
+    --color-gray-50: #f9f9fb;
+    --color-gray-100: #edf0f5;
+    --color-gray-200: #dde2e8;
+    --color-gray-300: #b8c2cc;
+    --color-gray-400: #8E8E93;
+    --color-gray-500: #6E7B91;
     --color-gray-600: #1d1d1f;
 
-    /* Subtle accent color */
-    --color-accent: #86868b;
-    --color-accent-subtle: rgba(134, 134, 139, 0.08);
+    /* Subtle accent colors for educational context */
+    --color-accent: #4F709C;
+    --color-accent-subtle: rgba(79, 112, 156, 0.08);
+    --color-success: #7D9D9C;
 
     /* Message colors */
-    --color-user-question: #f5f5f7;
+    --color-user-question: #f9f9fb;
     --color-ai-answer: #ffffff;
 
     /* Interaction */
-    --color-button-hover: #f5f5f7;
+    --color-button-hover: #f5f7fa;
 
-    /* Sizes and effects - Apple-like */
+    /* Sizes and effects - refined for accessibility */
     --border-radius-sm: 4px;
     --border-radius: 8px;
     --border-radius-lg: 12px;
-    --box-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
-    --box-shadow: 0 2px 5px rgba(0, 0, 0, 0.08);
+    --box-shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.05);
+    --box-shadow: 0 2px 6px rgba(0, 0, 0, 0.07);
     --transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 
-    /* Apple-style spacing */
+    /* Educational-focused spacing */
     --space-xs: 0.5rem;
     /* 8px */
     --space-sm: 0.75rem;
@@ -52,7 +53,7 @@
 }
 
 body {
-    font-family: 'SF Pro Text', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    font-family: 'Inter', 'SF Pro Text', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
     background-color: var(--color-background);
     color: var(--color-foreground);
     line-height: 1.5;
@@ -70,7 +71,7 @@ body {
     padding: 0 var(--space-lg);
 }
 
-/* Header with clean, Apple-inspired styling */
+/* Header with educational focus */
 header {
     padding: var(--space-sm) 0;
     border-bottom: 1px solid var(--color-gray-100);
@@ -95,21 +96,21 @@ header .container {
 }
 
 .logo .icon {
-    width: 20px;
-    height: 20px;
-    color: var(--color-gray-500);
+    width: 22px;
+    height: 22px;
+    color: var(--color-accent);
     filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.03));
 }
 
 .logo h1 {
-    font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-    font-size: 1rem;
+    font-family: 'SF Pro Display', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    font-size: 1.05rem;
     font-weight: 500;
     letter-spacing: -0.01em;
-    color: var(--color-gray-600);
+    color: var(--color-foreground);
 }
 
-/* Refined navigation */
+/* Navigation with educational section indicators */
 nav ul {
     display: flex;
     list-style: none;
@@ -126,16 +127,16 @@ nav a {
 }
 
 nav a:hover {
-    color: var(--color-gray-600);
+    color: var(--color-accent);
     text-decoration: none;
 }
 
 nav a.active {
-    color: var(--color-foreground);
+    color: var(--color-accent);
     font-weight: 500;
 }
 
-/* Main content */
+/* Main content with improved spacing for learning */
 main {
     flex: 1;
     padding: var(--space-lg) 0;
@@ -143,7 +144,7 @@ main {
     flex-direction: column;
 }
 
-/* Hero section - Apple-style spacing and typography */
+/* Hero section - focused on educational messaging */
 .hero {
     max-width: 680px;
     margin: var(--space-lg) auto var(--space-xl);
@@ -151,11 +152,39 @@ main {
     flex-direction: column;
     align-items: center;
     text-align: center;
+    position: relative;
+}
+
+/* Background shapes for visual interest */
+.hero::before {
+    content: "";
+    position: absolute;
+    width: 300px;
+    height: 300px;
+    background: radial-gradient(circle, var(--color-accent-subtle) 0%, rgba(255, 255, 255, 0) 70%);
+    top: -100px;
+    right: -150px;
+    z-index: -1;
+    opacity: 0.4;
+    border-radius: 50%;
+}
+
+.hero::after {
+    content: "";
+    position: absolute;
+    width: 250px;
+    height: 250px;
+    background: radial-gradient(circle, var(--color-gray-100) 0%, rgba(255, 255, 255, 0) 70%);
+    bottom: -50px;
+    left: -100px;
+    z-index: -1;
+    opacity: 0.4;
+    border-radius: 50%;
 }
 
 .hero-title {
-    font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-    font-size: 1.75rem;
+    font-family: 'SF Pro Display', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    font-size: 2rem;
     font-weight: 600;
     line-height: 1.2;
     margin-bottom: var(--space-sm);
@@ -166,7 +195,7 @@ main {
 
 .hero-subtitle {
     color: var(--color-gray-500);
-    font-size: 0.9375rem;
+    font-size: 1rem;
     line-height: 1.5;
     margin-bottom: var(--space-xl);
     max-width: 600px;
@@ -175,7 +204,7 @@ main {
     letter-spacing: -0.01em;
 }
 
-/* Divider */
+/* Divider with educational context */
 .divider {
     position: relative;
     text-align: center;
@@ -201,7 +230,7 @@ main {
     color: var(--color-gray-400);
 }
 
-/* Welcome message */
+/* Welcome message with friendly yet informative tone */
 .welcome-message {
     display: flex;
     align-items: flex-start;
@@ -212,10 +241,10 @@ main {
 }
 
 .assistant-avatar {
-    width: 24px;
-    height: 24px;
+    width: 28px;
+    height: 28px;
     border-radius: 50%;
-    background: linear-gradient(135deg, #86868b, #6e6e73);
+    background: linear-gradient(135deg, var(--color-accent), var(--color-gray-500));
     box-shadow: var(--box-shadow-sm);
     display: flex;
     align-items: center;
@@ -237,7 +266,7 @@ main {
     line-height: 1.6;
 }
 
-/* Main input field - Apple-inspired simplicity */
+/* Main input field - optimized for educational queries */
 .main-input-container {
     margin-top: auto;
     max-width: 600px;
@@ -259,8 +288,8 @@ main {
 }
 
 .main-input:focus-within {
-    border-color: var(--color-gray-300);
-    box-shadow: var(--box-shadow);
+    border-color: var(--color-accent);
+    box-shadow: 0 0 0 3px var(--color-accent-subtle);
 }
 
 #main-question-input {
@@ -278,9 +307,9 @@ main {
     color: var(--color-gray-400);
 }
 
-/* Button styles - subtle Apple-inspired */
+/* Button styles - optimized for educational context */
 #main-send-button {
-    background-color: var(--color-gray-500);
+    background-color: var(--color-accent);
     color: white;
     border: none;
     padding: var(--space-sm) var(--space-md);
@@ -295,7 +324,7 @@ main {
 }
 
 #main-send-button:hover {
-    background-color: var(--color-gray-600);
+    background-color: #40628a;
     transform: translateY(-1px);
 }
 
@@ -306,6 +335,21 @@ main {
 #main-send-button:disabled {
     background-color: var(--color-gray-300);
     cursor: not-allowed;
+}
+
+/* Voice input animation */
+@keyframes pulse {
+    0% {
+        box-shadow: 0 0 0 0 rgba(79, 112, 156, 0.4);
+    }
+
+    70% {
+        box-shadow: 0 0 0 6px rgba(79, 112, 156, 0);
+    }
+
+    100% {
+        box-shadow: 0 0 0 0 rgba(79, 112, 156, 0);
+    }
 }
 
 #voice-input-button {
@@ -322,13 +366,14 @@ main {
 }
 
 #voice-input-button:hover {
-    color: var(--color-gray-600);
+    color: var(--color-accent);
     background-color: var(--color-accent-subtle);
 }
 
 #voice-input-button.recording {
     background-color: rgba(204, 0, 0, 0.1);
     color: #cc0000;
+    animation: pulse 2s infinite;
 }
 
 #voice-input-button svg {
@@ -336,7 +381,7 @@ main {
     height: 18px;
 }
 
-/* Footer */
+/* Footer with educational resources links */
 footer {
     padding: var(--space-lg) 0;
     color: var(--color-gray-400);
@@ -345,7 +390,7 @@ footer {
     border-top: 1px solid var(--color-gray-100);
 }
 
-/* Conversation container */
+/* Conversation container - focused on knowledge exchange */
 .conversation-container {
     max-width: 860px;
     margin: 0 auto;
@@ -377,9 +422,9 @@ footer {
 }
 
 .text-button:hover {
+    color: var(--color-accent);
     background-color: var(--color-accent-subtle);
     text-decoration: none;
-    color: var(--color-gray-600);
 }
 
 .text-button svg {
@@ -387,7 +432,7 @@ footer {
     height: 14px;
 }
 
-/* Q&A - clean design */
+/* Q&A - designed for educational context */
 .qa-container {
     display: flex;
     flex-direction: column;
@@ -404,7 +449,7 @@ footer {
     box-shadow: var(--box-shadow-sm);
 }
 
-/* Question styles */
+/* Question styles - clear and focused */
 .question-container {
     background-color: var(--color-user-question);
     padding: var(--space-md);
@@ -418,9 +463,9 @@ footer {
 }
 
 .user-icon {
-    width: 20px;
-    height: 20px;
-    color: var(--color-gray-400);
+    width: 22px;
+    height: 22px;
+    color: var(--color-gray-500);
     flex-shrink: 0;
 }
 
@@ -431,7 +476,7 @@ footer {
     padding: calc(var(--space-xs) / 2) 0;
 }
 
-/* Answer styles */
+/* Answer styles - educational and clear */
 .answer-container {
     padding: var(--space-md);
     background-color: var(--color-ai-answer);
@@ -447,9 +492,9 @@ footer {
 }
 
 .assistant-icon {
-    width: 20px;
-    height: 20px;
-    color: var(--color-gray-500);
+    width: 22px;
+    height: 22px;
+    color: var(--color-accent);
     flex-shrink: 0;
     filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.03));
 }
@@ -461,9 +506,9 @@ footer {
     padding: calc(var(--space-xs) / 2) 0;
 }
 
-/* Action buttons */
+/* Action buttons - focused on educational features */
 .answer-actions {
-    margin-left: 32px;
+    margin-left: 34px;
     display: flex;
     flex-wrap: wrap;
     gap: var(--space-sm);
@@ -486,7 +531,8 @@ footer {
 
 .action-button:hover {
     background-color: var(--color-gray-50);
-    border-color: var(--color-gray-300);
+    border-color: var(--color-accent);
+    color: var(--color-accent);
     transform: translateY(-1px);
 }
 
@@ -499,15 +545,31 @@ footer {
     height: 14px;
 }
 
-/* Play audio button - subtle highlight */
+/* Play audio button - highlight for accessibility */
 .play-audio-button {
     background-color: var(--color-accent-subtle);
-    border-color: var(--color-gray-400);
-    color: var(--color-gray-600);
+    border-color: var(--color-accent);
+    color: var(--color-accent);
 }
 
 .play-audio-button:hover {
-    background-color: rgba(134, 134, 139, 0.15);
+    background-color: rgba(79, 112, 156, 0.15);
+}
+
+/* Audio visualization for playback */
+.audio-wave {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    height: 18px;
+    margin-right: 4px;
+}
+
+.audio-wave .bar {
+    width: 2px;
+    height: 3px;
+    background-color: currentColor;
+    border-radius: 1px;
 }
 
 /* Loading spinner */
@@ -535,14 +597,14 @@ footer {
     display: inline-block;
 }
 
-/* Notification - Apple style */
+/* Notification - refined for educational content */
 .notification {
     position: fixed;
     bottom: var(--space-xl);
     left: 50%;
     transform: translateX(-50%);
     padding: var(--space-sm) var(--space-md);
-    background-color: rgba(0, 0, 0, 0.7);
+    background-color: var(--color-foreground);
     color: white;
     border-radius: var(--border-radius);
     font-size: 0.875rem;
@@ -555,20 +617,20 @@ footer {
     transition: opacity 0.3s ease;
 }
 
-/* Typing indicator */
+/* Typing indicator - more scholarly style */
 .typing-indicator {
     display: flex;
     align-items: center;
     gap: var(--space-xs);
     padding: var(--space-xs) 0;
-    margin-left: 32px;
+    margin-left: 34px;
 }
 
 .typing-dot {
     width: 5px;
     height: 5px;
     border-radius: 50%;
-    background-color: var(--color-gray-400);
+    background-color: var(--color-accent);
     opacity: 0.8;
     animation: typingDot 1.4s infinite ease-in-out;
 }
@@ -643,11 +705,11 @@ footer {
 /* Media queries */
 @media (max-width: 768px) {
     .hero-title {
-        font-size: 1.5rem;
+        font-size: 1.75rem;
     }
 
     .hero-subtitle {
-        font-size: 0.875rem;
+        font-size: 0.9375rem;
     }
 
     .theme-toggle {
@@ -670,7 +732,7 @@ footer {
     }
 
     .hero-title {
-        font-size: 1.25rem;
+        font-size: 1.5rem;
     }
 
     .answer-actions {
@@ -695,13 +757,14 @@ footer {
     --color-gray-200: #48484a;
     --color-gray-300: #636366;
     --color-gray-400: #8e8e93;
-    --color-gray-500: #aeaeb2;
+    --color-gray-500: #9baec8;
     --color-gray-600: #f5f5f7;
     --color-user-question: #2c2c2e;
     --color-ai-answer: #1a1a1a;
     --color-button-hover: #3a3a3c;
-    --color-accent: #98989d;
-    --color-accent-subtle: rgba(152, 152, 157, 0.15);
+    --color-accent: #6d92c9;
+    --color-accent-subtle: rgba(109, 146, 201, 0.15);
+    --color-success: #9ebebe;
 }
 
 /* For JavaScript-toggled dark mode */
@@ -724,4 +787,23 @@ body.dark-mode footer {
 
 body.dark-mode .qa-pair {
     border-color: var(--color-gray-200);
+}
+
+/* Accessibility features */
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border-width: 0;
+}
+
+/* Focus styles for keyboard navigation */
+:focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 2px;
 }

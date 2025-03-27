@@ -4,17 +4,15 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Knowledge Explorer</title>
-  <meta name="description" content="An elegant information system with a refined approach to knowledge discovery" />
+  <title>Insight | Your AI Learning Companion</title>
+  <meta name="description" content="Knowledge spoken clearly. Learning made accessible." />
   <link rel="icon"
-    href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%236e6e73'%3E%3Ccircle cx='12' cy='12' r='10' /%3E%3C/svg%3E"
+    href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%234F709C'%3E%3Ccircle cx='12' cy='12' r='10' /%3E%3C/svg%3E"
     type="image/svg+xml">
   <link rel="stylesheet" href="css/styles.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link
-    href="https://fonts.googleapis.com/css2?family=SF+Pro+Display:wght@400;500;600&family=SF+Pro+Text:wght@400;500&display=swap"
-    rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 </head>
 
 <body>
@@ -27,12 +25,13 @@
           <path
             d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.411 0-8-3.589-8-8s3.589-8 8-8 8 3.589 8 8-3.589 8-8 8z" />
         </svg>
-        <h1>Knowledge Explorer</h1>
+        <h1>Insight</h1>
       </div>
       <nav>
         <ul>
           <li><a href="#" class="active">Home</a></li>
           <li><a href="#">About</a></li>
+          <li><a href="#">Accessibility</a></li>
         </ul>
       </nav>
     </div>
@@ -65,12 +64,12 @@
   <main>
     <div class="container">
       <section class="hero">
-        <h1 class="hero-title">Your Interactive Knowledge Companion</h1>
-        <p class="hero-subtitle">Discover insights through elegant conversation. A refined approach to information,
-          thoughtfully designed for clarity and understanding.</p>
+        <h1 class="hero-title">Knowledge spoken clearly</h1>
+        <p class="hero-subtitle">An educational companion that makes learning accessible through conversation and audio.
+          Ask questions and receive clear, spoken explanations on any topic.</p>
 
         <div class="divider">
-          <span>Your Conversation</span>
+          <span>Start a conversation</span>
         </div>
 
         <div id="welcome-message" class="welcome-message">
@@ -80,17 +79,16 @@
                 d="M12 16c2.206 0 4-1.794 4-4s-1.794-4-4-4-4 1.794-4 4 1.794 4 4 4zm0-6c1.084 0 2 .916 2 2s-.916 2-2 2-2-.916-2-2 .916-2 2-2z" />
               <path
                 d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.411 0-8-3.589-8-8s3.589-8 8-8 8 3.589 8 8-3.589 8-8 8z" />
-              <path
-                d="M17 12c0 2.757-2.243 5-5 5s-5-2.243-5-5 2.243-5 5-5 5 2.243 5 5zm-2 0c0-1.654-1.346-3-3-3s-3 1.346-3 3 1.346 3 3 3 3-1.346 3-3z" />
             </svg>
           </div>
-          <p>Hello. I'm here to assist with information on topics you're interested in. Ask a question to begin a
-            thoughtful conversation.</p>
+          <p>Hello! I'm your learning companion. Ask me anything you'd like to understand better, and I'll provide clear
+            explanations that you can read or listen to.</p>
         </div>
 
         <div class="main-input-container">
           <form id="main-form" class="main-input">
-            <input type="text" id="main-question-input" placeholder="What would you like to know?" autocomplete="off">
+            <input type="text" id="main-question-input" placeholder="What would you like to learn about?"
+              autocomplete="off">
             <button type="submit" id="main-send-button">
               <span class="button-text">Ask</span>
               <span class="loading-spinner"></span>
@@ -129,7 +127,7 @@
 
   <footer>
     <div class="container">
-      <p>Knowledge Explorer • Information System • Learn and Discover</p>
+      <p>Insight Assistant • Making learning accessible • CC BY-SA 4.0</p>
     </div>
   </footer>
 
@@ -154,8 +152,6 @@
               d="M12 16c2.206 0 4-1.794 4-4s-1.794-4-4-4-4 1.794-4 4 1.794 4 4 4zm0-6c1.084 0 2 .916 2 2s-.916 2-2 2-2-.916-2-2 .916-2 2-2z" />
             <path
               d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.411 0-8-3.589-8-8s3.589-8 8-8 8 3.589 8 8-3.589 8-8 8z" />
-            <path
-              d="M17 12c0 2.757-2.243 5-5 5s-5-2.243-5-5 2.243-5 5-5 5 2.243 5 5zm-2 0c0-1.654-1.346-3-3-3s-3 1.346-3 3 1.346 3 3 3 3-1.346 3-3z" />
           </svg>
           <div class="answer-text"></div>
         </div>
@@ -188,7 +184,7 @@
               <polyline points="7 10 12 15 17 10"></polyline>
               <line x1="12" y1="15" x2="12" y2="3"></line>
             </svg>
-            <span>Audio</span>
+            <span>Save Audio</span>
           </button>
         </div>
       </div>
