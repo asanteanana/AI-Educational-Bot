@@ -4,10 +4,10 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Insight | Your AI Learning Companion</title>
-  <meta name="description" content="Knowledge spoken clearly. Learning made accessible." />
+  <title>AI Assistant | Knowledge Database</title>
+  <meta name="description" content="Access information with a simple, intuitive interface." />
   <link rel="icon"
-    href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%230071e3'%3E%3Ccircle cx='12' cy='12' r='10' /%3E%3C/svg%3E"
+    href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23007aff'%3E%3Ccircle cx='12' cy='12' r='10' /%3E%3C/svg%3E"
     type="image/svg+xml">
   <link rel="stylesheet" href="css/styles.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -43,18 +43,15 @@
   <div class="app-container">
     <div class="app-header">
       <div class="app-logo">
+        <!-- Simplified logo circle -->
         <svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-          <path
-            d="M12 16c2.206 0 4-1.794 4-4s-1.794-4-4-4-4 1.794-4 4 1.794 4 4 4zm0-6c1.084 0 2 .916 2 2s-.916 2-2 2-2-.916-2-2 .916-2 2-2z" />
-          <path
-            d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.411 0-8-3.589-8-8s3.589-8 8-8 8 3.589 8 8-3.589 8-8 8z" />
+          <circle cx="12" cy="12" r="10" />
         </svg>
         <span class="app-logo-text">AI assistant</span>
       </div>
 
-      <h1 class="app-title">Knowledge spoken clearly</h1>
-      <p class="app-subtitle">Ask me anything you'd like to understand better, and I'll provide clear explanations that
-        you can read or listen to.</p>
+      <h1 class="app-title">Knowledge Database</h1>
+      <p class="app-subtitle">Ask questions about any topic to receive clear, concise information</p>
     </div>
 
     <div class="input-container">
@@ -83,21 +80,20 @@
     </div>
 
     <div class="topic-section">
-      <div class="or-divider">Or</div>
+      <div class="or-divider">Or browse by topic</div>
       <div class="topics-grid">
-        <div class="topic-button" data-topic="Improve Information">
+        <div class="topic-button" data-topic="History">
           <svg class="topic-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
             stroke-linecap="round" stroke-linejoin="round">
             <circle cx="12" cy="12" r="10"></circle>
-            <line x1="12" y1="16" x2="12" y2="12"></line>
-            <line x1="12" y1="8" x2="12.01" y2="8"></line>
+            <polyline points="12 6 12 12 16 14"></polyline>
           </svg>
           <div>
-            <div class="topic-label">Improve Information</div>
-            <div class="topic-description">Learn foundational concepts</div>
+            <div class="topic-label">History</div>
+            <div class="topic-description">Historical events and people</div>
           </div>
         </div>
-        <div class="topic-button" data-topic="Learn Skills">
+        <div class="topic-button" data-topic="Science">
           <svg class="topic-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
             stroke-linecap="round" stroke-linejoin="round">
             <path
@@ -105,26 +101,80 @@
             </path>
           </svg>
           <div>
-            <div class="topic-label">Learn Skills</div>
-            <div class="topic-description">Develop practical abilities</div>
+            <div class="topic-label">Science</div>
+            <div class="topic-description">Scientific discoveries and concepts</div>
           </div>
         </div>
-        <div class="topic-button" data-topic="Educational Resources">
+        <div class="topic-button" data-topic="Technology">
           <svg class="topic-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
             stroke-linecap="round" stroke-linejoin="round">
-            <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
-            <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+            <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
+            <line x1="8" y1="21" x2="16" y2="21"></line>
+            <line x1="12" y1="17" x2="12" y2="21"></line>
           </svg>
           <div>
-            <div class="topic-label">Educational Resources</div>
-            <div class="topic-description">Find learning materials</div>
+            <div class="topic-label">Technology</div>
+            <div class="topic-description">Innovations and digital knowledge</div>
           </div>
         </div>
       </div>
     </div>
 
-    <div id="conversation" class="conversation" style="display: none;">
-      <!-- Messages will be added here by JavaScript -->
+    <div id="conversation" class="conversation">
+      <!-- Example message for design purposes -->
+      <div class="message">
+        <div class="message-avatar user">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+            stroke-linejoin="round">
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+            <circle cx="12" cy="7" r="4"></circle>
+          </svg>
+        </div>
+        <div class="message-content">
+          <div class="message-text">What was the impact of the Industrial Revolution?</div>
+        </div>
+      </div>
+
+      <div class="message">
+        <div class="message-avatar">
+          <svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="12" cy="12" r="10" />
+          </svg>
+        </div>
+        <div class="message-content">
+          <div class="message-text">The Industrial Revolution, which began in Britain in the late 18th century, had
+            profound economic, social, and cultural impacts across the world. Key impacts included:</div>
+          <div class="message-actions">
+            <button class="action-button primary play-audio-button">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                stroke-linejoin="round">
+                <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+                <path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+                <path d="M19.07 4.93a10 10 0 0 1 0 14.14"></path>
+              </svg>
+              Listen
+            </button>
+            <button class="action-button regenerate-button">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                stroke-linejoin="round">
+                <path d="M23 4v6h-6"></path>
+                <path d="M1 20v-6h6"></path>
+                <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path>
+              </svg>
+              Regenerate
+            </button>
+            <button class="action-button download-audio-button">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                stroke-linejoin="round">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                <polyline points="7 10 12 15 17 10"></polyline>
+                <line x1="12" y1="15" x2="12" y2="3"></line>
+              </svg>
+              Save Audio
+            </button>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -148,10 +198,7 @@
     <div class="message">
       <div class="message-avatar">
         <svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-          <path
-            d="M12 16c2.206 0 4-1.794 4-4s-1.794-4-4-4-4 1.794-4 4 1.794 4 4 4zm0-6c1.084 0 2 .916 2 2s-.916 2-2 2-2-.916-2-2 .916-2 2-2z" />
-          <path
-            d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.411 0-8-3.589-8-8s3.589-8 8-8 8 3.589 8 8-3.589 8-8 8z" />
+          <circle cx="12" cy="12" r="10" />
         </svg>
       </div>
       <div class="message-content">
@@ -193,10 +240,7 @@
     <div class="message">
       <div class="message-avatar">
         <svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-          <path
-            d="M12 16c2.206 0 4-1.794 4-4s-1.794-4-4-4-4 1.794-4 4 1.794 4 4 4zm0-6c1.084 0 2 .916 2 2s-.916 2-2 2-2-.916-2-2 .916-2 2-2z" />
-          <path
-            d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.411 0-8-3.589-8-8s3.589-8 8-8 8 3.589 8 8-3.589 8-8 8z" />
+          <circle cx="12" cy="12" r="10" />
         </svg>
       </div>
       <div class="message-content">
@@ -212,5 +256,7 @@
   <script src="https://cdn.skypack.dev/framer-motion@4.1.17/dist/es/index.mjs" type="module"></script>
   <script src="js/app.js" type="module"></script>
 </body>
+
+</html>
 
 </html>

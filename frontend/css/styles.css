@@ -1,32 +1,48 @@
 /* Insight - AI Learning Companion */
 :root {
-    /* Core colors - Apple-inspired palette */
+    /* Core colors - Application inspired palette */
     --color-background: #f5f5f7;
     --color-card: #ffffff;
     --color-foreground: #1d1d1f;
-    --color-foreground-secondary: #86868b;
-    --color-accent: #0071e3;
-    --color-accent-light: rgba(0, 113, 227, 0.08);
+    --color-foreground-secondary: #6b7280;
+
+    /* Status colors */
     --color-success: #34c759;
     --color-error: #ff3b30;
+    --color-warning: #ffcc00;
+    --color-info: #007aff;
+    --color-neutral: #8e8e93;
+
+    /* Accent colors */
+    --color-accent: #007aff;
+    /* Main blue from the application UI */
+    --color-accent-light: rgba(0, 122, 255, 0.08);
+
+    /* Status background colors */
+    --color-success-bg: rgba(52, 199, 89, 0.1);
+    --color-error-bg: rgba(255, 59, 48, 0.1);
+    --color-warning-bg: rgba(255, 204, 0, 0.1);
+    --color-info-bg: rgba(0, 122, 255, 0.1);
+    --color-neutral-bg: rgba(142, 142, 147, 0.1);
 
     /* UI colors */
-    --color-border: rgba(0, 0, 0, 0.1);
+    --color-border: rgba(0, 0, 0, 0.08);
     --color-input-bg: #ffffff;
+    --color-table-row-alt: rgba(0, 0, 0, 0.02);
 
     /* Typography */
     --font-primary: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Inter', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
     --font-display: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Inter', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
 
     /* Sizing and spacing */
-    --radius-sm: 8px;
-    --radius-md: 12px;
-    --radius-lg: 16px;
+    --radius-sm: 4px;
+    --radius-md: 6px;
+    --radius-lg: 12px;
     --radius-full: 999px;
 
     --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
-    --shadow-md: 0 4px 8px rgba(0, 0, 0, 0.04), 0 0 2px rgba(0, 0, 0, 0.06);
-    --shadow-lg: 0 8px 16px rgba(0, 0, 0, 0.04), 0 0 2px rgba(0, 0, 0, 0.06);
+    --shadow-md: 0 2px 4px rgba(0, 0, 0, 0.05);
+    --shadow-lg: 0 4px 6px rgba(0, 0, 0, 0.05);
 
     --space-1: 4px;
     --space-2: 8px;
@@ -58,34 +74,36 @@ body {
     min-height: 100vh;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    padding: var(--space-6);
+    padding: var(--space-4);
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
 }
 
-/* Main container */
+/* Main container - more structured like the application UI */
 .app-container {
-    max-width: 800px;
+    max-width: 900px;
     width: 100%;
     margin: 0 auto;
-    padding: var(--space-8);
+    padding: 0;
     border-radius: var(--radius-lg);
     background-color: var(--color-card);
     box-shadow: var(--shadow-md);
     overflow: hidden;
     display: flex;
     flex-direction: column;
-    margin-top: var(--space-8);
+    margin-top: var(--space-4);
+    border: 1px solid var(--color-border);
 }
 
 .app-header {
     display: flex;
     flex-direction: column;
-    align-items: center;
-    text-align: center;
-    margin-bottom: var(--space-10);
+    align-items: flex-start;
+    padding: var(--space-6);
+    border-bottom: 1px solid var(--color-border);
+    background-color: #f9fafc;
 }
 
 .app-logo {
@@ -96,60 +114,63 @@ body {
 }
 
 .app-logo svg {
-    width: 28px;
-    height: 28px;
+    width: 24px;
+    height: 24px;
     color: var(--color-accent);
 }
 
 .app-logo-text {
     font-family: var(--font-display);
-    font-size: 20px;
+    font-size: 17px;
     font-weight: 600;
+    color: var(--color-foreground);
+    margin-left: var(--space-2);
 }
 
 .app-title {
     font-family: var(--font-display);
-    font-size: 26px;
+    font-size: 24px;
     font-weight: 600;
     color: var(--color-foreground);
-    margin-bottom: var(--space-3);
+    margin-bottom: var(--space-2);
     letter-spacing: -0.02em;
 }
 
 .app-subtitle {
-    font-size: 15px;
+    font-size: 14px;
     color: var(--color-foreground-secondary);
-    max-width: 450px;
-    margin: 0 auto;
+    max-width: 600px;
     line-height: 1.4;
 }
 
-/* Input container */
+/* Input container - styled like the application header */
 .input-container {
-    margin-bottom: var(--space-8);
+    padding: var(--space-4) var(--space-6);
+    border-bottom: 1px solid var(--color-border);
 }
 
 .input-wrapper {
     display: flex;
     align-items: center;
     background-color: var(--color-input-bg);
-    border: none;
-    border-radius: var(--radius-full);
-    padding: var(--space-2) var(--space-2) var(--space-2) var(--space-4);
+    border-radius: var(--radius-md);
+    padding: var(--space-1) var(--space-1) var(--space-1) var(--space-3);
     transition: var(--transition-fast);
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1), 0 0 0 1px rgba(0, 0, 0, 0.05);
+    box-shadow: var(--shadow-sm);
+    border: 1px solid var(--color-border);
 }
 
 .input-wrapper:focus-within {
-    box-shadow: 0 0 0 4px var(--color-accent-light);
+    box-shadow: 0 0 0 2px var(--color-accent-light);
+    border-color: var(--color-accent);
 }
 
 .input-field {
     flex: 1;
     border: none;
     background: transparent;
-    font-size: 15px;
-    padding: var(--space-3);
+    font-size: 14px;
+    padding: var(--space-2);
     color: var(--color-foreground);
     font-family: var(--font-primary);
     outline: none;
@@ -164,9 +185,9 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 34px;
-    height: 34px;
-    border-radius: var(--radius-full);
+    width: 32px;
+    height: 32px;
+    border-radius: var(--radius-md);
     background-color: var(--color-accent);
     color: white;
     border: none;
@@ -176,7 +197,6 @@ body {
 
 .send-button:hover {
     opacity: 0.9;
-    transform: translateY(-1px);
 }
 
 .send-button svg {
@@ -188,9 +208,9 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 34px;
-    height: 34px;
-    border-radius: var(--radius-full);
+    width: 32px;
+    height: 32px;
+    border-radius: var(--radius-md);
     background-color: transparent;
     color: var(--color-foreground-secondary);
     border: none;
@@ -209,17 +229,19 @@ body {
     animation: pulse 2s infinite;
 }
 
-/* Topic buttons */
+/* Topic section - styled like the table rows */
 .topic-section {
-    margin-top: var(--space-8);
+    padding: var(--space-6);
+    border-bottom: 1px solid var(--color-border);
 }
 
 .or-divider {
     display: flex;
     align-items: center;
-    margin-bottom: var(--space-6);
+    margin-bottom: var(--space-4);
     color: var(--color-foreground-secondary);
-    font-size: 14px;
+    font-size: 13px;
+    font-weight: 500;
 }
 
 .or-divider::before,
@@ -228,7 +250,7 @@ body {
     flex: 1;
     height: 1px;
     background-color: var(--color-border);
-    margin: 0 var(--space-4);
+    margin: 0 var(--space-3);
 }
 
 .topics-grid {
@@ -239,14 +261,11 @@ body {
 
 .topic-button {
     display: flex;
-    flex-direction: column;
     align-items: center;
-    justify-content: center;
-    padding: var(--space-5);
+    padding: var(--space-3) var(--space-4);
     background-color: var(--color-card);
     border: 1px solid var(--color-border);
     border-radius: var(--radius-md);
-    text-align: center;
     transition: var(--transition-fast);
     cursor: pointer;
 }
@@ -254,49 +273,55 @@ body {
 .topic-button:hover {
     border-color: var(--color-accent);
     background-color: var(--color-accent-light);
-    transform: translateY(-2px);
 }
 
 .topic-icon {
-    width: 28px;
-    height: 28px;
-    margin-bottom: var(--space-3);
+    width: 20px;
+    height: 20px;
     color: var(--color-accent);
+    margin-right: var(--space-3);
+    flex-shrink: 0;
 }
 
 .topic-label {
     font-size: 14px;
     font-weight: 500;
     color: var(--color-foreground);
+    margin-bottom: var(--space-1);
 }
 
 .topic-description {
     font-size: 12px;
     color: var(--color-foreground-secondary);
-    margin-top: var(--space-1);
 }
 
-/* Conversation display */
+/* Conversation display - styled like the application table */
 .conversation {
     display: flex;
     flex-direction: column;
-    gap: var(--space-6);
+    padding: 0;
 }
 
 .message {
     display: flex;
-    gap: var(--space-4);
+    padding: var(--space-4) var(--space-6);
+    border-bottom: 1px solid var(--color-border);
+}
+
+.message:nth-child(odd) {
+    background-color: var(--color-table-row-alt);
 }
 
 .message-avatar {
     width: 28px;
     height: 28px;
     border-radius: var(--radius-full);
-    background-color: var(--color-accent-light);
+    background-color: var(--color-info-bg);
     display: flex;
     align-items: center;
     justify-content: center;
     flex-shrink: 0;
+    margin-right: var(--space-4);
 }
 
 .message-avatar.user {
@@ -311,28 +336,37 @@ body {
 
 .message-content {
     flex: 1;
-    font-size: 15px;
+    font-size: 14px;
     line-height: 1.5;
+}
+
+.message-text {
+    background-color: transparent;
+    padding: 0;
+    border-radius: 0;
+    box-shadow: none;
+    border: none;
+    margin-bottom: var(--space-3);
 }
 
 .message-actions {
     display: flex;
-    margin-top: var(--space-4);
     gap: var(--space-2);
 }
 
+/* Status-like buttons for the actions */
 .action-button {
     display: flex;
     align-items: center;
-    justify-content: center;
-    padding: var(--space-2) var(--space-3);
-    border: 1px solid var(--color-border);
-    border-radius: var(--radius-sm);
-    background-color: transparent;
+    padding: var(--space-1) var(--space-3);
+    border-radius: var(--radius-md);
     font-size: 13px;
-    color: var(--color-foreground-secondary);
+    font-weight: 500;
     cursor: pointer;
     transition: var(--transition-fast);
+    background-color: transparent;
+    border: 1px solid var(--color-border);
+    color: var(--color-foreground-secondary);
 }
 
 .action-button svg {
@@ -347,10 +381,58 @@ body {
     color: var(--color-accent);
 }
 
+/* Style buttons like status pills in the app */
 .action-button.primary {
-    background-color: var(--color-accent-light);
-    border-color: var(--color-accent);
-    color: var(--color-accent);
+    background-color: var(--color-info-bg);
+    border-color: var(--color-info-bg);
+    color: var(--color-info);
+}
+
+.regenerate-button {
+    background-color: var(--color-warning-bg);
+    border-color: var(--color-warning-bg);
+    color: var(--color-warning);
+}
+
+.download-audio-button {
+    background-color: var(--color-neutral-bg);
+    border-color: var(--color-neutral-bg);
+    color: var(--color-neutral);
+}
+
+/* Status Indicators like in the application UI */
+.status-indicator {
+    display: inline-flex;
+    align-items: center;
+    padding: var(--space-1) var(--space-3);
+    border-radius: var(--radius-full);
+    font-size: 13px;
+    font-weight: 500;
+}
+
+.status-success {
+    background-color: var(--color-success-bg);
+    color: var(--color-success);
+}
+
+.status-error {
+    background-color: var(--color-error-bg);
+    color: var(--color-error);
+}
+
+.status-warning {
+    background-color: var(--color-warning-bg);
+    color: var(--color-warning);
+}
+
+.status-info {
+    background-color: var(--color-info-bg);
+    color: var(--color-info);
+}
+
+.status-neutral {
+    background-color: var(--color-neutral-bg);
+    color: var(--color-neutral);
 }
 
 /* Loading animation */
@@ -395,56 +477,22 @@ body {
     }
 }
 
-/* Audio visualization */
-.audio-wave {
-    display: flex;
-    align-items: center;
-    gap: 2px;
-    margin-right: var(--space-2);
-}
-
-.audio-wave .bar {
-    width: 2px;
-    height: 3px;
-    background-color: currentColor;
-    border-radius: 1px;
-}
-
-/* Notification toast */
-.toast {
-    position: fixed;
-    bottom: var(--space-8);
-    left: 50%;
-    transform: translateX(-50%);
-    padding: var(--space-3) var(--space-5);
-    background-color: rgba(0, 0, 0, 0.8);
-    color: white;
-    border-radius: var(--radius-full);
-    font-size: 14px;
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
-    box-shadow: var(--shadow-md);
-    z-index: 100;
-    opacity: 0;
-    transition: var(--transition-medium);
-}
-
 /* Theme toggle */
 .theme-toggle {
     position: fixed;
-    top: var(--space-6);
-    right: var(--space-6);
+    top: var(--space-4);
+    right: var(--space-4);
     display: flex;
     background-color: var(--color-card);
-    border-radius: var(--radius-full);
+    border-radius: var(--radius-md);
     box-shadow: var(--shadow-md);
     overflow: hidden;
     border: 1px solid var(--color-border);
 }
 
 .theme-button {
-    width: 36px;
-    height: 36px;
+    width: 32px;
+    height: 32px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -460,83 +508,8 @@ body {
 }
 
 .theme-button svg {
-    width: 18px;
-    height: 18px;
-}
-
-/* Animations */
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(10px);
-    }
-
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-@keyframes pulse {
-    0% {
-        box-shadow: 0 0 0 0 rgba(255, 59, 48, 0.4);
-    }
-
-    70% {
-        box-shadow: 0 0 0 8px rgba(255, 59, 48, 0);
-    }
-
-    100% {
-        box-shadow: 0 0 0 0 rgba(255, 59, 48, 0);
-    }
-}
-
-/* Responsiveness */
-@media (max-width: 768px) {
-    body {
-        padding: var(--space-3);
-    }
-
-    .app-container {
-        margin-top: var(--space-4);
-        padding: var(--space-4);
-        border-radius: var(--radius-md);
-    }
-
-    .app-title {
-        font-size: 22px;
-    }
-
-    .app-subtitle {
-        font-size: 14px;
-    }
-
-    .topics-grid {
-        grid-template-columns: repeat(2, 1fr);
-    }
-
-    .theme-toggle {
-        top: var(--space-3);
-        right: var(--space-3);
-    }
-}
-
-@media (max-width: 480px) {
-    .topics-grid {
-        grid-template-columns: 1fr;
-    }
-
-    .topic-button {
-        flex-direction: row;
-        justify-content: flex-start;
-        text-align: left;
-        padding: var(--space-3) var(--space-4);
-    }
-
-    .topic-icon {
-        margin-bottom: 0;
-        margin-right: var(--space-3);
-    }
+    width: 16px;
+    height: 16px;
 }
 
 /* Dark mode */
@@ -549,10 +522,71 @@ body {
     --color-accent-light: rgba(10, 132, 255, 0.12);
     --color-border: rgba(255, 255, 255, 0.1);
     --color-input-bg: rgba(255, 255, 255, 0.05);
+    --color-table-row-alt: rgba(255, 255, 255, 0.03);
 
     --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.2);
     --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.3);
     --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.3);
+}
+
+/* Responsiveness */
+@media (max-width: 768px) {
+    body {
+        padding: var(--space-2);
+    }
+
+    .app-container {
+        margin-top: var(--space-2);
+        border-radius: var(--radius-md);
+    }
+
+    .app-header {
+        padding: var(--space-4);
+    }
+
+    .app-title {
+        font-size: 20px;
+    }
+
+    .app-subtitle {
+        font-size: 13px;
+    }
+
+    .input-container {
+        padding: var(--space-3) var(--space-4);
+    }
+
+    .topic-section {
+        padding: var(--space-4);
+    }
+
+    .topics-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .message {
+        padding: var(--space-3) var(--space-4);
+    }
+
+    .theme-toggle {
+        top: var(--space-2);
+        right: var(--space-2);
+    }
+}
+
+@media (max-width: 480px) {
+    .topics-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .message-actions {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .action-button {
+        width: 100%;
+    }
 }
 
 /* Accessibility */
