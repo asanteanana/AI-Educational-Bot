@@ -7,7 +7,7 @@
   <title>Insight | Your AI Learning Companion</title>
   <meta name="description" content="Knowledge spoken clearly. Learning made accessible." />
   <link rel="icon"
-    href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%234F709C'%3E%3Ccircle cx='12' cy='12' r='10' /%3E%3C/svg%3E"
+    href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%236e6ef9'%3E%3Ccircle cx='12' cy='12' r='10' /%3E%3C/svg%3E"
     type="image/svg+xml">
   <link rel="stylesheet" href="css/styles.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -16,30 +16,9 @@
 </head>
 
 <body>
-  <header>
-    <div class="container">
-      <div class="logo">
-        <svg class="icon" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-          <path
-            d="M12 16c2.206 0 4-1.794 4-4s-1.794-4-4-4-4 1.794-4 4 1.794 4 4 4zm0-6c1.084 0 2 .916 2 2s-.916 2-2 2-2-.916-2-2 .916-2 2-2z" />
-          <path
-            d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.411 0-8-3.589-8-8s3.589-8 8-8 8 3.589 8 8-3.589 8-8 8z" />
-        </svg>
-        <h1>Insight</h1>
-      </div>
-      <nav>
-        <ul>
-          <li><a href="#" class="active">Home</a></li>
-          <li><a href="#">About</a></li>
-          <li><a href="#">Accessibility</a></li>
-        </ul>
-      </nav>
-    </div>
-  </header>
-
   <!-- Theme toggle -->
   <div class="theme-toggle">
-    <button id="light-mode-button" class="active" aria-label="Switch to light mode">
+    <button id="light-mode-button" class="theme-button active" aria-label="Switch to light mode">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
         stroke-linejoin="round">
         <circle cx="12" cy="12" r="5"></circle>
@@ -53,7 +32,7 @@
         <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
       </svg>
     </button>
-    <button id="dark-mode-button" aria-label="Switch to dark mode">
+    <button id="dark-mode-button" class="theme-button" aria-label="Switch to dark mode">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
         stroke-linejoin="round">
         <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
@@ -61,131 +40,170 @@
     </button>
   </div>
 
-  <main>
-    <div class="container">
-      <section class="hero">
-        <h1 class="hero-title">Knowledge spoken clearly</h1>
-        <p class="hero-subtitle">An educational companion that makes learning accessible through conversation and audio.
-          Ask questions and receive clear, spoken explanations on any topic.</p>
-
-        <div class="divider">
-          <span>Start a conversation</span>
-        </div>
-
-        <div id="welcome-message" class="welcome-message">
-          <div class="assistant-avatar">
-            <svg viewBox="0 0 24 24" fill="white" xmlns="http://www.w3.org/2000/svg">
-              <path
-                d="M12 16c2.206 0 4-1.794 4-4s-1.794-4-4-4-4 1.794-4 4 1.794 4 4 4zm0-6c1.084 0 2 .916 2 2s-.916 2-2 2-2-.916-2-2 .916-2 2-2z" />
-              <path
-                d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.411 0-8-3.589-8-8s3.589-8 8-8 8 3.589 8 8-3.589 8-8 8z" />
-            </svg>
-          </div>
-          <p>Hello! I'm your learning companion. Ask me anything you'd like to understand better, and I'll provide clear
-            explanations that you can read or listen to.</p>
-        </div>
-
-        <div class="main-input-container">
-          <form id="main-form" class="main-input">
-            <input type="text" id="main-question-input" placeholder="What would you like to learn about?"
-              autocomplete="off">
-            <button type="submit" id="main-send-button">
-              <span class="button-text">Ask</span>
-              <span class="loading-spinner"></span>
-            </button>
-            <button type="button" id="voice-input-button" aria-label="Use voice input">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                stroke-linejoin="round">
-                <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path>
-                <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
-                <line x1="12" y1="19" x2="12" y2="23"></line>
-                <line x1="8" y1="23" x2="16" y2="23"></line>
-              </svg>
-            </button>
-          </form>
-        </div>
-      </section>
-
-      <section id="conversation-container" class="conversation-container hidden">
-        <div class="conversation-header">
-          <button id="new-conversation" class="text-button">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-              stroke-linejoin="round">
-              <line x1="12" y1="5" x2="12" y2="19"></line>
-              <line x1="5" y1="12" x2="19" y2="12"></line>
-            </svg>
-            New Conversation
-          </button>
-        </div>
-
-        <div id="qa-container" class="qa-container">
-          <!-- Q&A pairs will be added here by JavaScript -->
-        </div>
-      </section>
-    </div>
-  </main>
-
-  <footer>
-    <div class="container">
-      <p>Insight Assistant • Making learning accessible • CC BY-SA 4.0</p>
-    </div>
-  </footer>
-
-  <!-- QA pair template -->
-  <template id="qa-pair-template">
-    <div class="qa-pair">
-      <div class="question-container">
-        <div class="question-content">
-          <svg class="user-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-            stroke-linecap="round" stroke-linejoin="round">
-            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-            <circle cx="12" cy="7" r="4"></circle>
-          </svg>
-          <div class="question-text"></div>
-        </div>
+  <div class="app-container">
+    <div class="app-header">
+      <div class="app-logo">
+        <svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+          <path
+            d="M12 16c2.206 0 4-1.794 4-4s-1.794-4-4-4-4 1.794-4 4 1.794 4 4 4zm0-6c1.084 0 2 .916 2 2s-.916 2-2 2-2-.916-2-2 .916-2 2-2z" />
+          <path
+            d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.411 0-8-3.589-8-8s3.589-8 8-8 8 3.589 8 8-3.589 8-8 8z" />
+        </svg>
+        <span class="app-logo-text">AI assistant</span>
       </div>
 
-      <div class="answer-container">
-        <div class="answer-content">
-          <svg class="assistant-icon" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-            <path
-              d="M12 16c2.206 0 4-1.794 4-4s-1.794-4-4-4-4 1.794-4 4 1.794 4 4 4zm0-6c1.084 0 2 .916 2 2s-.916 2-2 2-2-.916-2-2 .916-2 2-2z" />
-            <path
-              d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.411 0-8-3.589-8-8s3.589-8 8-8 8 3.589 8 8-3.589 8-8 8z" />
-          </svg>
-          <div class="answer-text"></div>
-        </div>
+      <h1 class="app-title">Knowledge spoken clearly</h1>
+      <p class="app-subtitle">Ask me anything you'd like to understand better, and I'll provide clear explanations that
+        you can read or listen to.</p>
+    </div>
 
-        <div class="answer-actions">
-          <button class="action-button play-audio-button" aria-label="Play audio response">
+    <div class="input-container">
+      <form id="main-form">
+        <div class="input-wrapper">
+          <input type="text" class="input-field" id="main-question-input" placeholder="What do you want to learn about?"
+            autocomplete="off">
+          <button type="button" id="voice-input-button" class="voice-button" aria-label="Use voice input">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+              stroke-linejoin="round">
+              <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path>
+              <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
+              <line x1="12" y1="19" x2="12" y2="23"></line>
+              <line x1="8" y1="23" x2="16" y2="23"></line>
+            </svg>
+          </button>
+          <button type="submit" id="main-send-button" class="send-button">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+              stroke-linejoin="round">
+              <line x1="22" y1="2" x2="11" y2="13"></line>
+              <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+            </svg>
+          </button>
+        </div>
+      </form>
+    </div>
+
+    <div class="topic-section">
+      <div class="or-divider">Or</div>
+      <div class="topics-grid">
+        <div class="topic-button" data-topic="Improve Information">
+          <svg class="topic-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"></circle>
+            <line x1="12" y1="16" x2="12" y2="12"></line>
+            <line x1="12" y1="8" x2="12.01" y2="8"></line>
+          </svg>
+          <div>
+            <div class="topic-label">Improve Information</div>
+            <div class="topic-description">Learn foundational concepts</div>
+          </div>
+        </div>
+        <div class="topic-button" data-topic="Learn Skills">
+          <svg class="topic-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
+            <path
+              d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z">
+            </path>
+          </svg>
+          <div>
+            <div class="topic-label">Learn Skills</div>
+            <div class="topic-description">Develop practical abilities</div>
+          </div>
+        </div>
+        <div class="topic-button" data-topic="Educational Resources">
+          <svg class="topic-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
+            <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+            <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+          </svg>
+          <div>
+            <div class="topic-label">Educational Resources</div>
+            <div class="topic-description">Find learning materials</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="conversation" class="conversation" style="display: none;">
+      <!-- Messages will be added here by JavaScript -->
+    </div>
+  </div>
+
+  <!-- Message templates -->
+  <template id="user-message-template">
+    <div class="message">
+      <div class="message-avatar user">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+          stroke-linejoin="round">
+          <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+          <circle cx="12" cy="7" r="4"></circle>
+        </svg>
+      </div>
+      <div class="message-content">
+        <div class="message-text"></div>
+      </div>
+    </div>
+  </template>
+
+  <template id="assistant-message-template">
+    <div class="message">
+      <div class="message-avatar">
+        <svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+          <path
+            d="M12 16c2.206 0 4-1.794 4-4s-1.794-4-4-4-4 1.794-4 4 1.794 4 4 4zm0-6c1.084 0 2 .916 2 2s-.916 2-2 2-2-.916-2-2 .916-2 2-2z" />
+          <path
+            d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.411 0-8-3.589-8-8s3.589-8 8-8 8 3.589 8 8-3.589 8-8 8z" />
+        </svg>
+      </div>
+      <div class="message-content">
+        <div class="message-text"></div>
+        <div class="message-actions">
+          <button class="action-button primary play-audio-button">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
               stroke-linejoin="round">
               <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
               <path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path>
               <path d="M19.07 4.93a10 10 0 0 1 0 14.14"></path>
             </svg>
-            <span>Listen</span>
+            Listen
           </button>
-
-          <button class="action-button regenerate-button" aria-label="Regenerate response">
+          <button class="action-button regenerate-button">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
               stroke-linejoin="round">
               <path d="M23 4v6h-6"></path>
               <path d="M1 20v-6h6"></path>
               <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path>
             </svg>
-            <span>Refresh</span>
+            Regenerate
           </button>
-
-          <button class="action-button download-audio-button" aria-label="Download audio">
+          <button class="action-button download-audio-button">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
               stroke-linejoin="round">
               <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
               <polyline points="7 10 12 15 17 10"></polyline>
               <line x1="12" y1="15" x2="12" y2="3"></line>
             </svg>
-            <span>Save Audio</span>
+            Save Audio
           </button>
+        </div>
+      </div>
+    </div>
+  </template>
+
+  <template id="typing-indicator-template">
+    <div class="message">
+      <div class="message-avatar">
+        <svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+          <path
+            d="M12 16c2.206 0 4-1.794 4-4s-1.794-4-4-4-4 1.794-4 4 1.794 4 4 4zm0-6c1.084 0 2 .916 2 2s-.916 2-2 2-2-.916-2-2 .916-2 2-2z" />
+          <path
+            d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.411 0-8-3.589-8-8s3.589-8 8-8 8 3.589 8 8-3.589 8-8 8z" />
+        </svg>
+      </div>
+      <div class="message-content">
+        <div class="typing">
+          <span class="typing-dot"></span>
+          <span class="typing-dot"></span>
+          <span class="typing-dot"></span>
         </div>
       </div>
     </div>
