@@ -88,98 +88,12 @@
         <h2 class="welcome-title">Begin your learning journey</h2>
         <p class="welcome-text">I'm your learning companion, here to help you discover and understand new ideas. Every
           question is a step toward growth. What would you like to explore today?</p>
-
-        <!-- Added suggestion pills inspired by Perplexity UI -->
-        <div class="suggestion-pills">
-          <div class="suggestion-pill">How does machine learning work?</div>
-          <div class="suggestion-pill">Explain quantum computing</div>
-          <div class="suggestion-pill">History of artificial intelligence</div>
-        </div>
       </div>
 
       <!-- Status-based header -->
       <div class="conversation-header">
         <span style="flex: 3;">Your Learning Questions</span>
         <span style="flex: 1; text-align: right;">Progress</span>
-      </div>
-
-      <!-- Example of citation box inspired by Perplexity -->
-      <div class="message">
-        <div class="message-content">
-          <div class="message-text">Machine learning is a branch of artificial intelligence that focuses on developing
-            systems that learn from data.</div>
-          <div class="citation-box">
-            <div class="title">From "Introduction to Machine Learning"</div>
-            <p>Machine learning algorithms build a model based on sample data, known as training data, in order to make
-              predictions or decisions without being explicitly programmed to do so.</p>
-            <div class="source">Source: MIT Press, 2021</div>
-          </div>
-          <div class="status-pill status-success">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-              stroke-linejoin="round">
-              <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
-              <polyline points="22 4 12 14.01 9 11.01"></polyline>
-            </svg>
-            Discovered
-          </div>
-        </div>
-      </div>
-
-      <!-- Example of code block styled like modern AI assistants -->
-      <div class="message">
-        <div class="message-content">
-          <div class="message-text">Here's a simple example of a machine learning model in Python:</div>
-          <div class="code-block">
-            <div class="code-language">python</div>
-            <pre><code>from sklearn.model_selection import train_test_split
-from sklearn.linear_model import LinearRegression
-import numpy as np
-
-# Generate sample data
-X = np.random.rand(100, 1)
-y = 2 + 3 * X + np.random.randn(100, 1) * 0.1
-
-# Split the data
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2)
-
-# Train a model
-model = LinearRegression()
-model.fit(X_train, y_train)
-
-# Make predictions
-predictions = model.predict(X_test)</code></pre>
-          </div>
-          <div class="status-pill status-success">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-              stroke-linejoin="round">
-              <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
-              <polyline points="22 4 12 14.01 9 11.01"></polyline>
-            </svg>
-            Discovered
-          </div>
-        </div>
-      </div>
-
-      <!-- Example of thinking animation inspired by Grok -->
-      <div class="message">
-        <div class="message-content">
-          <div class="message-text">Working on a more complex example for deep learning...</div>
-          <div class="thinking-animation">
-            <div class="thinking-bar"></div>
-            <div class="thinking-bar"></div>
-            <div class="thinking-bar"></div>
-            <div class="thinking-bar"></div>
-          </div>
-          <div class="status-pill status-warning">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-              stroke-linejoin="round">
-              <circle cx="12" cy="12" r="10"></circle>
-              <line x1="12" y1="8" x2="12" y2="12"></line>
-              <line x1="12" y1="16" x2="12.01" y2="16"></line>
-            </svg>
-            Learning
-          </div>
-        </div>
       </div>
 
       <!-- Conversation will be populated here dynamically -->
