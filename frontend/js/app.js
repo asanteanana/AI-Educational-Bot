@@ -13,13 +13,21 @@ const welcomeContainer = document.querySelector('.welcome-container');
 const conversationHeader = document.querySelector('.conversation-header');
 const appContainer = document.querySelector('.app-container');
 
-// Learning-focused responses
+// Learning-focused responses with audio accessibility emphasis
 const demoResponses = {
-    "hello": "Hello there! I'm excited to join you on your learning journey today. What topic would you like to explore?",
-    "who are you": "I'm your personal learning companion, designed to help you discover and understand new concepts. Think of me as a guide on your educational journey, here to help you make sense of any topic you're curious about.",
-    "what can you do": "I can help you explore a wide range of topics, explain complex concepts in simple terms, and provide different perspectives to deepen your understanding. Learning is always more engaging when it's interactive, so feel free to ask follow-up questions as we go!",
-    "help": "I'd be happy to assist with your learning goals! Whether you're curious about a specific concept, need clarification on a topic, or want to explore a new idea, I'm here to guide you. What would you like to understand better today?",
-    "thanks": "You're very welcome! Curiosity and questions are the foundation of learning, so I appreciate your engagement. Is there anything else you'd like to explore or understand more deeply?",
+    "hello": "Hello! Welcome to your audio learning companion. I'm designed to make learning more accessible through spoken information. My responses are crafted to be clear and engaging when listened to. What topic would you like to explore today?",
+
+    "who are you": "I'm your audio-first educational assistant, designed to make knowledge accessible through spoken content. I use natural-sounding text-to-speech technology to help diverse learners access information in a way that works for them. My approach is inspired by the universal accessibility principles championed by resources like Wikipedia, where knowledge should be available to everyone regardless of how they prefer or need to consume information.",
+
+    "what can you do": "I can transform complex information into clear, spoken explanations that are easy to listen to and understand. This is particularly helpful for auditory learners, people with reading difficulties, those who are multitasking, or anyone who prefers listening over reading. You can ask me about virtually any topic, and I'll provide an explanation optimized for listening. You can also save these audio explanations for later or request simplified versions if needed.",
+
+    "how does this work": "When you ask a question, I generate a response that's specifically formatted to sound natural when spoken aloud. My text-to-speech engine converts this text to high-quality audio that mimics natural human speech patterns, including appropriate pacing, emphasis, and intonation. This makes complex information more accessible to everyone, including people with reading difficulties, visual impairments, or those who simply prefer auditory learning. You can listen immediately or save the audio for later reference.",
+
+    "accessibility": "Audio learning addresses several accessibility needs. For people with visual impairments, dyslexia, or other reading difficulties, spoken content provides access to information that might otherwise be challenging to consume. For those with attention difficulties, audio can sometimes be easier to focus on than text. And for people who are busy or multitasking, audio allows learning to happen alongside other activities. This approach to knowledge sharing follows the principles of universal design for learning, which aims to make education accessible to everyone.",
+
+    "help": "I'd be happy to assist with your audio learning needs! You can ask me about any topic, and I'll provide information designed to be heard rather than read. When I respond, you'll see audio controls to listen to the explanation, request a simpler version, or save the audio for later. This service is particularly valuable if you're an auditory learner, have difficulty reading text, or simply prefer to consume information while multitasking. What would you like to learn about today?",
+
+    "thanks": "You're very welcome! I'm glad I could help make information more accessible through audio. Learning should adapt to different needs and preferences, not the other way around. If you have more questions or topics to explore, feel free to ask anytime. I'm here to make knowledge accessible to everyone through the power of speech.",
 };
 
 // Simulate retrieval of information with a learning focus
@@ -38,13 +46,17 @@ const simulateAPIResponse = async (question) => {
         }
     }
 
-    // Learning-focused fallback responses
+    // Audio-learning focused fallback responses
     const fallbackResponses = [
-        "That's a fascinating question! While I don't have all the information on this topic right now, this is definitely an area worth exploring further. Would you like to try a different angle?",
-        "Great curiosity! In a fully developed system, I'd guide you through a detailed exploration of this topic. Learning is about discovery, so don't hesitate to ask more questions.",
-        "I appreciate your interest in learning about this! While I don't have complete information on this specific topic at the moment, I'd be happy to explore related concepts with you.",
-        "Excellent question that shows real curiosity! While I can't provide a comprehensive answer right now, this is exactly the kind of thinking that leads to deeper understanding.",
-        "That's a thoughtful inquiry! Every question is a step toward new knowledge. While I don't have the full details on this right now, I'd be glad to help you explore related concepts."
+        "That's an interesting topic to explore through audio learning. While I don't have complete information right now, I can create a spoken explanation about related concepts if you'd like. Audio formats make complex topics more accessible to many learners who process information better through listening.",
+
+        "This would make for a fascinating audio lesson. In a complete system, I'd provide a spoken explanation with proper pacing and emphasis to make this information easy to absorb through listening. Would you like to explore a related topic that I can explain through audio?",
+
+        "I appreciate your interest in learning about this through audio. While I don't have comprehensive information on this specific topic at the moment, audio learning has been shown to be particularly effective for complex subjects like this one. It allows learners to process information at their own pace and often improves retention.",
+
+        "That's exactly the kind of thoughtful question that benefits from an audio explanation. While I don't have the full details right now, spoken explanations like those found in educational podcasts and audiobooks have revolutionized how we learn complex topics. They're especially helpful for auditory learners and those with reading difficulties.",
+
+        "What a great topic to explore through listening! Audio learning, like what Wikipedia's spoken articles provide, makes knowledge more universally accessible. While I don't have the complete information on this yet, I'd be happy to provide audio explanations on related subjects that might interest you."
     ];
 
     return fallbackResponses[Math.floor(Math.random() * fallbackResponses.length)];
@@ -621,7 +633,7 @@ const speak = (text) => {
         );
 
         utterance.voice = preferredVoice || voices.find(voice => voice.lang.startsWith('en')) || voices[0];
-        utterance.rate = 1;
+        utterance.rate = 0.95; // Slightly slower rate for better comprehension
         utterance.pitch = 1;
 
         utterance.onend = () => resolve();
@@ -893,7 +905,7 @@ const setupThemeToggle = () => {
             document.body.removeChild(ripple);
         });
 
-        showNotification('Light mode activated for better daytime learning');
+        showNotification('Light mode activated for better reading and visual accessibility');
     });
 
     // Dark mode toggle
@@ -945,7 +957,7 @@ const setupThemeToggle = () => {
             document.body.removeChild(ripple);
         });
 
-        showNotification('Dark mode activated for comfortable night learning');
+        showNotification('Dark mode activated for reduced eye strain and nighttime listening');
     });
 };
 

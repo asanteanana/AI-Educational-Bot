@@ -4,9 +4,9 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Learn - Your Learning Companion</title>
+  <title>VoiceLearn - Accessible Learning Companion</title>
   <meta name="description"
-    content="Your friendly learning companion that helps you discover knowledge and grow your understanding through thoughtful conversations." />
+    content="Your accessible learning companion using text-to-speech technology to help you discover knowledge through natural audio conversations." />
   <link rel="icon"
     href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%230071e3'%3E%3Ccircle cx='12' cy='12' r='10' /%3E%3C/svg%3E"
     type="image/svg+xml">
@@ -51,9 +51,9 @@
         <span class="app-logo-text">Learning Companion</span>
       </div>
 
-      <h1 class="app-title">What would you like to learn today?</h1>
-      <p class="app-subtitle">Ask me anything—I'm here to help you explore ideas, understand concepts, and grow your
-        knowledge</p>
+      <h1 class="app-title">What would you like to learn and listen to today?</h1>
+      <p class="app-subtitle">Ask anything and receive spoken explanations designed for auditory learning—making
+        knowledge accessible to everyone, regardless of reading preferences or ability</p>
     </div>
 
     <div class="input-container">
@@ -61,7 +61,8 @@
         <div class="input-wrapper">
           <input type="text" class="input-field" id="main-question-input" placeholder="What are you curious about?"
             autocomplete="off">
-          <button type="button" id="voice-input-button" class="voice-button" aria-label="Use voice input">
+          <button type="button" id="voice-input-button" class="voice-button"
+            aria-label="Use voice input for accessibility">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
               stroke-linejoin="round">
               <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path>
@@ -84,16 +85,18 @@
     <div id="conversation" class="conversation">
       <!-- Welcome message -->
       <div class="welcome-container">
-        <div class="welcome-icon">✨</div>
-        <h2 class="welcome-title">Begin your learning journey</h2>
-        <p class="welcome-text">I'm your learning companion, here to help you discover and understand new ideas. Every
-          question is a step toward growth. What would you like to explore today?</p>
+        <div class="welcome-icon">🔊</div>
+        <h2 class="welcome-title">Learn through listening</h2>
+        <p class="welcome-text">I'm your audio learning companion, designed to make knowledge accessible through
+          natural-sounding speech. Ask a question, and I'll provide information you can listen to—perfect for auditory
+          learners, multitasking, or anyone who prefers spoken content over reading. Inspired by the accessibility
+          principles championed by educational resources like Wikipedia, I offer an inclusive way to explore ideas.</p>
       </div>
 
       <!-- Status-based header -->
       <div class="conversation-header">
-        <span style="flex: 3;">Your Learning Questions</span>
-        <span style="flex: 1; text-align: right;">Progress</span>
+        <span style="flex: 3;">Your Audio Learning Library</span>
+        <span style="flex: 1; text-align: right;">Status</span>
       </div>
 
       <!-- Conversation will be populated here dynamically -->
@@ -111,7 +114,7 @@
             <path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"></path>
             <path d="M12 6v6l4 2"></path>
           </svg>
-          Exploring...
+          Researching...
         </div>
       </div>
     </div>
@@ -127,7 +130,7 @@
             <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
             <polyline points="22 4 12 14.01 9 11.01"></polyline>
           </svg>
-          Discovered
+          Ready to Play
         </div>
         <div class="message-actions">
           <button class="action-button primary play-audio-button">
@@ -137,7 +140,7 @@
               <path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path>
               <path d="M19.07 4.93a10 10 0 0 1 0 14.14"></path>
             </svg>
-            Listen
+            Listen Now
           </button>
           <button class="action-button regenerate-button">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
@@ -146,7 +149,7 @@
               <path d="M1 20v-6h6"></path>
               <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path>
             </svg>
-            Different Approach
+            Simplify Explanation
           </button>
           <button class="action-button download-audio-button">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
@@ -155,7 +158,7 @@
               <polyline points="7 10 12 15 17 10"></polyline>
               <line x1="12" y1="15" x2="12" y2="3"></line>
             </svg>
-            Save Lesson
+            Save Audio
           </button>
         </div>
       </div>
@@ -165,7 +168,7 @@
   <template id="typing-indicator-template">
     <div class="message">
       <div class="message-content">
-        <div class="message-text">Gathering knowledge for you...</div>
+        <div class="message-text">Preparing your audio lesson...</div>
         <div class="status-pill status-warning">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
             stroke-linejoin="round">
@@ -173,7 +176,7 @@
             <line x1="12" y1="8" x2="12" y2="12"></line>
             <line x1="12" y1="16" x2="12.01" y2="16"></line>
           </svg>
-          Learning
+          Processing
         </div>
         <div class="typing">
           <span class="typing-dot"></span>
