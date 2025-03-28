@@ -41,8 +41,9 @@
     </button>
   </div>
 
-  <div class="app-container">
-    <div class="app-header">
+  <div class="app-container wiki-layout">
+    <!-- Wiki-style sidebar -->
+    <div class="wiki-sidebar">
       <div class="app-logo">
         <!-- Simplified logo circle -->
         <svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
@@ -51,55 +52,83 @@
         <span class="app-logo-text">Learning Companion</span>
       </div>
 
-      <h1 class="app-title">What would you like to learn and listen to today?</h1>
-      <p class="app-subtitle">Ask anything and receive spoken explanations designed for auditory learning—making
-        knowledge accessible to everyone, regardless of reading preferences or ability</p>
+      <h3 class="sidebar-heading">Learning Tools</h3>
+      <ul class="sidebar-links">
+        <li><a href="#" class="active">Audio Conversation</a></li>
+        <li><a href="#">Audio Library</a></li>
+        <li><a href="#">Saved Explanations</a></li>
+        <li><a href="#">Accessibility</a></li>
+      </ul>
+
+      <h3 class="sidebar-heading">References</h3>
+      <div class="reference-panel">
+        <p class="reference-text">All audio explanations are generated to be educational and accessible. Content is
+          provided with proper citations when available.</p>
+      </div>
     </div>
 
-    <div class="input-container">
-      <form id="main-form">
-        <div class="input-wrapper">
-          <input type="text" class="input-field" id="main-question-input" placeholder="What are you curious about?"
-            autocomplete="off">
-          <button type="button" id="voice-input-button" class="voice-button"
-            aria-label="Use voice input for accessibility">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-              stroke-linejoin="round">
-              <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path>
-              <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
-              <line x1="12" y1="19" x2="12" y2="23"></line>
-              <line x1="8" y1="23" x2="16" y2="23"></line>
-            </svg>
-          </button>
-          <button type="submit" id="main-send-button" class="send-button">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-              stroke-linejoin="round">
-              <line x1="22" y1="2" x2="11" y2="13"></line>
-              <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
-            </svg>
-          </button>
+    <!-- Main content area -->
+    <div class="wiki-content">
+      <div class="app-header">
+        <h1 class="app-title">What would you like to learn today?</h1>
+        <p class="app-subtitle">Receive spoken explanations designed for auditory learning</p>
+      </div>
+
+      <div class="input-container">
+        <form id="main-form">
+          <div class="input-wrapper">
+            <input type="text" class="input-field" id="main-question-input" placeholder="What are you curious about?"
+              autocomplete="off">
+            <button type="button" id="voice-input-button" class="voice-button"
+              aria-label="Use voice input for accessibility">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                stroke-linejoin="round">
+                <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path>
+                <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
+                <line x1="12" y1="19" x2="12" y2="23"></line>
+                <line x1="8" y1="23" x2="16" y2="23"></line>
+              </svg>
+            </button>
+            <button type="submit" id="main-send-button" class="send-button">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                stroke-linejoin="round">
+                <line x1="22" y1="2" x2="11" y2="13"></line>
+                <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+              </svg>
+            </button>
+          </div>
+        </form>
+      </div>
+
+      <div id="conversation" class="conversation">
+        <!-- Welcome message -->
+        <div class="welcome-container">
+          <div class="welcome-icon">🔊</div>
+          <h2 class="welcome-title">Learn through listening</h2>
+          <p class="welcome-text">Your audio learning companion that makes knowledge accessible through spoken content.
+            Ask a question to receive information you can listen to—perfect for auditory learning, multitasking, or when
+            you prefer audio over reading. Built on principles of accessibility, like Wikipedia's commitment to
+            knowledge for everyone.</p>
+
+          <!-- Wiki-inspired citation -->
+          <div class="citation-box">
+            <div class="citation-header">Sources</div>
+            <ul class="citation-list">
+              <li><span class="citation-number">[1]</span> <a href="#">Audio Learning Benefits</a>, Journal of
+                Educational Technology</li>
+              <li><span class="citation-number">[2]</span> <a href="#">Accessibility Guidelines</a>, W3C</li>
+            </ul>
+          </div>
         </div>
-      </form>
-    </div>
 
-    <div id="conversation" class="conversation">
-      <!-- Welcome message -->
-      <div class="welcome-container">
-        <div class="welcome-icon">🔊</div>
-        <h2 class="welcome-title">Learn through listening</h2>
-        <p class="welcome-text">Hey there! I'm your friendly audio learning companion. Think of me as your personal
-          podcast creator—just ask any question, and I'll craft an engaging audio explanation just for you. Perfect for
-          when you're on the go, prefer to learn by listening, or simply want to give your eyes a rest. Let's make
-          learning more accessible, personal, and fun—tap the mic or type your first question to get started.</p>
+        <!-- Status-based header -->
+        <div class="conversation-header">
+          <span style="flex: 3;">Your Audio Learning Library</span>
+          <span style="flex: 1; text-align: right;">Status</span>
+        </div>
+
+        <!-- Conversation will be populated here dynamically -->
       </div>
-
-      <!-- Status-based header -->
-      <div class="conversation-header">
-        <span style="flex: 3;">Your Audio Learning Library</span>
-        <span style="flex: 1; text-align: right;">Status</span>
-      </div>
-
-      <!-- Conversation will be populated here dynamically -->
     </div>
   </div>
 

@@ -642,3 +642,403 @@ svg {
     flex-shrink: 0;
     animation: pulse 2s infinite;
 }
+
+/* Theme toggle - Wikipedia-inspired with better accessibility */
+.theme-toggle {
+    position: fixed;
+    top: var(--space-4);
+    right: var(--space-4);
+    display: flex;
+    background-color: var(--color-input-bg);
+    border-radius: var(--radius-full);
+    overflow: hidden;
+    transition: background-color 0.3s ease;
+    padding: 2px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    z-index: 100;
+    border: 1px solid var(--color-border);
+}
+
+.theme-button {
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    color: var(--color-foreground-secondary);
+    will-change: transform, background-color;
+    transition: all var(--transition-spring);
+    position: relative;
+    overflow: hidden;
+    border-radius: 50%;
+}
+
+.theme-button.active {
+    background-color: var(--color-accent);
+    color: white;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.theme-button:not(.active):hover {
+    background-color: var(--color-accent-light);
+    color: var(--color-accent);
+    transform: translateY(-1px);
+}
+
+.theme-button svg {
+    width: 18px;
+    height: 18px;
+    transition: transform 0.3s ease;
+}
+
+.theme-button:hover svg {
+    transform: scale(1.1) rotate(5deg);
+}
+
+.theme-button:active svg {
+    transform: scale(0.9);
+}
+
+/* Theme button active svg */
+.theme-button:active svg {
+    transform: scale(0.9);
+}
+
+/* Conversation container - Wikipedia article-inspired styling */
+.conversation {
+    display: flex;
+    flex-direction: column;
+    padding: 0;
+    overflow-y: auto;
+    max-height: 500px;
+    background-color: var(--color-card);
+    transition: background-color 0.3s ease;
+}
+
+/* Conversation header - Wikipedia section header inspired */
+.conversation-header {
+    display: flex;
+    padding: var(--space-3) var(--space-5);
+    border-bottom: 1px solid var(--color-border);
+    background-color: var(--color-input-bg);
+    font-weight: 600;
+    font-size: 13px;
+    color: var(--color-foreground-secondary);
+    opacity: 0;
+    transform: translateY(-10px);
+    transition: opacity 0.3s ease, transform 0.5s var(--transition-spring), background-color 0.3s ease;
+}
+
+/* Message styling - Wikipedia paragraphs inspired */
+.message {
+    display: flex;
+    padding: var(--space-3) var(--space-5);
+    border-bottom: 1px solid var(--color-border);
+    position: relative;
+    overflow: hidden;
+    will-change: transform, background-color;
+    transition: background-color 0.2s ease, transform var(--transition-spring), box-shadow 0.3s ease;
+}
+
+.message:hover {
+    transform: translateY(-2px) scale(1.005);
+    z-index: 1;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.message:nth-child(even) {
+    background-color: var(--color-table-row-alt);
+}
+
+.message-content {
+    flex: 1;
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+.message-text {
+    padding: 0;
+    margin-bottom: var(--space-3);
+}
+
+/* Status Pills - Wikipedia reference style */
+.status-pill {
+    display: inline-flex;
+    align-items: center;
+    border-radius: var(--radius-full);
+    padding: var(--space-1) var(--space-3);
+    font-size: 13px;
+    font-weight: 500;
+    margin-right: var(--space-2);
+    will-change: transform;
+    transition: transform var(--transition-spring), box-shadow 0.3s ease;
+}
+
+.status-pill svg {
+    width: 14px;
+    height: 14px;
+    margin-right: var(--space-1);
+}
+
+.status-success {
+    background-color: var(--color-success-bg);
+    color: var(--color-success);
+}
+
+.status-warning {
+    background-color: var(--color-warning-bg);
+    color: var(--color-warning);
+}
+
+.status-error {
+    background-color: var(--color-error-bg);
+    color: var(--color-error);
+}
+
+.status-info {
+    background-color: var(--color-info-bg);
+    color: var(--color-info);
+}
+
+.status-neutral {
+    background-color: var(--color-neutral-bg);
+    color: var(--color-neutral);
+}
+
+.status-submitting {
+    background-color: var(--color-submitting-bg);
+    color: var(--color-submitting);
+}
+
+/* Message actions - Wikipedia citation style */
+.message-actions {
+    display: flex;
+    gap: var(--space-2);
+    margin-top: var(--space-2);
+    flex-wrap: wrap;
+}
+
+/* Action buttons - Wikipedia edit buttons style */
+.action-button {
+    display: flex;
+    align-items: center;
+    padding: var(--space-1) var(--space-3);
+    border-radius: var(--radius-full);
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    will-change: transform, background-color;
+    transition: all var(--transition-spring);
+    background-color: var(--color-input-bg);
+    border: none;
+    color: var(--color-foreground);
+    position: relative;
+    overflow: hidden;
+}
+
+.action-button svg {
+    width: 12px;
+    height: 12px;
+    margin-right: var(--space-2);
+    transition: transform 0.3s ease;
+}
+
+.action-button:hover {
+    background-color: var(--color-accent-light);
+    color: var(--color-accent);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.action-button:hover svg {
+    transform: scale(1.2);
+}
+
+.action-button:active {
+    transform: translateY(0);
+}
+
+/* Primary button - like Wikipedia's main action */
+.action-button.primary {
+    background-color: var(--color-accent);
+    color: white;
+}
+
+.action-button.primary:hover {
+    background-color: var(--color-accent);
+    opacity: 0.9;
+    color: white;
+    box-shadow: 0 4px 12px var(--color-accent-glow);
+}
+
+/* Wikipedia-inspired layout styles */
+.wiki-layout {
+    display: flex;
+    flex-direction: row;
+    max-width: 1200px;
+}
+
+.wiki-sidebar {
+    width: 250px;
+    padding: var(--space-6);
+    border-right: 1px solid var(--color-border);
+    background-color: var(--color-card);
+    transition: background-color 0.3s ease;
+    flex-shrink: 0;
+}
+
+.wiki-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.sidebar-heading {
+    font-size: 14px;
+    font-weight: 600;
+    margin: var(--space-6) 0 var(--space-3);
+    color: var(--color-foreground);
+    border-bottom: 1px solid var(--color-border);
+    padding-bottom: var(--space-2);
+}
+
+.sidebar-links {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 var(--space-6);
+}
+
+.sidebar-links li {
+    margin-bottom: var(--space-2);
+}
+
+.sidebar-links a {
+    color: var(--color-foreground-secondary);
+    text-decoration: none;
+    font-size: 14px;
+    display: block;
+    padding: var(--space-2) 0;
+    transition: all var(--transition-spring);
+    border-left: 2px solid transparent;
+    padding-left: var(--space-2);
+}
+
+.sidebar-links a:hover {
+    color: var(--color-accent);
+    padding-left: var(--space-3);
+}
+
+.sidebar-links a.active {
+    color: var(--color-accent);
+    border-left-color: var(--color-accent);
+    font-weight: 500;
+    padding-left: var(--space-3);
+}
+
+.reference-panel {
+    background-color: var(--color-table-row-alt);
+    border-radius: var(--radius-md);
+    padding: var(--space-4);
+    font-size: 13px;
+    color: var(--color-foreground-secondary);
+    border: 1px solid var(--color-border);
+}
+
+.reference-text {
+    line-height: 1.5;
+    margin: 0;
+}
+
+/* Wikipedia-inspired citation box */
+.citation-box {
+    margin-top: var(--space-5);
+    background-color: var(--color-input-bg);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    padding: var(--space-4);
+    font-size: 13px;
+    max-width: 100%;
+}
+
+.citation-header {
+    font-weight: 600;
+    margin-bottom: var(--space-2);
+    color: var(--color-foreground);
+    font-size: 14px;
+}
+
+.citation-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.citation-list li {
+    margin-bottom: var(--space-2);
+    line-height: 1.5;
+    display: flex;
+    color: var(--color-foreground-secondary);
+}
+
+.citation-number {
+    margin-right: var(--space-2);
+    color: var(--color-accent);
+    font-weight: 500;
+    flex-shrink: 0;
+}
+
+.citation-list a {
+    color: var(--color-accent);
+    text-decoration: none;
+}
+
+.citation-list a:hover {
+    text-decoration: underline;
+}
+
+/* Responsive adjustments for wiki layout */
+@media (max-width: 900px) {
+    .wiki-layout {
+        flex-direction: column;
+    }
+
+    .wiki-sidebar {
+        width: 100%;
+        border-right: none;
+        border-bottom: 1px solid var(--color-border);
+        padding: var(--space-4);
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+    }
+
+    .app-logo {
+        width: 100%;
+        margin-bottom: var(--space-4);
+    }
+
+    .sidebar-heading {
+        width: 100%;
+        margin-top: var(--space-4);
+    }
+
+    .sidebar-links {
+        width: calc(50% - var(--space-2));
+    }
+
+    .reference-panel {
+        width: calc(50% - var(--space-2));
+        margin-bottom: var(--space-4);
+    }
+}
+
+@media (max-width: 600px) {
+
+    .sidebar-links,
+    .reference-panel {
+        width: 100%;
+    }
+}

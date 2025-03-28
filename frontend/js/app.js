@@ -12,6 +12,8 @@ const conversation = document.getElementById('conversation');
 const welcomeContainer = document.querySelector('.welcome-container');
 const conversationHeader = document.querySelector('.conversation-header');
 const appContainer = document.querySelector('.app-container');
+const wikiSidebar = document.querySelector('.wiki-sidebar');
+const wikiContent = document.querySelector('.wiki-content');
 
 // Learning-focused responses with audio accessibility emphasis
 const demoResponses = {
@@ -161,50 +163,53 @@ const handleQuestionSubmit = async (question) => {
 
     // Hide welcome message and show header if this is the first message
     if (welcomeContainer && welcomeContainer.style.display !== 'none') {
+        // Wiki-style fold animation
         animate(welcomeContainer, {
             opacity: [1, 0],
             height: [welcomeContainer.offsetHeight, 0],
-            scale: [1, 0.95]
+            scale: [1, 0.98]
         }, {
             duration: 0.5,
             ease: [0.4, 0, 0.2, 1]
         }).then(() => {
             welcomeContainer.style.display = 'none';
 
-            // Show the conversation header with a fade-in and slide animation
+            // Show the conversation header with a Wikipedia-inspired fade-in animation
             if (conversationHeader) {
                 conversationHeader.style.display = 'flex';
-                conversationHeader.style.opacity = '0';
-                conversationHeader.style.transform = 'translateY(-10px)';
 
+                // Animated with Framer Motion
                 animate(conversationHeader, {
                     opacity: [0, 1],
-                    y: [-10, 0]
+                    y: [-10, 0],
+                    backgroundColor: ['var(--color-card)', 'var(--color-input-bg)']
                 }, {
-                    duration: 0.5,
+                    duration: 0.6,
                     delay: 0.1,
-                    ease: [0.34, 1.56, 0.64, 1]
+                    ease: [0.16, 1, 0.3, 1] // Custom ease for Wikipedia-like appearance
                 });
             }
         });
     }
 
-    // Add user message with animation
+    // Add user message with Wikipedia-inspired animation
     const userMessage = createUserMessage(question);
     conversation.appendChild(userMessage);
 
-    // Get the actual DOM element to animate
+    // Get the actual DOM element to animate with Framer Motion
     const userMessageElement = userMessage.querySelector('.message');
     userMessageElement.style.opacity = '0';
     userMessageElement.style.transform = 'translateY(10px)';
 
-    // Animate message appearance
+    // Animate message appearance with a Wikipedia-style fade
     animate(userMessageElement, {
         opacity: [0, 1],
-        y: [10, 0]
+        y: [10, 0],
+        borderLeftWidth: [0, 4, 0], // Wiki-style highlight effect
+        borderLeftColor: ['transparent', 'var(--color-accent)', 'transparent']
     }, {
-        duration: 0.4,
-        ease: [0.34, 1.56, 0.64, 1]
+        duration: 0.5,
+        ease: [0.16, 1, 0.3, 1]
     });
 
     // Add typing indicator with a staggered animation
@@ -835,7 +840,7 @@ const setupVoiceInput = () => {
     };
 };
 
-// Setup theme toggle with enhanced animations
+// Setup theme toggle with enhanced animations and fix bugs
 const setupThemeToggle = () => {
     // Dark mode: Define the body class based on system preference or saved setting
     const applyDarkMode = (isDark) => {
@@ -854,10 +859,14 @@ const setupThemeToggle = () => {
     const savedTheme = localStorage.getItem('theme');
     const prefersDarkMode = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
 
-    // Apply initial theme
-    applyDarkMode(savedTheme === 'dark' || (!savedTheme && prefersDarkMode));
+    // Apply initial theme with forced reflow to ensure CSS variables update
+    const isDark = savedTheme === 'dark' || (!savedTheme && prefersDarkMode);
+    applyDarkMode(isDark);
 
-    // Light mode toggle
+    // Force a reflow to ensure CSS variables are applied properly
+    document.body.offsetHeight;
+
+    // Light mode toggle with improved reliability
     lightModeButton.addEventListener('click', () => {
         if (lightModeButton.classList.contains('active')) return;
 
@@ -870,10 +879,12 @@ const setupThemeToggle = () => {
             ease: [0.34, 1.56, 0.64, 1]
         });
 
+        // Apply mode change with forced reflow
         applyDarkMode(false);
+        document.body.offsetHeight;
         localStorage.setItem('theme', 'light');
 
-        // Button press feedback
+        // Button press feedback with Framer Motion
         animate(lightModeButton, {
             scale: [1, 1.2, 1],
             rotate: [0, 10, 0]
@@ -882,34 +893,29 @@ const setupThemeToggle = () => {
             ease: [0.34, 1.56, 0.64, 1]
         });
 
-        // Ripple effect
-        const ripple = document.createElement('div');
-        ripple.style.position = 'fixed';
-        ripple.style.top = '0';
-        ripple.style.left = '0';
-        ripple.style.width = '100vw';
-        ripple.style.height = '100vh';
-        ripple.style.backgroundColor = 'rgba(255, 255, 255, 0.03)';
-        ripple.style.borderRadius = '50%';
-        ripple.style.transform = 'scale(0)';
-        ripple.style.pointerEvents = 'none';
-        ripple.style.zIndex = '-1';
-        document.body.appendChild(ripple);
+        // Wikipedia-style page transition effect
+        const flash = document.createElement('div');
+        flash.style.position = 'fixed';
+        flash.style.inset = '0';
+        flash.style.backgroundColor = 'rgba(255, 255, 255, 0.2)';
+        flash.style.pointerEvents = 'none';
+        flash.style.zIndex = '9999';
+        flash.style.opacity = '0';
+        document.body.appendChild(flash);
 
-        animate(ripple, {
-            transform: ['scale(0)', 'scale(3)'],
-            opacity: [1, 0]
+        animate(flash, {
+            opacity: [0, 0.7, 0]
         }, {
             duration: 0.8,
-            ease: [0.4, 0, 0.2, 1]
+            ease: [0.34, 1.56, 0.64, 1]
         }).then(() => {
-            document.body.removeChild(ripple);
+            document.body.removeChild(flash);
         });
 
         showNotification('Light mode activated for better reading and visual accessibility');
     });
 
-    // Dark mode toggle
+    // Dark mode toggle with improved reliability
     darkModeButton.addEventListener('click', () => {
         if (darkModeButton.classList.contains('active')) return;
 
@@ -922,10 +928,12 @@ const setupThemeToggle = () => {
             ease: [0.34, 1.56, 0.64, 1]
         });
 
+        // Apply mode change with forced reflow
         applyDarkMode(true);
+        document.body.offsetHeight;
         localStorage.setItem('theme', 'dark');
 
-        // Button press feedback
+        // Button press feedback with Framer Motion
         animate(darkModeButton, {
             scale: [1, 1.2, 1],
             rotate: [0, -10, 0]
@@ -934,39 +942,36 @@ const setupThemeToggle = () => {
             ease: [0.34, 1.56, 0.64, 1]
         });
 
-        // Ripple effect
-        const ripple = document.createElement('div');
-        ripple.style.position = 'fixed';
-        ripple.style.top = '0';
-        ripple.style.left = '0';
-        ripple.style.width = '100vw';
-        ripple.style.height = '100vh';
-        ripple.style.backgroundColor = 'rgba(0, 0, 0, 0.1)';
-        ripple.style.borderRadius = '50%';
-        ripple.style.transform = 'scale(0)';
-        ripple.style.pointerEvents = 'none';
-        ripple.style.zIndex = '-1';
-        document.body.appendChild(ripple);
+        // Wikipedia-style page transition effect for dark mode
+        const flash = document.createElement('div');
+        flash.style.position = 'fixed';
+        flash.style.inset = '0';
+        flash.style.backgroundColor = 'rgba(0, 0, 0, 0.2)';
+        flash.style.pointerEvents = 'none';
+        flash.style.zIndex = '9999';
+        flash.style.opacity = '0';
+        document.body.appendChild(flash);
 
-        animate(ripple, {
-            transform: ['scale(0)', 'scale(3)'],
-            opacity: [1, 0]
+        animate(flash, {
+            opacity: [0, 0.7, 0]
         }, {
             duration: 0.8,
-            ease: [0.4, 0, 0.2, 1]
+            ease: [0.34, 1.56, 0.64, 1]
         }).then(() => {
-            document.body.removeChild(ripple);
+            document.body.removeChild(flash);
         });
 
         showNotification('Dark mode activated for reduced eye strain and nighttime listening');
     });
 };
 
-// Animated entrance effects for UI elements
+// Animated entrance effects for UI elements with Wikipedia-inspired animations
 const animateUIElements = () => {
     // Get all the key UI sections
     const elements = [
         appContainer,
+        wikiSidebar,
+        wikiContent,
         document.querySelector('.app-header'),
         document.querySelector('.input-container'),
         welcomeContainer,
@@ -981,7 +986,7 @@ const animateUIElements = () => {
         }
     });
 
-    // Staggered animation of elements with spring physics for more natural motion
+    // Staggered animation of elements with Wikipedia-style progressive loading
     elements.forEach((el, index) => {
         if (el) {
             setTimeout(() => {
@@ -990,270 +995,76 @@ const animateUIElements = () => {
                     y: [20, 0],
                     scale: [0.98, 1]
                 }, {
-                    duration: 0.7,
-                    ease: [0.34, 1.56, 0.64, 1] // Spring-like curve
+                    duration: 0.6,
+                    ease: [0.16, 1, 0.3, 1] // Wikipedia-inspired ease curve
                 });
-            }, 100 + (index * 120));
+            }, 100 + (index * 100));
         }
     });
 
-    // Enhanced animation for app title with character-by-character reveal
+    // Wikipedia-style header animation
     const appTitle = document.querySelector('.app-title');
     if (appTitle) {
         const originalText = appTitle.textContent;
-        const charCount = originalText.length;
+        appTitle.innerHTML = '';
 
-        // Create wrapper for text animation
-        const charWrapper = document.createElement('span');
-        charWrapper.style.position = 'relative';
-        charWrapper.style.display = 'inline-block';
+        // Add characters one by one like Wikipedia page load
+        originalText.split('').forEach((char, index) => {
+            const span = document.createElement('span');
+            span.textContent = char;
+            span.style.opacity = '0';
+            span.style.display = 'inline-block';
+            appTitle.appendChild(span);
 
-        // Clear original content
-        appTitle.textContent = '';
-        appTitle.appendChild(charWrapper);
-
-        // Create spans for each character
-        for (let i = 0; i < charCount; i++) {
-            const charSpan = document.createElement('span');
-            charSpan.textContent = originalText[i];
-            charSpan.style.opacity = '0';
-            charSpan.style.display = 'inline-block';
-            charSpan.style.transform = 'translateY(20px)';
-            charWrapper.appendChild(charSpan);
-
-            // Animate each character with stagger
             setTimeout(() => {
-                animate(charSpan, {
+                animate(span, {
                     opacity: [0, 1],
-                    y: [20, 0],
-                    rotate: [10, 0]
+                    y: [5, 0]
                 }, {
-                    duration: 0.5,
-                    ease: [0.34, 1.56, 0.64, 1]
+                    duration: 0.1,
+                    ease: 'linear'
                 });
-            }, 600 + (i * 30)); // Starts after initial page load
-        }
+            }, 600 + (index * 25));
+        });
     }
 
-    // Add subtle scroll-triggered animations to the welcome container content
-    if (welcomeContainer) {
-        const welcomeTitle = welcomeContainer.querySelector('.welcome-title');
-        const welcomeText = welcomeContainer.querySelector('.welcome-text');
-        const welcomeIcon = welcomeContainer.querySelector('.welcome-icon');
+    // Animate citation box with Wikipedia-style appearance
+    const citationBox = document.querySelector('.citation-box');
+    if (citationBox) {
+        citationBox.style.opacity = '0';
+        citationBox.style.transform = 'translateY(10px)';
 
-        // Create and set up intersection observer for scroll animations
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    // Different animation for each element
-                    if (entry.target === welcomeIcon) {
-                        animate(welcomeIcon, {
-                            scale: [0.5, 1.2, 1],
-                            rotate: [0, 15, 0]
-                        }, {
-                            duration: 1,
-                            ease: [0.34, 1.56, 0.64, 1]
-                        });
-                    } else if (entry.target === welcomeTitle) {
-                        animate(welcomeTitle, {
-                            opacity: [0, 1],
-                            y: [15, 0]
-                        }, {
-                            duration: 0.7,
-                            delay: 0.2,
-                            ease: [0.34, 1.56, 0.64, 1]
-                        });
-                    } else if (entry.target === welcomeText) {
-                        animate(welcomeText, {
-                            opacity: [0, 1],
-                            y: [10, 0]
-                        }, {
-                            duration: 0.7,
-                            delay: 0.4,
-                            ease: [0.34, 1.56, 0.64, 1]
-                        });
-                    }
-
-                    // Unobserve after animation is triggered
-                    observer.unobserve(entry.target);
-                }
-            });
-        }, { threshold: 0.2 });
-
-        // Set initial states and observe elements
-        if (welcomeIcon) {
-            welcomeIcon.style.opacity = '1';
-            welcomeIcon.style.transform = 'scale(0.5)';
-            observer.observe(welcomeIcon);
-        }
-
-        if (welcomeTitle) {
-            welcomeTitle.style.opacity = '0';
-            welcomeTitle.style.transform = 'translateY(15px)';
-            observer.observe(welcomeTitle);
-        }
-
-        if (welcomeText) {
-            welcomeText.style.opacity = '0';
-            welcomeText.style.transform = 'translateY(10px)';
-            observer.observe(welcomeText);
-        }
-    }
-
-    // Add magnetic hover effect to app logo
-    const logo = document.querySelector('.app-logo');
-    if (logo) {
-        // Create shine element
-        const shine = document.createElement('div');
-        shine.style.position = 'absolute';
-        shine.style.top = '0';
-        shine.style.left = '-100%';
-        shine.style.width = '50%';
-        shine.style.height = '100%';
-        shine.style.background = 'linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent)';
-        shine.style.transform = 'skewX(-25deg)';
-        shine.style.pointerEvents = 'none';
-
-        logo.style.position = 'relative';
-        logo.style.overflow = 'hidden';
-        logo.appendChild(shine);
-
-        // Add magnetic hover effect
-        logo.addEventListener('mousemove', (e) => {
-            const rect = logo.getBoundingClientRect();
-            const centerX = rect.left + rect.width / 2;
-            const centerY = rect.top + rect.height / 2;
-            const moveX = (e.clientX - centerX) / 10;
-            const moveY = (e.clientY - centerY) / 10;
-
-            animate(logo, {
-                x: moveX,
-                y: moveY,
-                rotateX: moveY / 2,
-                rotateY: -moveX / 2
-            }, { duration: 0.2 });
-        });
-
-        logo.addEventListener('mouseleave', () => {
-            animate(logo, {
-                x: 0,
-                y: 0,
-                rotateX: 0,
-                rotateY: 0
-            }, {
-                duration: 0.5,
-                ease: [0.34, 1.56, 0.64, 1]
-            });
-        });
-
-        // Animate shine every few seconds
-        const animateShine = () => {
-            animate(shine, {
-                left: ['-100%', '200%']
-            }, {
-                duration: 1.5,
-                ease: [0.4, 0, 0.2, 1]
-            });
-        };
-
-        // Initial animation and then repeat
-        setTimeout(animateShine, 2000);
-        setInterval(animateShine, 8000);
-    }
-
-    // Add parallax effect to the app container on mouse move
-    if (appContainer) {
-        document.addEventListener('mousemove', (e) => {
-            const mouseX = e.clientX / window.innerWidth - 0.5;
-            const mouseY = e.clientY / window.innerHeight - 0.5;
-
-            // Subtle movement based on mouse position
-            requestAnimationFrame(() => {
-                appContainer.style.transform = `translateX(${mouseX * 5}px) translateY(${mouseY * 5}px)`;
-            });
-        });
-
-        // Enhanced hover effect
-        appContainer.addEventListener('mouseenter', () => {
-            animate(appContainer, {
-                y: -5,
+        setTimeout(() => {
+            animate(citationBox, {
+                opacity: [0, 1],
+                y: [10, 0],
                 boxShadow: [
-                    'var(--shadow-md)',
-                    '0 8px 30px rgba(0, 0, 0, 0.12)'
+                    '0 0 0 rgba(0, 0, 0, 0)',
+                    '0 2px 6px rgba(0, 0, 0, 0.08)'
                 ]
-            }, { duration: 0.3 });
-        });
-
-        appContainer.addEventListener('mouseleave', () => {
-            animate(appContainer, {
-                y: 0,
-                boxShadow: [
-                    '0 8px 30px rgba(0, 0, 0, 0.12)',
-                    'var(--shadow-md)'
-                ]
-            }, { duration: 0.3 });
-        });
+            }, {
+                duration: 0.8,
+                delay: 1,
+                ease: [0.16, 1, 0.3, 1]
+            });
+        }, 1200);
     }
 
-    // Add animated focus effect to input field
-    const inputField = document.getElementById('main-question-input');
-    if (inputField) {
-        inputField.addEventListener('focus', () => {
-            const inputWrapper = inputField.closest('.input-wrapper');
-            if (inputWrapper) {
-                animate(inputWrapper, {
-                    scale: [1, 1.01],
-                    boxShadow: [
-                        'var(--shadow-sm)',
-                        '0 0 0 2px rgba(0, 113, 227, 0.2), 0 0 15px rgba(0, 113, 227, 0.15)'
-                    ]
-                }, {
-                    duration: 0.4,
-                    ease: [0.34, 1.56, 0.64, 1]
-                });
-            }
-        });
+    // Animate sidebar links like Wikipedia menu
+    const sidebarLinks = document.querySelectorAll('.sidebar-links a');
+    sidebarLinks.forEach((link, index) => {
+        link.style.opacity = '0';
+        link.style.transform = 'translateX(-10px)';
 
-        inputField.addEventListener('blur', () => {
-            const inputWrapper = inputField.closest('.input-wrapper');
-            if (inputWrapper) {
-                animate(inputWrapper, {
-                    scale: [1.01, 1],
-                    boxShadow: [
-                        '0 0 0 2px rgba(0, 113, 227, 0.2), 0 0 15px rgba(0, 113, 227, 0.15)',
-                        'var(--shadow-sm)'
-                    ]
-                }, {
-                    duration: 0.3,
-                    ease: [0.4, 0, 0.2, 1]
-                });
-            }
-        });
-    }
-
-    // Add animated hover effects to all buttons
-    document.querySelectorAll('button').forEach(button => {
-        if (!button.classList.contains('theme-button') && !button.classList.contains('action-button')) {
-            button.addEventListener('mouseenter', () => {
-                animate(button, {
-                    scale: [1, 1.05],
-                    y: [0, -2]
-                }, {
-                    duration: 0.2,
-                    ease: [0.34, 1.56, 0.64, 1]
-                });
+        setTimeout(() => {
+            animate(link, {
+                opacity: [0, 1],
+                x: [-10, 0]
+            }, {
+                duration: 0.4,
+                ease: [0.16, 1, 0.3, 1]
             });
-
-            button.addEventListener('mouseleave', () => {
-                animate(button, {
-                    scale: [1.05, 1],
-                    y: [-2, 0]
-                }, {
-                    duration: 0.2,
-                    ease: [0.4, 0, 0.2, 1]
-                });
-            });
-        }
+        }, 1200 + (index * 50));
     });
 };
 
@@ -1264,7 +1075,7 @@ const initApp = () => {
         conversationHeader.style.display = 'none';
     }
 
-    // Add framer-motion inspired animations to the UI
+    // Add Wikipedia-inspired animations to the UI
     animateUIElements();
 
     // Setup event listeners with enhanced feedback
@@ -1272,32 +1083,39 @@ const initApp = () => {
         e.preventDefault();
         const question = mainQuestionInput.value.trim();
         if (question) {
-            // Add haptic-like feedback animation
+            // Wikipedia-inspired button animation
             animate(mainSendButton, {
-                scale: [1, 0.85, 1],
-                rotate: [0, -5, 0]
+                scale: [1, 0.9, 1],
+                backgroundColor: [
+                    'var(--color-accent)',
+                    'var(--color-accent)',
+                    'var(--color-accent)'
+                ]
             }, {
                 duration: 0.4,
-                ease: [0.34, 1.56, 0.64, 1]
-            });
-
-            // Add subtle feedback to the entire container
-            animate(appContainer, {
-                boxShadow: ['var(--shadow-md)', 'var(--shadow-lg)', 'var(--shadow-md)']
-            }, {
-                duration: 0.8,
-                ease: [0.34, 1.56, 0.64, 1]
+                ease: [0.16, 1, 0.3, 1]
             });
 
             handleQuestionSubmit(question);
             mainQuestionInput.value = '';
-        } else {
-            // Shake animation for empty input - Apple-like error feedback
+
+            // Add Wikipedia-style focus animation to input after submit
             animate(mainQuestionInput, {
-                x: [0, -5, 5, -5, 5, 0],
+                backgroundColor: [
+                    'var(--color-card)',
+                    'var(--color-input-bg)'
+                ]
+            }, {
+                duration: 0.6,
+                ease: [0.16, 1, 0.3, 1]
+            });
+        } else {
+            // Wikipedia-style error shake
+            animate(mainQuestionInput, {
+                x: [0, -3, 3, -3, 3, 0],
             }, {
                 duration: 0.5,
-                ease: [0.34, 1.56, 0.64, 1]
+                ease: [0.16, 1, 0.3, 1]
             });
 
             // Subtle highlight effect
@@ -1305,36 +1123,12 @@ const initApp = () => {
                 borderColor: ['transparent', 'var(--color-error)', 'transparent']
             }, {
                 duration: 1,
-                ease: [0.34, 1.56, 0.64, 1]
+                ease: [0.16, 1, 0.3, 1]
             });
 
             showNotification('What would you like to learn about?');
         }
     });
-
-    // Add subtle animation to the input wrapper when the input has content
-    if (mainQuestionInput && mainSendButton) {
-        mainQuestionInput.addEventListener('input', () => {
-            const inputWrapper = mainQuestionInput.closest('.input-wrapper');
-            if (mainQuestionInput.value.trim().length > 0 && inputWrapper) {
-                // Animate the send button
-                animate(mainSendButton, {
-                    scale: [1, 1.1, 1],
-                }, {
-                    duration: 0.4,
-                    ease: [0.34, 1.56, 0.64, 1]
-                });
-
-                // Animate the input wrapper
-                animate(inputWrapper, {
-                    boxShadow: ['var(--shadow-sm)', '0 0 0 1px var(--color-accent-light), var(--shadow-md)']
-                }, {
-                    duration: 0.4,
-                    ease: [0.34, 1.56, 0.64, 1]
-                });
-            }
-        });
-    }
 
     // Setup voice input
     setupVoiceInput();
@@ -1436,51 +1230,47 @@ const initApp = () => {
     });
 };
 
-// Monitor system dark mode changes
+// Monitor system color scheme changes with improved reliability
 const watchSystemColorScheme = () => {
     if (window.matchMedia) {
         const colorSchemeQuery = window.matchMedia('(prefers-color-scheme: dark)');
 
-        // Add change listener
+        // Check for preference change
+        const handleChange = (e) => {
+            const savedTheme = localStorage.getItem('theme');
+            // Only auto switch if user hasn't explicitly set a preference
+            if (!savedTheme) {
+                // Ensure we force a reflow for CSS variables to update properly
+                document.body.classList.toggle('dark-mode', e.matches);
+                document.body.offsetHeight;
+
+                // Update buttons
+                if (e.matches) {
+                    lightModeButton.classList.remove('active');
+                    darkModeButton.classList.add('active');
+                } else {
+                    darkModeButton.classList.remove('active');
+                    lightModeButton.classList.add('active');
+                }
+            }
+        };
+
+        // Add change listener with compatibility
         try {
             // Modern approach
-            colorSchemeQuery.addEventListener('change', (e) => {
-                const savedTheme = localStorage.getItem('theme');
-                // Only auto switch if user hasn't explicitly set a preference
-                if (!savedTheme) {
-                    if (e.matches) {
-                        document.body.classList.add('dark-mode');
-                        lightModeButton.classList.remove('active');
-                        darkModeButton.classList.add('active');
-                    } else {
-                        document.body.classList.remove('dark-mode');
-                        darkModeButton.classList.remove('active');
-                        lightModeButton.classList.add('active');
-                    }
-                }
-            });
+            colorSchemeQuery.addEventListener('change', handleChange);
         } catch (e) {
             // Fallback for older browsers
-            colorSchemeQuery.addListener((e) => {
-                const savedTheme = localStorage.getItem('theme');
-                if (!savedTheme) {
-                    if (e.matches) {
-                        document.body.classList.add('dark-mode');
-                        lightModeButton.classList.remove('active');
-                        darkModeButton.classList.add('active');
-                    } else {
-                        document.body.classList.remove('dark-mode');
-                        darkModeButton.classList.remove('active');
-                        lightModeButton.classList.add('active');
-                    }
-                }
-            });
+            colorSchemeQuery.addListener(handleChange);
         }
     }
 };
 
 // Start the application
 document.addEventListener('DOMContentLoaded', () => {
-    initApp();
-    watchSystemColorScheme();
+    // Wait a short time to ensure all elements are fully loaded
+    setTimeout(() => {
+        initApp();
+        watchSystemColorScheme();
+    }, 100);
 }); 
