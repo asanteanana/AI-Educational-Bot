@@ -70,6 +70,32 @@
     --transition-bounce: 0.5s cubic-bezier(0.34, 1.61, 0.7, 1);
 }
 
+/* Dark mode theme */
+.dark-mode {
+    --color-background: #161617;
+    --color-card: #1c1c1e;
+    --color-foreground: #f5f5f7;
+    --color-foreground-secondary: #a1a1a6;
+
+    /* Dark mode status colors - slightly adjusted for better contrast */
+    --color-success-bg: rgba(52, 199, 89, 0.15);
+    --color-error-bg: rgba(255, 59, 48, 0.15);
+    --color-warning-bg: rgba(255, 204, 0, 0.15);
+    --color-info-bg: rgba(0, 113, 227, 0.15);
+    --color-neutral-bg: rgba(142, 142, 147, 0.15);
+    --color-submitting-bg: rgba(100, 210, 255, 0.15);
+
+    /* UI colors for dark mode */
+    --color-border: rgba(255, 255, 255, 0.1);
+    --color-input-bg: #2c2c2e;
+    --color-table-row-alt: rgba(255, 255, 255, 0.03);
+
+    /* Shadows for dark mode */
+    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.2);
+    --shadow-md: 0 2px 4px rgba(0, 0, 0, 0.2);
+    --shadow-lg: 0 4px 6px rgba(0, 0, 0, 0.2);
+}
+
 /* Base reset */
 * {
     margin: 0;
@@ -198,9 +224,9 @@ body {
 
 .input-wrapper:focus-within {
     background-color: var(--color-card);
-    transform: translateY(-1px);
-    box-shadow: 0 0 0 2px rgba(0, 113, 227, 0.1);
-    border-color: rgba(0, 113, 227, 0.5);
+    box-shadow: 0 0 0 2px var(--color-accent-light), 0 0 10px var(--color-accent-glow);
+    transform: translateY(-1px) scale(1.01);
+    border-color: var(--color-accent);
 }
 
 .input-wrapper:focus-within::after {
@@ -208,442 +234,111 @@ body {
 }
 
 .input-field {
-    flex: 1;
     border: none;
     background: transparent;
     font-size: 15px;
-    padding: var(--space-2);
+    line-height: 1.4;
+    padding: var(--space-3) 0;
+    flex: 1;
+    min-width: 0;
     color: var(--color-foreground);
     font-family: var(--font-primary);
+}
+
+.input-field:focus {
     outline: none;
-    -webkit-appearance: none;
-    appearance: none;
 }
 
 .input-field::placeholder {
     color: var(--color-foreground-secondary);
-    opacity: 0.6;
+    opacity: 0.7;
+    transition: opacity var(--transition-fast);
+}
+
+.input-field:focus::placeholder {
+    opacity: 0.4;
+}
+
+/* Enhanced button animations */
+.voice-button,
+.send-button {
+    background: transparent;
+    border: none;
+    width: 36px;
+    height: 36px;
+    border-radius: var(--radius-full);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: var(--color-foreground-secondary);
+    transition: all var(--transition-spring);
+    position: relative;
+    overflow: hidden;
+}
+
+.voice-button svg,
+.send-button svg {
+    width: 18px;
+    height: 18px;
+    transition: all var(--transition-spring);
+}
+
+.voice-button:hover,
+.send-button:hover {
+    color: var(--color-accent);
+    background-color: var(--color-accent-light);
+    transform: translateY(-2px);
+}
+
+.voice-button:active,
+.send-button:active {
+    transform: translateY(0) scale(0.95);
 }
 
 .send-button {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 32px;
-    height: 32px;
-    border-radius: var(--radius-full);
     background-color: var(--color-accent);
     color: white;
-    border: none;
-    cursor: pointer;
-    will-change: transform, box-shadow;
-    transition: transform var(--transition-spring), opacity 0.2s ease, box-shadow 0.2s ease;
-    transform-origin: center;
-}
-
-.send-button:hover {
-    opacity: 0.9;
-    transform: scale(1.08);
-    box-shadow: 0 0 10px var(--color-accent-glow);
-}
-
-.send-button:active {
-    transform: scale(0.95);
+    margin-left: var(--space-1);
 }
 
 .send-button svg {
-    width: 14px;
-    height: 14px;
+    width: 16px;
+    height: 16px;
 }
 
-.voice-button {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 30px;
-    height: 30px;
-    border-radius: var(--radius-full);
-    background-color: transparent;
-    color: var(--color-foreground-secondary);
-    border: none;
-    cursor: pointer;
-    will-change: transform, background-color;
-    transition: transform var(--transition-spring), background-color 0.2s ease, color 0.2s ease;
-    margin-right: var(--space-1);
-}
-
-.voice-button:hover {
-    background-color: var(--color-accent-light);
-    color: var(--color-accent);
-    transform: scale(1.08);
-}
-
-.voice-button:active {
-    transform: scale(0.95);
-}
-
-.voice-button svg {
-    width: 13px;
-    height: 13px;
-}
-
-.voice-button.recording {
-    color: var(--color-error);
-    animation: pulse 2s infinite;
-}
-
-/* Conversation display - styled like visa status table */
-.conversation {
-    display: flex;
-    flex-direction: column;
-    padding: 0;
-    overflow-y: auto;
-    max-height: 500px;
-}
-
-.conversation-header {
-    display: flex;
-    padding: var(--space-3) var(--space-5);
-    border-bottom: 1px solid var(--color-border);
-    background-color: var(--color-input-bg);
-    font-weight: 600;
-    font-size: 13px;
-    color: var(--color-foreground-secondary);
-}
-
-.message {
-    display: flex;
-    padding: var(--space-3) var(--space-5);
-    border-bottom: 1px solid var(--color-border);
-    position: relative;
-    overflow: hidden;
-    will-change: transform, background-color;
-    transition: background-color 0.2s ease, transform var(--transition-spring), box-shadow 0.3s ease;
-}
-
-.message:hover {
-    transform: translateY(-2px) scale(1.005);
-    z-index: 1;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-}
-
-.message:nth-child(even) {
-    background-color: var(--color-table-row-alt);
-}
-
-.message:nth-child(even):hover {
-    background-color: var(--color-accent-light);
-}
-
-.message-content {
-    flex: 1;
-    font-size: 14px;
-    line-height: 1.5;
-}
-
-.message-text {
-    padding: 0;
-    margin-bottom: var(--space-3);
-}
-
-/* Status Pills - inspired by visa application status */
-.status-pill {
-    display: inline-flex;
-    align-items: center;
-    border-radius: var(--radius-full);
-    padding: var(--space-1) var(--space-3);
-    font-size: 13px;
-    font-weight: 500;
-    margin-right: var(--space-2);
-    will-change: transform;
-    transition: transform var(--transition-spring), box-shadow 0.3s ease;
-}
-
-.status-pill:hover {
+.send-button:hover {
+    background-color: var(--color-accent);
+    color: white;
+    box-shadow: 0 2px 8px var(--color-accent-glow);
     transform: translateY(-2px) scale(1.05);
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
 
-.status-pill svg {
-    width: 14px;
-    height: 14px;
-    margin-right: var(--space-1);
+.send-button:active {
+    transform: translateY(0) scale(0.95);
+    box-shadow: 0 0 0 var(--color-accent-glow);
 }
 
-.status-success {
-    background-color: var(--color-success-bg);
-    color: var(--color-success);
+/* Add delightful pulse animation for the microphone when recording */
+.voice-button.recording {
+    background-color: var(--color-error);
+    color: white;
+    box-shadow: 0 0 0 0 rgba(255, 59, 48, 0.7);
+    animation: pulse 2s infinite cubic-bezier(0.66, 0, 0, 1);
 }
 
-.status-warning {
-    background-color: var(--color-warning-bg);
-    color: var(--color-warning);
-}
-
-.status-error {
-    background-color: var(--color-error-bg);
-    color: var(--color-error);
-}
-
-.status-info {
-    background-color: var(--color-info-bg);
-    color: var(--color-info);
-}
-
-.status-neutral {
-    background-color: var(--color-neutral-bg);
-    color: var(--color-neutral);
-}
-
-.status-submitting {
-    background-color: var(--color-submitting-bg);
-    color: var(--color-submitting);
-}
-
-/* Message actions */
-.message-actions {
-    display: flex;
-    gap: var(--space-2);
-    margin-top: var(--space-2);
-    flex-wrap: wrap;
-}
-
-/* Action buttons - flat like the Apple documentation buttons */
-.action-button {
-    display: flex;
-    align-items: center;
-    padding: var(--space-1) var(--space-3);
-    border-radius: var(--radius-full);
-    font-size: 13px;
-    font-weight: 500;
-    cursor: pointer;
-    will-change: transform, background-color;
-    transition: all var(--transition-spring);
-    background-color: var(--color-input-bg);
-    border: none;
-    color: var(--color-foreground);
-    position: relative;
-    overflow: hidden;
-}
-
-.action-button svg {
-    width: 12px;
-    height: 12px;
-    margin-right: var(--space-2);
-    transition: transform 0.3s ease;
-}
-
-.action-button:hover {
-    background-color: var(--color-accent-light);
-    color: var(--color-accent);
-    transform: translateY(-2px);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
-
-.action-button:hover svg {
-    transform: scale(1.2);
-}
-
-.action-button:active {
-    transform: translateY(0);
-}
-
-/* Create ripple effect */
-.action-button::after {
-    content: "";
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 100px;
-    height: 100px;
-    background-color: rgba(255, 255, 255, 0.4);
-    border-radius: 50%;
-    transform: translate(-50%, -50%) scale(0);
-    opacity: 0;
-    pointer-events: none;
-    transition: transform 0.5s, opacity 0.5s;
-}
-
-.action-button:active::after {
-    transform: translate(-50%, -50%) scale(1);
-    opacity: 0.3;
-    transition: 0s;
-}
-
-/* Primary button */
-.action-button.primary {
-    background-color: var(--color-accent);
+.voice-button.recording:hover {
+    background-color: var(--color-error);
     color: white;
 }
 
-.action-button.primary:hover {
-    background-color: var(--color-accent);
-    opacity: 0.9;
-    color: white;
-    box-shadow: 0 4px 12px var(--color-accent-glow);
-}
-
-/* Loading animation */
-.typing {
-    display: flex;
-    gap: var(--space-1);
-    padding: var(--space-2) var(--space-4);
-    width: fit-content;
-}
-
-.typing-dot {
-    width: 6px;
-    height: 6px;
-    border-radius: var(--radius-full);
-    background-color: var(--color-accent);
-    opacity: 0.6;
-    animation: typingAnimation 1.4s infinite ease-in-out;
-}
-
-.typing-dot:nth-child(1) {
-    animation-delay: 0s;
-}
-
-.typing-dot:nth-child(2) {
-    animation-delay: 0.2s;
-}
-
-.typing-dot:nth-child(3) {
-    animation-delay: 0.4s;
-}
-
-@keyframes typingAnimation {
-
-    0%,
-    100% {
-        opacity: 0.3;
-        transform: scale(0.8);
-    }
-
-    50% {
-        opacity: 1;
-        transform: scale(1);
-    }
-}
-
-/* Theme toggle - enhanced Apple style */
-.theme-toggle {
-    position: fixed;
-    top: var(--space-4);
-    right: var(--space-4);
-    display: flex;
-    background-color: var(--color-input-bg);
-    border-radius: var(--radius-full);
-    overflow: hidden;
-    transition: background-color 0.3s ease;
-    padding: 2px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-    z-index: 100;
-}
-
-.theme-button {
-    width: 36px;
-    height: 36px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: transparent;
-    border: none;
-    cursor: pointer;
-    color: var(--color-foreground-secondary);
-    will-change: transform, background-color;
-    transition: all var(--transition-spring);
-    position: relative;
-    overflow: hidden;
-    border-radius: 50%;
-}
-
-.theme-button.active {
-    background-color: var(--color-accent);
-    color: white;
-}
-
-.theme-button:not(.active):hover {
-    background-color: var(--color-accent-light);
-    color: var(--color-accent);
-    transform: translateY(-1px);
-}
-
-.theme-button svg {
-    width: 18px;
-    height: 18px;
-    transition: transform 0.3s ease;
-}
-
-.theme-button:hover svg {
-    transform: scale(1.1) rotate(5deg);
-}
-
-.theme-button:active svg {
-    transform: scale(0.9);
-}
-
-/* Create ripple effect */
-.theme-button::after {
-    content: "";
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 50px;
-    height: 50px;
-    background-color: rgba(255, 255, 255, 0.4);
-    border-radius: 50%;
-    transform: translate(-50%, -50%) scale(0);
-    opacity: 0;
-    pointer-events: none;
-    transition: transform 0.5s, opacity 0.5s;
-}
-
-.theme-button:active::after {
-    transform: translate(-50%, -50%) scale(1);
-    opacity: 0.3;
-    transition: 0s;
-}
-
-/* Enhanced notification */
-.notification {
-    position: fixed;
-    bottom: 20px;
-    left: 50%;
-    transform: translateX(-50%);
-    padding: 10px 16px;
-    background-color: var(--color-card);
-    color: var(--color-foreground);
-    font-size: 14px;
-    font-weight: 500;
-    border-radius: var(--radius-full);
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
-    z-index: 1000;
-    opacity: 0;
-    display: flex;
-    align-items: center;
-    border: 1px solid var(--color-border);
-    max-width: 90%;
-}
-
-.notification::before {
-    content: "";
-    width: 8px;
-    height: 8px;
-    background-color: var(--color-accent);
-    border-radius: 50%;
-    margin-right: 10px;
-    flex-shrink: 0;
-}
-
-/* Animation for dark mode toggle */
 @keyframes pulse {
     0% {
-        box-shadow: 0 0 0 0 rgba(255, 59, 48, 0.4);
+        box-shadow: 0 0 0 0 rgba(255, 59, 48, 0.7);
     }
 
     70% {
-        box-shadow: 0 0 0 8px rgba(255, 59, 48, 0);
+        box-shadow: 0 0 0 10px rgba(255, 59, 48, 0);
     }
 
     100% {
@@ -651,26 +346,73 @@ body {
     }
 }
 
-/* Welcome message - enhanced with more engaging styling */
+/* Thinking animation - more playful and Apple-inspired */
+.typing {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-2);
+    margin-top: var(--space-3);
+    height: 24px;
+}
+
+.typing-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: var(--radius-full);
+    background-color: var(--color-accent);
+    opacity: 0.7;
+}
+
+.typing-dot:nth-child(1) {
+    animation: typingDot 1.4s infinite ease-in-out;
+}
+
+.typing-dot:nth-child(2) {
+    animation: typingDot 1.4s infinite ease-in-out 0.2s;
+}
+
+.typing-dot:nth-child(3) {
+    animation: typingDot 1.4s infinite ease-in-out 0.4s;
+}
+
+@keyframes typingDot {
+
+    0%,
+    60%,
+    100% {
+        transform: translateY(0) scale(1);
+        opacity: 0.7;
+    }
+
+    30% {
+        transform: translateY(-6px) scale(1.2);
+        opacity: 1;
+        background-color: var(--color-info);
+    }
+}
+
+/* Enhanced welcome container with subtle hover effect */
 .welcome-container {
-    padding: var(--space-8) var(--space-5);
+    background-color: var(--color-card);
+    border-radius: var(--radius-lg);
+    padding: var(--space-6);
+    margin-bottom: var(--space-6);
     text-align: center;
-    color: var(--color-foreground-secondary);
-    background: linear-gradient(to bottom, var(--color-card), var(--color-table-row-alt));
-    border-radius: var(--radius-md);
-    margin: var(--space-4) var(--space-4);
-    box-shadow: var(--shadow-sm);
-    transform: translateY(0);
-    will-change: transform;
-    transition: transform var(--transition-spring), box-shadow 0.3s ease;
+    max-width: 580px;
+    margin-left: auto;
+    margin-right: auto;
+    border: 1px solid var(--color-border);
+    box-shadow: var(--shadow-md);
     position: relative;
     overflow: hidden;
-    animation: slide-in-bottom 0.7s var(--transition-spring) both;
+    transition: all var(--transition-spring);
 }
 
 .welcome-container:hover {
-    transform: translateY(-2px);
-    box-shadow: var(--shadow-md);
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-lg), 0 8px 32px rgba(0, 113, 227, 0.1);
+    border-color: rgba(0, 113, 227, 0.2);
 }
 
 .welcome-container::after {
@@ -680,8 +422,13 @@ body {
     left: 0;
     right: 0;
     height: 3px;
-    background: linear-gradient(to right, var(--color-accent), var(--color-success));
-    border-radius: var(--radius-md) var(--radius-md) 0 0;
+    background: linear-gradient(90deg, var(--color-accent), #5ac8fa, #34c759);
+    opacity: 0;
+    transition: opacity var(--transition-medium);
+}
+
+.welcome-container:hover::after {
+    opacity: 1;
 }
 
 .welcome-title {
@@ -862,4 +609,36 @@ svg {
     outline: 2px solid var(--color-accent);
     outline-offset: 2px;
 }
+
+/* Notification style - Apple-inspired toast */
+.notification {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 12px 20px;
+    background-color: var(--color-card);
+    color: var(--color-foreground);
+    font-size: 14px;
+    font-weight: 500;
+    border-radius: var(--radius-full);
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.2);
+    z-index: 1000;
+    opacity: 0;
+    display: flex;
+    align-items: center;
+    border: 1px solid var(--color-border);
+    max-width: 90%;
+    transition: all var(--transition-spring);
+}
+
+.notification::before {
+    content: "";
+    width: 8px;
+    height: 8px;
+    background-color: var(--color-accent);
+    border-radius: 50%;
+    margin-right: 10px;
+    flex-shrink: 0;
+    animation: pulse 2s infinite;
 }

@@ -81,6 +81,7 @@ const showNotification = (message, duration = 3000) => {
     notification.className = 'notification';
     notification.textContent = message;
     notification.setAttribute('role', 'status');
+    notification.setAttribute('aria-live', 'polite');
     document.body.appendChild(notification);
 
     // Animate appearance with spring physics for more natural feel
@@ -100,8 +101,8 @@ const showNotification = (message, duration = 3000) => {
     // Subtle hover animation
     notification.addEventListener('mouseenter', () => {
         animate(notification, {
-            scale: 1.03,
-            y: -3
+            scale: 1.05,
+            y: -5
         }, { duration: 0.2 });
     });
 
@@ -1271,7 +1272,7 @@ const initApp = () => {
         e.preventDefault();
         const question = mainQuestionInput.value.trim();
         if (question) {
-            // Add button press animation
+            // Add haptic-like feedback animation
             animate(mainSendButton, {
                 scale: [1, 0.85, 1],
                 rotate: [0, -5, 0]
@@ -1280,10 +1281,18 @@ const initApp = () => {
                 ease: [0.34, 1.56, 0.64, 1]
             });
 
+            // Add subtle feedback to the entire container
+            animate(appContainer, {
+                boxShadow: ['var(--shadow-md)', 'var(--shadow-lg)', 'var(--shadow-md)']
+            }, {
+                duration: 0.8,
+                ease: [0.34, 1.56, 0.64, 1]
+            });
+
             handleQuestionSubmit(question);
             mainQuestionInput.value = '';
         } else {
-            // Shake animation for empty input
+            // Shake animation for empty input - Apple-like error feedback
             animate(mainQuestionInput, {
                 x: [0, -5, 5, -5, 5, 0],
             }, {
@@ -1303,12 +1312,22 @@ const initApp = () => {
         }
     });
 
-    // Add subtle bounce animation to the send button when input has content
+    // Add subtle animation to the input wrapper when the input has content
     if (mainQuestionInput && mainSendButton) {
         mainQuestionInput.addEventListener('input', () => {
-            if (mainQuestionInput.value.trim().length > 0) {
+            const inputWrapper = mainQuestionInput.closest('.input-wrapper');
+            if (mainQuestionInput.value.trim().length > 0 && inputWrapper) {
+                // Animate the send button
                 animate(mainSendButton, {
                     scale: [1, 1.1, 1],
+                }, {
+                    duration: 0.4,
+                    ease: [0.34, 1.56, 0.64, 1]
+                });
+
+                // Animate the input wrapper
+                animate(inputWrapper, {
+                    boxShadow: ['var(--shadow-sm)', '0 0 0 1px var(--color-accent-light), var(--shadow-md)']
                 }, {
                     duration: 0.4,
                     ease: [0.34, 1.56, 0.64, 1]
@@ -1328,16 +1347,19 @@ const initApp = () => {
         mainQuestionInput.focus();
 
         // Subtle pulse animation to draw attention
-        animate(mainQuestionInput, {
-            boxShadow: [
-                'none',
-                '0 0 0 3px var(--color-accent-light), 0 0 15px var(--color-accent-glow)',
-                'none'
-            ]
-        }, {
-            duration: 1.5,
-            ease: [0.34, 1.56, 0.64, 1]
-        });
+        const inputWrapper = mainQuestionInput.closest('.input-wrapper');
+        if (inputWrapper) {
+            animate(inputWrapper, {
+                boxShadow: [
+                    'var(--shadow-sm)',
+                    '0 0 0 2px var(--color-accent-light), 0 0 15px var(--color-accent-glow)',
+                    'var(--shadow-sm)'
+                ]
+            }, {
+                duration: 1.5,
+                ease: [0.34, 1.56, 0.64, 1]
+            });
+        }
     }, 1000);
 
     // Add ripple effect to send button
@@ -1368,6 +1390,49 @@ const initApp = () => {
         }).then(() => {
             mainSendButton.removeChild(ripple);
         });
+    });
+
+    // Add the Apple-inspired welcome animation effect
+    if (welcomeContainer) {
+        const welcomeGlow = document.createElement('div');
+        welcomeGlow.style.position = 'absolute';
+        welcomeGlow.style.inset = '0';
+        welcomeGlow.style.backgroundImage = 'radial-gradient(circle at 50% 0%, var(--color-accent-glow), transparent 70%)';
+        welcomeGlow.style.opacity = '0';
+        welcomeGlow.style.pointerEvents = 'none';
+        welcomeContainer.appendChild(welcomeGlow);
+
+        // Animate the glow
+        animate(welcomeGlow, {
+            opacity: [0, 0.6, 0]
+        }, {
+            duration: 3,
+            ease: [0.4, 0, 0.2, 1],
+            repeat: Infinity,
+            repeatDelay: 3
+        });
+
+        // Make the welcome container subtly float
+        animate(welcomeContainer, {
+            y: [0, -5, 0]
+        }, {
+            duration: 6,
+            ease: [0.4, 0, 0.2, 1],
+            repeat: Infinity
+        });
+    }
+
+    // Add parallax effect to app container for more depth
+    document.addEventListener('mousemove', (e) => {
+        const mouseX = (e.clientX / window.innerWidth - 0.5) * 10;
+        const mouseY = (e.clientY / window.innerHeight - 0.5) * 10;
+
+        // Only apply the subtle effect if not on mobile
+        if (window.innerWidth > 768) {
+            requestAnimationFrame(() => {
+                appContainer.style.transform = `perspective(1000px) rotateX(${mouseY * 0.1}deg) rotateY(${mouseX * 0.1}deg) translateZ(0)`;
+            });
+        }
     });
 };
 
