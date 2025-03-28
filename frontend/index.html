@@ -4,9 +4,9 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>VoiceLearn - Accessible Learning Companion</title>
+  <title>Learning Companion</title>
   <meta name="description"
-    content="Your accessible learning companion using text-to-speech technology to help you discover knowledge through natural audio conversations." />
+    content="Your learning companion that helps you discover and understand knowledge through natural conversations." />
   <link rel="icon"
     href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%230071e3'%3E%3Ccircle cx='12' cy='12' r='10' /%3E%3C/svg%3E"
     type="image/svg+xml">
@@ -41,9 +41,8 @@
     </button>
   </div>
 
-  <div class="app-container wiki-layout">
-    <!-- Wiki-style sidebar -->
-    <div class="wiki-sidebar">
+  <div class="app-container">
+    <div class="app-header">
       <div class="app-logo">
         <!-- Simplified logo circle -->
         <svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
@@ -51,84 +50,64 @@
         </svg>
         <span class="app-logo-text">Learning Companion</span>
       </div>
-
-      <h3 class="sidebar-heading">Learning Tools</h3>
-      <ul class="sidebar-links">
-        <li><a href="#" class="active">Audio Conversation</a></li>
-        <li><a href="#">Audio Library</a></li>
-        <li><a href="#">Saved Explanations</a></li>
-        <li><a href="#">Accessibility</a></li>
-      </ul>
-
-      <h3 class="sidebar-heading">References</h3>
-      <div class="reference-panel">
-        <p class="reference-text">All audio explanations are generated to be educational and accessible. Content is
-          provided with proper citations when available.</p>
-      </div>
+      <h1 class="app-title">What would you like to learn today?</h1>
+      <p class="app-subtitle">Ask questions to get helpful, factual responses</p>
     </div>
 
-    <!-- Main content area -->
-    <div class="wiki-content">
-      <div class="app-header">
-        <h1 class="app-title">What would you like to learn today?</h1>
-        <p class="app-subtitle">Receive spoken explanations designed for auditory learning</p>
-      </div>
-
-      <div class="input-container">
-        <form id="main-form">
-          <div class="input-wrapper">
-            <input type="text" class="input-field" id="main-question-input" placeholder="What are you curious about?"
-              autocomplete="off">
-            <button type="button" id="voice-input-button" class="voice-button"
-              aria-label="Use voice input for accessibility">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                stroke-linejoin="round">
-                <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path>
-                <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
-                <line x1="12" y1="19" x2="12" y2="23"></line>
-                <line x1="8" y1="23" x2="16" y2="23"></line>
-              </svg>
-            </button>
-            <button type="submit" id="main-send-button" class="send-button">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                stroke-linejoin="round">
-                <line x1="22" y1="2" x2="11" y2="13"></line>
-                <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
-              </svg>
-            </button>
-          </div>
-        </form>
-      </div>
-
-      <div id="conversation" class="conversation">
-        <!-- Welcome message -->
-        <div class="welcome-container">
-          <div class="welcome-icon">🔊</div>
-          <h2 class="welcome-title">Learn through listening</h2>
-          <p class="welcome-text">Your audio learning companion that makes knowledge accessible through spoken content.
-            Ask a question to receive information you can listen to—perfect for auditory learning, multitasking, or when
-            you prefer audio over reading. Built on principles of accessibility, like Wikipedia's commitment to
-            knowledge for everyone.</p>
-
-          <!-- Wiki-inspired citation -->
-          <div class="citation-box">
-            <div class="citation-header">Sources</div>
-            <ul class="citation-list">
-              <li><span class="citation-number">[1]</span> <a href="#">Audio Learning Benefits</a>, Journal of
-                Educational Technology</li>
-              <li><span class="citation-number">[2]</span> <a href="#">Accessibility Guidelines</a>, W3C</li>
-            </ul>
-          </div>
+    <div class="input-container">
+      <form id="main-form">
+        <div class="input-wrapper">
+          <input type="text" class="input-field" id="main-question-input" placeholder="What are you curious about?"
+            autocomplete="off">
+          <button type="button" id="voice-input-button" class="voice-button"
+            aria-label="Use voice input for accessibility">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+              stroke-linejoin="round">
+              <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path>
+              <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
+              <line x1="12" y1="19" x2="12" y2="23"></line>
+              <line x1="8" y1="23" x2="16" y2="23"></line>
+            </svg>
+          </button>
+          <button type="submit" id="main-send-button" class="send-button">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+              stroke-linejoin="round">
+              <line x1="22" y1="2" x2="11" y2="13"></line>
+              <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+            </svg>
+          </button>
         </div>
+      </form>
+    </div>
 
-        <!-- Status-based header -->
-        <div class="conversation-header">
-          <span style="flex: 3;">Your Audio Learning Library</span>
-          <span style="flex: 1; text-align: right;">Status</span>
+    <div id="conversation" class="conversation">
+      <!-- Welcome message -->
+      <div class="welcome-container">
+        <div class="welcome-icon">🔍</div>
+        <h2 class="welcome-title">Welcome to Learning Companion</h2>
+        <p class="welcome-text">Ask me any question and I'll provide factual, helpful responses to assist your learning
+          journey. I'm designed to be your educational companion, ready to help you explore and understand new topics.
+        </p>
+
+        <!-- Wikipedia-inspired citation -->
+        <div class="citation-box">
+          <div class="citation-header">References</div>
+          <ul class="citation-list">
+            <li><span class="citation-number">[1]</span> <a href="#">Reliable Knowledge Sources</a>, Educational
+              Resources</li>
+            <li><span class="citation-number">[2]</span> <a href="#">Learning Methods</a>, Cognitive Science Journal
+            </li>
+          </ul>
         </div>
-
-        <!-- Conversation will be populated here dynamically -->
       </div>
+
+      <!-- Status-based header inspired by Wikipedia article headings -->
+      <div class="conversation-header">
+        <span style="flex: 3;">Your Learning Questions</span>
+        <span style="flex: 1; text-align: right;">Status</span>
+      </div>
+
+      <!-- Conversation will be populated here dynamically -->
     </div>
   </div>
 
@@ -159,17 +138,16 @@
             <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
             <polyline points="22 4 12 14.01 9 11.01"></polyline>
           </svg>
-          Ready to Play
+          Verified
         </div>
         <div class="message-actions">
+          <!-- Wikipedia-inspired edit actions -->
           <button class="action-button primary play-audio-button">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
               stroke-linejoin="round">
-              <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
-              <path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path>
-              <path d="M19.07 4.93a10 10 0 0 1 0 14.14"></path>
+              <polygon points="5 3 19 12 5 21 5 3"></polygon>
             </svg>
-            Listen Now
+            Read Aloud
           </button>
           <button class="action-button regenerate-button">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
@@ -178,7 +156,7 @@
               <path d="M1 20v-6h6"></path>
               <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path>
             </svg>
-            Simplify Explanation
+            Simplify
           </button>
           <button class="action-button download-audio-button">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
@@ -187,7 +165,7 @@
               <polyline points="7 10 12 15 17 10"></polyline>
               <line x1="12" y1="15" x2="12" y2="3"></line>
             </svg>
-            Save Audio
+            Save
           </button>
         </div>
       </div>
@@ -197,7 +175,7 @@
   <template id="typing-indicator-template">
     <div class="message">
       <div class="message-content">
-        <div class="message-text">Preparing your audio lesson...</div>
+        <div class="message-text">Finding information...</div>
         <div class="status-pill status-warning">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
             stroke-linejoin="round">

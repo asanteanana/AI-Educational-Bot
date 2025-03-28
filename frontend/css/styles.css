@@ -643,13 +643,13 @@ svg {
     animation: pulse 2s infinite;
 }
 
-/* Theme toggle - Wikipedia-inspired with better accessibility */
+/* Theme toggle - Fixed styling with improved visibility */
 .theme-toggle {
     position: fixed;
     top: var(--space-4);
     right: var(--space-4);
     display: flex;
-    background-color: var(--color-input-bg);
+    background-color: var(--color-card);
     border-radius: var(--radius-full);
     overflow: hidden;
     transition: background-color 0.3s ease;
@@ -702,12 +702,7 @@ svg {
     transform: scale(0.9);
 }
 
-/* Theme button active svg */
-.theme-button:active svg {
-    transform: scale(0.9);
-}
-
-/* Conversation container - Wikipedia article-inspired styling */
+/* Conversation container - Styled like a Wikipedia article */
 .conversation {
     display: flex;
     flex-direction: column;
@@ -764,6 +759,56 @@ svg {
     margin-bottom: var(--space-3);
 }
 
+/* Wikipedia-inspired citation box */
+.citation-box {
+    margin-top: var(--space-5);
+    background-color: var(--color-input-bg);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    padding: var(--space-4);
+    font-size: 13px;
+    max-width: 100%;
+    text-align: left;
+}
+
+.citation-header {
+    font-weight: 600;
+    margin-bottom: var(--space-2);
+    color: var(--color-foreground);
+    font-size: 14px;
+    border-bottom: 1px solid var(--color-border);
+    padding-bottom: var(--space-2);
+}
+
+.citation-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.citation-list li {
+    margin-bottom: var(--space-2);
+    line-height: 1.5;
+    display: flex;
+    color: var(--color-foreground-secondary);
+}
+
+.citation-number {
+    margin-right: var(--space-2);
+    color: var(--color-accent);
+    font-weight: 500;
+    flex-shrink: 0;
+}
+
+.citation-list a {
+    color: var(--color-accent);
+    text-decoration: none;
+}
+
+.citation-list a:hover {
+    text-decoration: underline;
+}
+
 /* Status Pills - Wikipedia reference style */
 .status-pill {
     display: inline-flex;
@@ -781,6 +826,11 @@ svg {
     width: 14px;
     height: 14px;
     margin-right: var(--space-1);
+}
+
+.status-pill:hover {
+    transform: translateY(-2px) scale(1.05);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
 
 .status-success {
@@ -874,171 +924,33 @@ svg {
     box-shadow: 0 4px 12px var(--color-accent-glow);
 }
 
-/* Wikipedia-inspired layout styles */
-.wiki-layout {
-    display: flex;
-    flex-direction: row;
-    max-width: 1200px;
-}
-
-.wiki-sidebar {
-    width: 250px;
-    padding: var(--space-6);
-    border-right: 1px solid var(--color-border);
-    background-color: var(--color-card);
-    transition: background-color 0.3s ease;
-    flex-shrink: 0;
-}
-
-.wiki-content {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-}
-
-.sidebar-heading {
-    font-size: 14px;
-    font-weight: 600;
-    margin: var(--space-6) 0 var(--space-3);
-    color: var(--color-foreground);
-    border-bottom: 1px solid var(--color-border);
-    padding-bottom: var(--space-2);
-}
-
-.sidebar-links {
-    list-style: none;
-    padding: 0;
-    margin: 0 0 var(--space-6);
-}
-
-.sidebar-links li {
-    margin-bottom: var(--space-2);
-}
-
-.sidebar-links a {
-    color: var(--color-foreground-secondary);
-    text-decoration: none;
-    font-size: 14px;
-    display: block;
-    padding: var(--space-2) 0;
-    transition: all var(--transition-spring);
-    border-left: 2px solid transparent;
-    padding-left: var(--space-2);
-}
-
-.sidebar-links a:hover {
-    color: var(--color-accent);
-    padding-left: var(--space-3);
-}
-
-.sidebar-links a.active {
-    color: var(--color-accent);
-    border-left-color: var(--color-accent);
-    font-weight: 500;
-    padding-left: var(--space-3);
-}
-
-.reference-panel {
-    background-color: var(--color-table-row-alt);
-    border-radius: var(--radius-md);
-    padding: var(--space-4);
-    font-size: 13px;
-    color: var(--color-foreground-secondary);
-    border: 1px solid var(--color-border);
-}
-
-.reference-text {
-    line-height: 1.5;
-    margin: 0;
-}
-
-/* Wikipedia-inspired citation box */
-.citation-box {
-    margin-top: var(--space-5);
+/* Code block styling - Wikipedia code format */
+.code-block {
     background-color: var(--color-input-bg);
-    border: 1px solid var(--color-border);
-    border-radius: var(--radius-md);
     padding: var(--space-4);
+    border-radius: var(--radius-md);
+    margin: var(--space-3) 0;
+    font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
     font-size: 13px;
-    max-width: 100%;
+    line-height: 1.6;
+    overflow-x: auto;
+    border-left: 3px solid var(--color-accent);
 }
 
-.citation-header {
-    font-weight: 600;
-    margin-bottom: var(--space-2);
-    color: var(--color-foreground);
-    font-size: 14px;
-}
-
-.citation-list {
-    list-style: none;
-    padding: 0;
+.code-block pre,
+.code-block code {
+    font-family: inherit;
+    white-space: pre;
     margin: 0;
 }
 
-.citation-list li {
-    margin-bottom: var(--space-2);
-    line-height: 1.5;
-    display: flex;
-    color: var(--color-foreground-secondary);
-}
-
-.citation-number {
-    margin-right: var(--space-2);
-    color: var(--color-accent);
-    font-weight: 500;
-    flex-shrink: 0;
-}
-
-.citation-list a {
-    color: var(--color-accent);
-    text-decoration: none;
-}
-
-.citation-list a:hover {
-    text-decoration: underline;
-}
-
-/* Responsive adjustments for wiki layout */
-@media (max-width: 900px) {
-    .wiki-layout {
-        flex-direction: column;
-    }
-
-    .wiki-sidebar {
-        width: 100%;
-        border-right: none;
-        border-bottom: 1px solid var(--color-border);
-        padding: var(--space-4);
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: space-between;
-    }
-
-    .app-logo {
-        width: 100%;
-        margin-bottom: var(--space-4);
-    }
-
-    .sidebar-heading {
-        width: 100%;
-        margin-top: var(--space-4);
-    }
-
-    .sidebar-links {
-        width: calc(50% - var(--space-2));
-    }
-
-    .reference-panel {
-        width: calc(50% - var(--space-2));
-        margin-bottom: var(--space-4);
-    }
-}
-
-@media (max-width: 600px) {
-
-    .sidebar-links,
-    .reference-panel {
-        width: 100%;
-    }
+/* Thinking animation - improved Wikipedia-inspired loading */
+.thinking-animation {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    margin: var(--space-3) 0;
+    padding: var(--space-2) var(--space-3);
+    background-color: var(--color-input-bg);
+    border-radius: var(--radius-md);
 }

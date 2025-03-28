@@ -12,8 +12,6 @@ const conversation = document.getElementById('conversation');
 const welcomeContainer = document.querySelector('.welcome-container');
 const conversationHeader = document.querySelector('.conversation-header');
 const appContainer = document.querySelector('.app-container');
-const wikiSidebar = document.querySelector('.wiki-sidebar');
-const wikiContent = document.querySelector('.wiki-content');
 
 // Learning-focused responses with audio accessibility emphasis
 const demoResponses = {
@@ -842,58 +840,40 @@ const setupVoiceInput = () => {
 
 // Setup theme toggle with enhanced animations and fix bugs
 const setupThemeToggle = () => {
-    // Dark mode: Define the body class based on system preference or saved setting
+    // Dark mode: Define the function to toggle dark mode
     const applyDarkMode = (isDark) => {
         if (isDark) {
             document.body.classList.add('dark-mode');
             lightModeButton.classList.remove('active');
             darkModeButton.classList.add('active');
+            localStorage.setItem('theme', 'dark');
         } else {
             document.body.classList.remove('dark-mode');
             darkModeButton.classList.remove('active');
             lightModeButton.classList.add('active');
+            localStorage.setItem('theme', 'light');
         }
+
+        // Force a reflow to ensure CSS variables are applied properly
+        document.body.offsetHeight;
     };
 
     // Check for saved theme preference or use system preference
     const savedTheme = localStorage.getItem('theme');
     const prefersDarkMode = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
 
-    // Apply initial theme with forced reflow to ensure CSS variables update
+    // Apply initial theme
     const isDark = savedTheme === 'dark' || (!savedTheme && prefersDarkMode);
     applyDarkMode(isDark);
 
-    // Force a reflow to ensure CSS variables are applied properly
-    document.body.offsetHeight;
-
-    // Light mode toggle with improved reliability
+    // Light mode toggle
     lightModeButton.addEventListener('click', () => {
-        if (lightModeButton.classList.contains('active')) return;
+        if (!document.body.classList.contains('dark-mode')) return;
 
-        // Animated transition for smoother theme change
-        animate(document.body, {
-            opacity: [1, 0.98, 1],
-            scale: [1, 0.999, 1]
-        }, {
-            duration: 0.5,
-            ease: [0.34, 1.56, 0.64, 1]
-        });
-
-        // Apply mode change with forced reflow
+        // Apply mode change
         applyDarkMode(false);
-        document.body.offsetHeight;
-        localStorage.setItem('theme', 'light');
 
-        // Button press feedback with Framer Motion
-        animate(lightModeButton, {
-            scale: [1, 1.2, 1],
-            rotate: [0, 10, 0]
-        }, {
-            duration: 0.5,
-            ease: [0.34, 1.56, 0.64, 1]
-        });
-
-        // Wikipedia-style page transition effect
+        // Wikipedia-style flash effect
         const flash = document.createElement('div');
         flash.style.position = 'fixed';
         flash.style.inset = '0';
@@ -912,37 +892,17 @@ const setupThemeToggle = () => {
             document.body.removeChild(flash);
         });
 
-        showNotification('Light mode activated for better reading and visual accessibility');
+        showNotification('Light mode activated');
     });
 
-    // Dark mode toggle with improved reliability
+    // Dark mode toggle
     darkModeButton.addEventListener('click', () => {
-        if (darkModeButton.classList.contains('active')) return;
+        if (document.body.classList.contains('dark-mode')) return;
 
-        // Animated transition for smoother theme change
-        animate(document.body, {
-            opacity: [1, 0.98, 1],
-            scale: [1, 0.999, 1]
-        }, {
-            duration: 0.5,
-            ease: [0.34, 1.56, 0.64, 1]
-        });
-
-        // Apply mode change with forced reflow
+        // Apply mode change
         applyDarkMode(true);
-        document.body.offsetHeight;
-        localStorage.setItem('theme', 'dark');
 
-        // Button press feedback with Framer Motion
-        animate(darkModeButton, {
-            scale: [1, 1.2, 1],
-            rotate: [0, -10, 0]
-        }, {
-            duration: 0.5,
-            ease: [0.34, 1.56, 0.64, 1]
-        });
-
-        // Wikipedia-style page transition effect for dark mode
+        // Wikipedia-style flash effect for dark mode
         const flash = document.createElement('div');
         flash.style.position = 'fixed';
         flash.style.inset = '0';
@@ -961,7 +921,7 @@ const setupThemeToggle = () => {
             document.body.removeChild(flash);
         });
 
-        showNotification('Dark mode activated for reduced eye strain and nighttime listening');
+        showNotification('Dark mode activated');
     });
 };
 
@@ -970,8 +930,6 @@ const animateUIElements = () => {
     // Get all the key UI sections
     const elements = [
         appContainer,
-        wikiSidebar,
-        wikiContent,
         document.querySelector('.app-header'),
         document.querySelector('.input-container'),
         welcomeContainer,
@@ -1049,23 +1007,6 @@ const animateUIElements = () => {
             });
         }, 1200);
     }
-
-    // Animate sidebar links like Wikipedia menu
-    const sidebarLinks = document.querySelectorAll('.sidebar-links a');
-    sidebarLinks.forEach((link, index) => {
-        link.style.opacity = '0';
-        link.style.transform = 'translateX(-10px)';
-
-        setTimeout(() => {
-            animate(link, {
-                opacity: [0, 1],
-                x: [-10, 0]
-            }, {
-                duration: 0.4,
-                ease: [0.16, 1, 0.3, 1]
-            });
-        }, 1200 + (index * 50));
-    });
 };
 
 // Initialize the application with enhanced animations
@@ -1156,7 +1097,7 @@ const initApp = () => {
         }
     }, 1000);
 
-    // Add ripple effect to send button
+    // Add ripple effect to send button - Wikipedia-inspired interaction
     mainSendButton.addEventListener('mousedown', (e) => {
         const rect = mainSendButton.getBoundingClientRect();
         const x = e.clientX - rect.left;
@@ -1186,17 +1127,18 @@ const initApp = () => {
         });
     });
 
-    // Add the Apple-inspired welcome animation effect
+    // Add subtle hover effect for welcome container
     if (welcomeContainer) {
+        // Add a subtle Wikipedia-inspired blue effect
         const welcomeGlow = document.createElement('div');
         welcomeGlow.style.position = 'absolute';
         welcomeGlow.style.inset = '0';
-        welcomeGlow.style.backgroundImage = 'radial-gradient(circle at 50% 0%, var(--color-accent-glow), transparent 70%)';
+        welcomeGlow.style.background = 'radial-gradient(circle at 50% 50%, rgba(0, 113, 227, 0.05), transparent 70%)';
         welcomeGlow.style.opacity = '0';
         welcomeGlow.style.pointerEvents = 'none';
         welcomeContainer.appendChild(welcomeGlow);
 
-        // Animate the glow
+        // Animate the glow subtly like Wikipedia's hover effects
         animate(welcomeGlow, {
             opacity: [0, 0.6, 0]
         }, {
@@ -1204,15 +1146,6 @@ const initApp = () => {
             ease: [0.4, 0, 0.2, 1],
             repeat: Infinity,
             repeatDelay: 3
-        });
-
-        // Make the welcome container subtly float
-        animate(welcomeContainer, {
-            y: [0, -5, 0]
-        }, {
-            duration: 6,
-            ease: [0.4, 0, 0.2, 1],
-            repeat: Infinity
         });
     }
 
