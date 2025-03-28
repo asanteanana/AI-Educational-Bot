@@ -1,6 +1,6 @@
 /* AI Educational Q&A Bot */
 :root {
-    /* Core colors - Prism brand colors */
+    /* Core colors - Learning Companion colors */
     --color-background: #f5f5f7;
     --color-card: #ffffff;
     --color-foreground: #1d1d1f;
@@ -14,7 +14,7 @@
     --color-neutral: #8e8e93;
     --color-submitting: #64d2ff;
 
-    /* Accent colors - Prism brand */
+    /* Accent colors - Learning Companion brand */
     --color-accent: #0071e3;
     --color-accent-light: rgba(0, 113, 227, 0.08);
     --color-accent-glow: rgba(0, 113, 227, 0.2);
@@ -152,7 +152,7 @@ body {
     font-size: var(--font-size-md);
 }
 
-/* Control panel for theme toggle and accessibility */
+/* Control panel for theme toggle */
 .control-panel {
     position: fixed;
     top: var(--space-4);
@@ -216,48 +216,6 @@ body {
 
 .theme-button:active svg {
     transform: scale(0.9);
-}
-
-/* Accessibility controls */
-.accessibility-controls {
-    display: flex;
-    background-color: var(--color-card);
-    border-radius: var(--radius-full);
-    overflow: hidden;
-    padding: 2px;
-    box-shadow: var(--shadow-md);
-    border: 1px solid var(--color-border);
-}
-
-.control-button {
-    width: 36px;
-    height: 36px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: transparent;
-    border: none;
-    cursor: pointer;
-    color: var(--color-foreground-secondary);
-    transition: all var(--transition-spring);
-    border-radius: 50%;
-}
-
-.control-button:hover {
-    background-color: var(--color-accent-light);
-    color: var(--color-accent);
-    transform: translateY(-1px);
-}
-
-.control-button.active {
-    background-color: var(--color-accent);
-    color: white;
-}
-
-.control-button svg {
-    width: 18px;
-    height: 18px;
-    transition: transform 0.3s ease;
 }
 
 /* Main container */
@@ -342,7 +300,7 @@ body {
     animation: slide-in-bottom 0.7s var(--transition-spring) both;
 }
 
-/* Input container and controls - Prism style */
+/* Input container and controls - Clean style */
 .input-container {
     padding: var(--space-6);
     border-top: 1px solid var(--color-border);
@@ -417,7 +375,7 @@ body {
     letter-spacing: -0.01em;
 }
 
-/* Button styles - Prism style */
+/* Button styles - Clean style */
 .voice-button,
 .send-button {
     background: transparent;
@@ -477,7 +435,7 @@ body {
     box-shadow: 0 0 0 var(--color-accent-glow);
 }
 
-/* Add delightful pulse animation for the microphone when recording - Apple style */
+/* Add delightful pulse animation for the microphone when recording */
 .voice-button.recording {
     background-color: var(--color-error);
     color: white;
@@ -490,225 +448,7 @@ body {
     color: white;
 }
 
-/* TTS Model Selector - Apple style */
-.tts-model-selector {
-    display: flex;
-    align-items: center;
-    margin-top: var(--space-5);
-    padding-top: var(--space-4);
-    border-top: 1px solid var(--color-border);
-}
-
-.tts-model-selector label {
-    font-size: var(--font-size-sm);
-    color: var(--color-foreground-secondary);
-    margin-right: var(--space-4);
-    white-space: nowrap;
-    font-weight: 500;
-}
-
-.select-wrapper {
-    position: relative;
-    flex: 1;
-}
-
-.select-wrapper select {
-    appearance: none;
-    -webkit-appearance: none;
-    width: 100%;
-    padding: var(--space-2) var(--space-4);
-    background-color: var(--color-input-bg);
-    border: 1px solid var(--color-border);
-    border-radius: var(--radius-md);
-    color: var(--color-foreground);
-    font-size: var(--font-size-sm);
-    cursor: pointer;
-    padding-right: 36px;
-    transition: all var(--transition-medium);
-}
-
-.select-wrapper select:hover {
-    border-color: var(--color-accent-light);
-}
-
-.select-wrapper select:focus {
-    outline: none;
-    border-color: var(--color-accent);
-    box-shadow: 0 0 0 2px var(--color-accent-light);
-}
-
-.select-wrapper::after {
-    content: '▼';
-    position: absolute;
-    right: var(--space-3);
-    top: 50%;
-    transform: translateY(-50%);
-    pointer-events: none;
-    font-size: 10px;
-    color: var(--color-foreground-secondary);
-}
-
-.performance-indicator {
-    display: flex;
-    align-items: center;
-    position: absolute;
-    right: 36px;
-    top: 50%;
-    transform: translateY(-50%);
-    font-size: var(--font-size-xs);
-    color: var(--color-foreground-secondary);
-}
-
-.indicator-dot {
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    background-color: var(--color-success);
-    margin-right: var(--space-2);
-}
-
-.indicator-dot[data-performance="fast"] {
-    background-color: var(--color-success);
-}
-
-.indicator-dot[data-performance="balanced"] {
-    background-color: var(--color-info);
-}
-
-.indicator-dot[data-performance="high-quality"] {
-    background-color: var(--color-warning);
-}
-
-.small-button {
-    display: flex;
-    align-items: center;
-    padding: var(--space-2) var(--space-4);
-    margin-left: var(--space-4);
-    background-color: var(--color-input-bg);
-    border: 1px solid var(--color-border);
-    border-radius: var(--radius-md);
-    color: var(--color-foreground);
-    font-size: var(--font-size-xs);
-    font-weight: 500;
-    cursor: pointer;
-    transition: all var(--transition-spring);
-}
-
-.small-button svg {
-    width: 12px;
-    height: 12px;
-    margin-right: var(--space-2);
-}
-
-.small-button:hover {
-    background-color: var(--color-accent-light);
-    color: var(--color-accent);
-    transform: translateY(-1px);
-    border-color: var(--color-accent-light);
-}
-
-/* Action buttons - Prism style */
-.action-button {
-    display: flex;
-    align-items: center;
-    padding: var(--space-2) var(--space-4);
-    border-radius: var(--radius-full);
-    font-size: var(--font-size-sm);
-    font-weight: 500;
-    cursor: pointer;
-    will-change: transform, background-color;
-    transition: all var(--transition-spring);
-    background-color: var(--color-input-bg);
-    border: none;
-    color: var(--color-foreground);
-    position: relative;
-    overflow: hidden;
-}
-
-.action-button svg {
-    width: 14px;
-    height: 14px;
-    margin-right: var(--space-2);
-    transition: transform 0.3s ease;
-}
-
-.action-button:hover {
-    background-color: var(--color-accent-light);
-    color: var(--color-accent);
-    transform: translateY(-2px);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
-
-.action-button:hover svg {
-    transform: scale(1.2);
-}
-
-.action-button:active {
-    transform: translateY(0);
-}
-
-/* Primary button - Prism style */
-.action-button.primary {
-    background-color: var(--color-accent);
-    color: white;
-    font-weight: 500;
-    padding: var(--space-2) var(--space-5);
-}
-
-.action-button.primary:hover {
-    background-color: var(--color-accent);
-    opacity: 0.9;
-    color: white;
-    box-shadow: 0 4px 12px var(--color-accent-glow);
-}
-
-/* Thinking animation - Apple style typing indicator */
-.typing {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: var(--space-2);
-    margin-top: var(--space-3);
-    height: 24px;
-}
-
-.typing-dot {
-    width: 8px;
-    height: 8px;
-    border-radius: var(--radius-full);
-    background-color: var(--color-accent);
-    opacity: 0.7;
-}
-
-.typing-dot:nth-child(1) {
-    animation: typingDot 1.4s infinite ease-in-out;
-}
-
-.typing-dot:nth-child(2) {
-    animation: typingDot 1.4s infinite ease-in-out 0.2s;
-}
-
-.typing-dot:nth-child(3) {
-    animation: typingDot 1.4s infinite ease-in-out 0.4s;
-}
-
-@keyframes typingDot {
-
-    0%,
-    60%,
-    100% {
-        transform: translateY(0) scale(1);
-        opacity: 0.7;
-    }
-
-    30% {
-        transform: translateY(-6px) scale(1.2);
-        opacity: 1;
-        background-color: var(--color-accent);
-    }
-}
-
-/* Enhanced welcome container with Prism brand styling */
+/* Enhanced welcome container with clean styling */
 .welcome-container {
     background-color: var(--color-card);
     border-radius: var(--radius-lg);
@@ -748,14 +488,14 @@ body {
 }
 
 .welcome-title {
-    font-size: 18px;
+    font-size: var(--font-size-xl);
     font-weight: 600;
     margin-bottom: var(--space-3);
     color: var(--color-foreground);
 }
 
 .welcome-text {
-    font-size: 15px;
+    font-size: var(--font-size-md);
     line-height: 1.5;
     margin-bottom: var(--space-5);
     color: var(--color-foreground-secondary);
@@ -769,6 +509,52 @@ body {
     animation: float 3s ease-in-out infinite;
 }
 
+/* Footer tabs styling */
+.footer-tabs {
+    padding: var(--space-3) var(--space-6);
+    border-top: 1px solid var(--color-border);
+    display: flex;
+    justify-content: center;
+}
+
+.tab-wrapper {
+    display: flex;
+    gap: var(--space-4);
+}
+
+.tab {
+    background: none;
+    border: none;
+    padding: var(--space-2) var(--space-4);
+    font-size: var(--font-size-sm);
+    color: var(--color-foreground-secondary);
+    cursor: pointer;
+    transition: all var(--transition-medium);
+    position: relative;
+}
+
+.tab.active {
+    color: var(--color-accent);
+    font-weight: 500;
+}
+
+.tab.active::after {
+    content: '';
+    position: absolute;
+    bottom: -var(--space-2);
+    left: 50%;
+    transform: translateX(-50%);
+    width: 20px;
+    height: 2px;
+    background-color: var(--color-accent);
+    border-radius: var(--radius-full);
+}
+
+.tab:hover {
+    color: var(--color-accent);
+}
+
+/* Animation keyframes */
 @keyframes float {
     0% {
         transform: translateY(0px);
@@ -783,16 +569,20 @@ body {
     }
 }
 
-/* Added keyframe animations */
-@keyframes subtle-pulse {
-
-    0%,
-    100% {
-        transform: scale(1);
+@keyframes pulse {
+    0% {
+        transform: scale(0.95);
+        box-shadow: 0 0 0 0 rgba(255, 59, 48, 0.7);
     }
 
-    50% {
-        transform: scale(1.02);
+    70% {
+        transform: scale(1);
+        box-shadow: 0 0 0 10px rgba(255, 59, 48, 0);
+    }
+
+    100% {
+        transform: scale(0.95);
+        box-shadow: 0 0 0 0 rgba(255, 59, 48, 0);
     }
 }
 
@@ -828,22 +618,42 @@ body {
     animation: fade-in 0.5s ease-out 0.3s both;
 }
 
-/* Add subtle card-hover effect */
-.message:hover {
-    transform: translateY(-2px) scale(1.005);
-    z-index: 1;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+/* Message styling */
+.message {
+    padding: var(--space-4) var(--space-6);
+    border-bottom: 1px solid var(--color-border);
+    transition: all var(--transition-medium);
 }
 
-/* Add subtle transition on image hovers */
-svg {
-    transition: transform 0.3s ease;
+.message-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--space-3);
 }
 
-/* Make status pills more interactive */
-.status-pill:hover {
-    transform: translateY(-2px) scale(1.05);
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+.user-indicator,
+.assistant-indicator {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    font-weight: 500;
+    font-size: var(--font-size-sm);
+}
+
+.user-indicator svg,
+.assistant-indicator svg {
+    width: 16px;
+    height: 16px;
+    color: var(--color-accent);
+}
+
+.message-content {
+    padding-left: calc(16px + var(--space-2) + var(--space-2));
+}
+
+.message-text {
+    line-height: 1.6;
 }
 
 /* Improved responsive design */
@@ -858,35 +668,12 @@ svg {
         padding: var(--space-2);
     }
 
-    .modal-content {
-        width: 95%;
-    }
-
     .app-title {
         font-size: var(--font-size-xl);
     }
 
     .input-wrapper {
         padding: var(--space-2) var(--space-3);
-    }
-
-    .tts-model-selector {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: var(--space-3);
-    }
-
-    .tts-model-selector label {
-        margin-bottom: var(--space-2);
-    }
-
-    .select-wrapper {
-        width: 100%;
-    }
-
-    .small-button {
-        margin-left: 0;
-        align-self: flex-end;
     }
 }
 
@@ -908,39 +695,9 @@ svg {
         right: var(--space-2);
     }
 
-    .theme-button,
-    .control-button {
+    .theme-button {
         width: 32px;
         height: 32px;
-    }
-
-    .response-actions {
-        flex-direction: column;
-        align-items: stretch;
-    }
-
-    .action-button {
-        width: 100%;
-        justify-content: center;
-    }
-
-    .modal-header h2 {
-        font-size: var(--font-size-md);
-    }
-
-    .modal-body {
-        padding: var(--space-3);
-    }
-
-    .setting-item {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: var(--space-2);
-    }
-
-    .setting-item select,
-    .range-control {
-        width: 100%;
     }
 
     .input-container {
@@ -952,251 +709,38 @@ svg {
     }
 }
 
-/* Print styles */
-@media print {
-    .app-container {
-        box-shadow: none;
-        border: none;
-        margin: 0;
-        width: 100%;
-    }
-
-    .audio-controls,
-    .input-container,
-    .control-panel,
-    .view-controls,
-    .response-actions,
-    .message-actions {
-        display: none !important;
-    }
-
-    .conversation {
-        max-height: none;
-        overflow: visible;
-    }
-
-    .message {
-        break-inside: avoid;
-        page-break-inside: avoid;
-        border-bottom: 1px solid #ddd;
-    }
-
-    .app-header {
-        padding: 1cm 0 0.5cm;
-        text-align: center;
-    }
-
-    body {
-        background-color: white;
-        color: black;
-        font-size: 12pt;
-    }
-
-    .message-content {
-        font-size: 11pt;
-    }
-
-    /* Ensure URLs are printed */
-    .citation-list a::after {
-        content: " (" attr(href) ")";
-        font-size: 10pt;
-        font-style: italic;
-    }
-}
-
-/* State transitions */
-.state-enter {
-    opacity: 0;
-    transform: translateY(10px);
-}
-
-.state-enter-active {
-    opacity: 1;
-    transform: translateY(0);
-    transition: opacity 300ms, transform 300ms;
-}
-
-.state-exit {
-    opacity: 1;
-}
-
-.state-exit-active {
-    opacity: 0;
-    transform: translateY(-10px);
-    transition: opacity 300ms, transform 300ms;
-}
-
-/* Enhanced focus styles */
-.focus-ring:focus-visible {
-    outline: none;
-    box-shadow: 0 0 0 2px var(--color-accent-light), 0 0 0 4px var(--color-accent-glow);
-}
-
-/* Enhanced accessibility for high contrast mode */
-.high-contrast-mode a:focus,
-.high-contrast-mode button:focus,
-.high-contrast-mode input:focus,
-.high-contrast-mode select:focus,
-.high-contrast-mode textarea:focus {
-    outline: 3px solid var(--color-accent);
-    outline-offset: 3px;
-}
-
-/* Viewport height fix for mobile browsers */
-@supports (-webkit-touch-callout: none) {
-    .app-container {
-        max-height: -webkit-fill-available;
-    }
-
-    .conversation {
-        max-height: 50vh;
-        /* Fallback */
-        max-height: -webkit-fill-available;
-    }
-}
-
-/* Final polish for Safari and iOS */
-@supports (-webkit-touch-callout: none) {
-
-    input,
-    textarea,
-    button,
-    select {
-        -webkit-tap-highlight-color: transparent;
-    }
-}
-
-/* Improve scrollbar appearance */
-::-webkit-scrollbar {
-    width: 8px;
-    height: 8px;
-}
-
-::-webkit-scrollbar-track {
-    background: var(--color-input-bg);
-    border-radius: 4px;
-}
-
-::-webkit-scrollbar-thumb {
-    background: var(--color-foreground-secondary);
-    opacity: 0.5;
-    border-radius: 4px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-    background: var(--color-accent);
-}
-
-/* Dark mode specific enhancements */
-.dark-mode .welcome-container::after {
-    background: linear-gradient(90deg, var(--color-accent), #5ac8fa, #34c759);
-    opacity: 0.7;
-}
-
-.dark-mode .message:hover {
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-}
-
-/* View tabs and navigation */
-.view-tabs {
-    display: flex;
-    gap: var(--space-2);
-}
-
-.view-tab {
-    padding: var(--space-2) var(--space-4);
-    background: transparent;
-    border: none;
-    border-radius: var(--radius-full);
-    font-size: var(--font-size-sm);
-    font-weight: 500;
-    color: var(--color-foreground-secondary);
-    cursor: pointer;
-    transition: all var(--transition-spring);
-    position: relative;
-}
-
-.view-tab:hover {
-    color: var(--color-accent);
-    background-color: var(--color-accent-light);
-}
-
-.view-tab.active {
-    background-color: var(--color-accent-light);
-    color: var(--color-accent);
-}
-
-.view-tab.active::after {
-    content: "";
-    position: absolute;
-    bottom: -10px;
+/* Notification toast styling */
+.notification {
+    position: fixed;
     left: 50%;
-    transform: translateX(-50%);
-    width: 6px;
-    height: 6px;
-    background-color: var(--color-accent);
-    border-radius: 50%;
-}
-
-.view-content {
-    display: none;
-    padding: var(--space-4) var(--space-5);
-}
-
-.view-content.active {
-    display: block;
-    animation: fade-in 0.5s ease-out;
-}
-
-/* Modal styling - Prism style */
-.modal-content {
+    bottom: 20px;
+    transform: translateX(-50%) translateY(10px);
     background-color: var(--color-card);
-    border-radius: var(--radius-lg);
+    color: var(--color-foreground);
+    padding: var(--space-3) var(--space-5);
+    border-radius: var(--radius-full);
+    box-shadow: var(--shadow-lg);
+    font-size: var(--font-size-sm);
+    z-index: 1000;
+    opacity: 0;
+    transition: all 0.3s ease;
     border: 1px solid var(--color-border);
+    max-width: 90%;
+    text-align: center;
 }
 
-.modal-header {
-    border-bottom: 1px solid var(--color-border);
+.notification-info {
+    border-left: 3px solid var(--color-info);
 }
 
-.modal-header h2 {
-    color: var(--color-foreground);
-    font-family: var(--font-display);
-    font-weight: 600;
+.notification-success {
+    border-left: 3px solid var(--color-success);
 }
 
-.primary-button {
-    background-color: var(--color-accent);
-    color: white;
+.notification-error {
+    border-left: 3px solid var(--color-error);
 }
 
-.primary-button:hover {
-    background-color: var(--color-accent);
-    opacity: 0.9;
-}
-
-/* Dark mode specific style adjustments */
-.dark-mode .modal-content {
-    background-color: var(--color-card);
-    border-color: var(--color-border);
-}
-
-.dark-mode .action-button {
-    background-color: var(--color-input-bg);
-    color: var(--color-foreground);
-}
-
-.dark-mode .action-button:hover {
-    background-color: var(--color-accent-light);
-    color: var(--color-accent);
-}
-
-.dark-mode .action-button.primary {
-    background-color: var(--color-accent);
-    color: white;
-}
-
-.dark-mode .action-button.primary:hover {
-    background-color: var(--color-accent);
-    opacity: 0.9;
+.notification-warning {
+    border-left: 3px solid var(--color-warning);
 }
