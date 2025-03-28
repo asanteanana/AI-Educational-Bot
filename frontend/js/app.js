@@ -1094,6 +1094,9 @@ const initApp = () => {
     // Setup theme toggle
     setupThemeToggle();
 
+    // Setup suggestion pills
+    setupSuggestionPills();
+
     // Focus input after load with animation
     setTimeout(() => {
         mainQuestionInput.focus();
@@ -1138,6 +1141,53 @@ const initApp = () => {
             ease: [0.4, 0, 0.2, 1]
         }).then(() => {
             mainSendButton.removeChild(ripple);
+        });
+    });
+};
+
+// Setup suggestion pills functionality
+const setupSuggestionPills = () => {
+    const suggestionPills = document.querySelectorAll('.suggestion-pill');
+
+    suggestionPills.forEach(pill => {
+        pill.addEventListener('click', () => {
+            // Get the suggestion text
+            const suggestionText = pill.textContent.trim();
+
+            // Set the input value
+            mainQuestionInput.value = suggestionText;
+
+            // Animate the pill to acknowledge selection
+            animate(pill, {
+                scale: [1, 0.95, 1.05, 1],
+                backgroundColor: ['var(--color-input-bg)', 'var(--color-accent-light)']
+            }, {
+                duration: 0.5,
+                ease: [0.34, 1.56, 0.64, 1]
+            });
+
+            // Focus the input field
+            mainQuestionInput.focus();
+
+            // Show notification
+            showNotification('Suggestion selected! Press enter to submit or modify your question.');
+        });
+    });
+
+    // Add hover animation
+    suggestionPills.forEach(pill => {
+        pill.addEventListener('mouseenter', () => {
+            animate(pill, {
+                y: -2,
+                boxShadow: ['0px 0px 0px rgba(0,0,0,0)', '0px 3px 10px rgba(0,0,0,0.1)']
+            }, { duration: 0.2 });
+        });
+
+        pill.addEventListener('mouseleave', () => {
+            animate(pill, {
+                y: 0,
+                boxShadow: ['0px 3px 10px rgba(0,0,0,0.1)', '0px 0px 0px rgba(0,0,0,0)']
+            }, { duration: 0.2 });
         });
     });
 };
