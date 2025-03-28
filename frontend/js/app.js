@@ -82,24 +82,24 @@ function initWaveSurfer() {
         responsive: true,
     });
 
-    wavesurfer.on('ready', function() {
+    wavesurfer.on('ready', function () {
         const duration = wavesurfer.getDuration();
         totalTimeDisplay.textContent = formatTime(duration);
         playIcon.classList.remove('hidden');
         pauseIcon.classList.add('hidden');
     });
 
-    wavesurfer.on('play', function() {
+    wavesurfer.on('play', function () {
         playIcon.classList.add('hidden');
         pauseIcon.classList.remove('hidden');
     });
 
-    wavesurfer.on('pause', function() {
+    wavesurfer.on('pause', function () {
         playIcon.classList.remove('hidden');
         pauseIcon.classList.add('hidden');
     });
 
-    wavesurfer.on('audioprocess', function() {
+    wavesurfer.on('audioprocess', function () {
         const currentTime = wavesurfer.getCurrentTime();
         currentTimeDisplay.textContent = formatTime(currentTime);
     });
@@ -122,7 +122,7 @@ function handleQuestionSubmit(event) {
     if (!question || isProcessing) return;
 
     isProcessing = true;
-    
+
     // Hide welcome message and show conversation header
     if (welcomeContainer.style.display !== 'none') {
         welcomeContainer.style.display = 'none';
@@ -132,10 +132,10 @@ function handleQuestionSubmit(event) {
 
     // Add user message
     const userMessageElement = addUserMessage(question);
-    
+
     // Show typing indicator
     const typingIndicator = addTypingIndicator();
-    
+
     // Reset input
     mainQuestionInput.value = '';
     charCount.textContent = '0';
@@ -144,15 +144,15 @@ function handleQuestionSubmit(event) {
     setTimeout(() => {
         // Remove typing indicator
         typingIndicator.remove();
-        
+
         // Add AI response
         const response = generateSampleResponse(question);
         addAssistantMessage(response);
-        
+
         // Update query count
         messageCount++;
         queryCount.textContent = `${messageCount} ${messageCount === 1 ? 'query' : 'queries'}`;
-        
+
         isProcessing = false;
     }, 2000);
 }
@@ -162,7 +162,7 @@ function addUserMessage(text) {
     const clone = document.importNode(userMessageTemplate.content, true);
     const messageText = clone.querySelector('.message-text');
     messageText.textContent = text;
-    
+
     // Add edit functionality to user messages
     const editButton = clone.querySelector('.edit-message');
     editButton.addEventListener('click', () => {
@@ -170,7 +170,7 @@ function addUserMessage(text) {
         mainQuestionInput.focus();
         updateCharCount();
     });
-    
+
     conversation.appendChild(clone);
     return conversation.lastElementChild;
 }
@@ -180,13 +180,13 @@ function addAssistantMessage(text) {
     const clone = document.importNode(assistantMessageTemplate.content, true);
     const messageText = clone.querySelector('.message-text');
     messageText.innerHTML = text;
-    
+
     // Add event listeners for assistant message actions
     const playAudioButton = clone.querySelector('.play-audio-button');
     playAudioButton.addEventListener('click', () => {
         playResponseAudio(text);
     });
-    
+
     const regenerateButton = clone.querySelector('.regenerate-button');
     regenerateButton.addEventListener('click', () => {
         showNotification('Generating simpler explanation...');
@@ -194,22 +194,22 @@ function addAssistantMessage(text) {
             messageText.innerHTML = generateSimplifiedResponse(text);
         }, 1000);
     });
-    
+
     const bookmarkButton = clone.querySelector('.bookmark-response');
     bookmarkButton.addEventListener('click', () => {
         toggleBookmark(text);
     });
-    
+
     const copyButton = clone.querySelector('.copy-response');
     copyButton.addEventListener('click', () => {
         copyToClipboard(text);
     });
-    
+
     const resourcesButton = clone.querySelector('.additional-resources');
     resourcesButton.addEventListener('click', () => {
         showNotification('Finding additional resources...');
     });
-    
+
     conversation.appendChild(clone);
     return conversation.lastElementChild;
 }
@@ -233,7 +233,7 @@ function generateSampleResponse(question) {
             <li>Finally, recent research has expanded our understanding significantly</li>
         </ul>
         <p>Would you like me to elaborate on any specific aspect of this topic?</p>`,
-        
+
         `<p>Exploring <strong>${question.split(' ').slice(0, 3).join(' ')}...</strong> is fascinating!</p>
         <p>From an educational perspective, this topic encompasses:</p>
         <ol>
@@ -242,13 +242,13 @@ function generateSampleResponse(question) {
             <li>Modern applications and future directions</li>
         </ol>
         <p>I can provide more specific information on any of these areas if you're interested.</p>`,
-        
+
         `<p>When examining <strong>${question.split(' ').slice(0, 4).join(' ')}...</strong>, it's important to consider multiple perspectives.</p>
         <p>Current educational research suggests three main approaches:</p>
         <p>The first approach focuses on theoretical foundations, while the second examines practical implementations. The third, which has gained popularity recently, integrates both perspectives with technological innovations.</p>
         <p>Would you like to hear more about these approaches?</p>`
     ];
-    
+
     return responses[Math.floor(Math.random() * responses.length)];
 }
 
@@ -265,50 +265,50 @@ function generateSimplifiedResponse(originalResponse) {
 function playResponseAudio(text) {
     // Show audio controls if hidden
     audioControls.classList.add('active');
-    
+
     // In a real app, this would call the TTS API with the selected model
     // For demo, we'll just use a sample audio
     const modelType = ttsModelSelect.value;
     showNotification(`Processing with ${modelType} voice model...`);
-    
+
     // Simulate loading an audio file
     setTimeout(() => {
         // Create a simple audio blob for demonstration (would be replaced with actual TTS audio)
         const audioContext = new (window.AudioContext || window.webkitAudioContext)();
         const oscillator = audioContext.createOscillator();
         const gainNode = audioContext.createGain();
-        
+
         oscillator.type = 'sine';
         oscillator.frequency.setValueAtTime(440, audioContext.currentTime);
         gainNode.gain.setValueAtTime(0.1, audioContext.currentTime);
-        
+
         oscillator.connect(gainNode);
         gainNode.connect(audioContext.destination);
-        
+
         const dest = audioContext.createMediaStreamDestination();
         oscillator.connect(dest);
-        
+
         const mediaRecorder = new MediaRecorder(dest.stream);
         const chunks = [];
-        
+
         mediaRecorder.ondataavailable = (evt) => {
             chunks.push(evt.data);
         };
-        
+
         mediaRecorder.onstop = () => {
             const blob = new Blob(chunks, { type: 'audio/wav' });
             const url = URL.createObjectURL(blob);
-            
+
             wavesurfer.load(url);
             currentAudio = url;
-            
+
             showNotification('Audio ready to play');
         };
-        
+
         // Record for 5 seconds
         mediaRecorder.start();
         oscillator.start();
-        
+
         setTimeout(() => {
             mediaRecorder.stop();
             oscillator.stop();
@@ -323,29 +323,29 @@ function initAudioControls() {
         if (!wavesurfer) return;
         wavesurfer.playPause();
     });
-    
+
     // Speed toggle
     speedToggle.addEventListener('click', () => {
         speedOptions.classList.toggle('hidden');
     });
-    
+
     // Speed options
     speedOptions.querySelectorAll('button').forEach(button => {
         button.addEventListener('click', () => {
             const speed = parseFloat(button.getAttribute('data-speed'));
             wavesurfer.setPlaybackRate(speed);
             speedToggle.textContent = `${speed}x`;
-            
+
             // Update active state
             speedOptions.querySelectorAll('button').forEach(btn => {
                 btn.classList.remove('active');
             });
             button.classList.add('active');
-            
+
             speedOptions.classList.add('hidden');
         });
     });
-    
+
     // Volume control
     volumeSlider.addEventListener('input', () => {
         const volume = volumeSlider.value / 100;
@@ -353,7 +353,7 @@ function initAudioControls() {
             wavesurfer.setVolume(volume);
         }
     });
-    
+
     // Download audio
     downloadAudioButton.addEventListener('click', () => {
         if (currentAudio) {
@@ -372,7 +372,7 @@ function copyToClipboard(text) {
     const tempDiv = document.createElement('div');
     tempDiv.innerHTML = text;
     const plainText = tempDiv.textContent || tempDiv.innerText;
-    
+
     navigator.clipboard.writeText(plainText).then(() => {
         showNotification('Response copied to clipboard');
     }).catch(err => {
@@ -385,18 +385,18 @@ function copyToClipboard(text) {
 function toggleBookmark(text) {
     // In a real app, this would save to local storage or a database
     showNotification('Response bookmarked for later reference');
-    
+
     // For demo purposes, add to bookmarks modal
     const bookmarksList = document.getElementById('bookmarked-responses');
     const emptyState = bookmarksList.querySelector('.empty-state');
-    
+
     if (emptyState) {
         emptyState.remove();
     }
-    
+
     const bookmarkItem = document.createElement('div');
     bookmarkItem.className = 'bookmark-item';
-    
+
     const itemText = document.createElement('div');
     itemText.className = 'bookmark-item-text';
     // Create a summary from the first 50 chars
@@ -404,11 +404,11 @@ function toggleBookmark(text) {
     tempDiv.innerHTML = text;
     const plainText = tempDiv.textContent || tempDiv.innerText;
     itemText.textContent = plainText.substring(0, 80) + '...';
-    
+
     const itemDate = document.createElement('div');
     itemDate.className = 'bookmark-item-date';
     itemDate.textContent = new Date().toLocaleString();
-    
+
     bookmarkItem.appendChild(itemText);
     bookmarkItem.appendChild(itemDate);
     bookmarksList.appendChild(bookmarkItem);
@@ -421,18 +421,18 @@ function showNotification(message, type = 'info') {
     if (existingNotification) {
         existingNotification.remove();
     }
-    
+
     const notification = document.createElement('div');
     notification.className = `notification notification-${type}`;
     notification.textContent = message;
     document.body.appendChild(notification);
-    
+
     // Fade in
     setTimeout(() => {
         notification.style.opacity = '1';
         notification.style.transform = 'translateY(-10px) translateX(-50%)';
     }, 10);
-    
+
     // Fade out after 3 seconds
     setTimeout(() => {
         notification.style.opacity = '0';
@@ -443,50 +443,77 @@ function showNotification(message, type = 'info') {
     }, 3000);
 }
 
-// Initialize theme toggle
-function initThemeToggle() {
-    // Check for system preference or saved preference
-    const prefersDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches;
+// Setup theme toggle for Prism app
+function setupThemeToggle() {
+    // Set up event listeners
+    lightModeButton.addEventListener('click', () => {
+        applyDarkMode(false);
+    });
+
+    darkModeButton.addEventListener('click', () => {
+        applyDarkMode(true);
+    });
+
+    // Initialize theme based on user preference or system
     const savedTheme = localStorage.getItem('theme');
-    
-    if (savedTheme === 'dark' || (!savedTheme && prefersDarkMode)) {
-        document.body.classList.add('dark-mode');
-        darkModeButton.classList.add('active');
-        lightModeButton.classList.remove('active');
+    if (savedTheme === 'dark') {
+        applyDarkMode(true);
+    } else if (savedTheme === 'light') {
+        applyDarkMode(false);
+    } else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        applyDarkMode(true);
     } else {
+        applyDarkMode(false);
+    }
+
+    // Listen for system theme changes if no preference set
+    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
+        if (!localStorage.getItem('theme')) {
+            applyDarkMode(e.matches);
+        }
+    });
+}
+
+// Apply dark mode or light mode
+function applyDarkMode(isDark) {
+    // Save preference
+    localStorage.setItem('theme', isDark ? 'dark' : 'light');
+
+    // Apply to body
+    if (isDark) {
+        document.body.classList.add('dark-mode');
+        lightModeButton.classList.remove('active');
+        darkModeButton.classList.add('active');
+    } else {
+        document.body.classList.remove('dark-mode');
         lightModeButton.classList.add('active');
         darkModeButton.classList.remove('active');
     }
-    
-    // Light mode toggle
-    lightModeButton.addEventListener('click', () => {
-        document.body.classList.remove('dark-mode');
-        localStorage.setItem('theme', 'light');
-        lightModeButton.classList.add('active');
-        darkModeButton.classList.remove('active');
-        showNotification('Light mode activated');
-        
-        // Update wavesurfer colors if initialized
-        if (wavesurfer) {
-            wavesurfer.setWaveColor(getComputedStyle(document.documentElement).getPropertyValue('--color-waveform').trim());
-            wavesurfer.setProgressColor(getComputedStyle(document.documentElement).getPropertyValue('--color-progress').trim());
-        }
-    });
-    
-    // Dark mode toggle
-    darkModeButton.addEventListener('click', () => {
-        document.body.classList.add('dark-mode');
-        localStorage.setItem('theme', 'dark');
-        darkModeButton.classList.add('active');
-        lightModeButton.classList.remove('active');
-        showNotification('Dark mode activated');
-        
-        // Update wavesurfer colors if initialized
-        if (wavesurfer) {
-            wavesurfer.setWaveColor(getComputedStyle(document.documentElement).getPropertyValue('--color-waveform').trim());
-            wavesurfer.setProgressColor(getComputedStyle(document.documentElement).getPropertyValue('--color-progress').trim());
-        }
-    });
+
+    // Force browser to re-compute all CSS
+    document.body.offsetHeight;
+
+    // Flash effect for visual feedback
+    animate(appContainer,
+        { opacity: [0.9, 1] },
+        { duration: 0.3, ease: "easeOut" }
+    );
+
+    // Show notification
+    showNotification(isDark ? 'Dark mode activated' : 'Light mode activated');
+
+    // Update WaveSurfer colors if initialized
+    if (typeof wavesurfer !== 'undefined' && wavesurfer !== null) {
+        const waveColor = getComputedStyle(document.documentElement)
+            .getPropertyValue('--color-waveform').trim();
+        const progressColor = getComputedStyle(document.documentElement)
+            .getPropertyValue('--color-progress').trim();
+
+        wavesurfer.setOptions({
+            waveColor: waveColor,
+            progressColor: progressColor
+        });
+    }
 }
 
 // Initialize accessibility controls
@@ -495,7 +522,7 @@ function initAccessibilityControls() {
     highContrastButton.addEventListener('click', () => {
         document.body.classList.toggle('high-contrast-mode');
         highContrastButton.classList.toggle('active');
-        
+
         if (document.body.classList.contains('high-contrast-mode')) {
             localStorage.setItem('high-contrast', 'enabled');
             showNotification('High contrast mode enabled');
@@ -504,13 +531,13 @@ function initAccessibilityControls() {
             showNotification('High contrast mode disabled');
         }
     });
-    
+
     // Apply saved high contrast setting
     if (localStorage.getItem('high-contrast') === 'enabled') {
         document.body.classList.add('high-contrast-mode');
         highContrastButton.classList.add('active');
     }
-    
+
     // Text size adjustments
     textIncreaseButton.addEventListener('click', () => {
         if (fontSizePercent < 150) {
@@ -520,7 +547,7 @@ function initAccessibilityControls() {
             showNotification(`Text size increased to ${fontSizePercent}%`);
         }
     });
-    
+
     textDecreaseButton.addEventListener('click', () => {
         if (fontSizePercent > 80) {
             fontSizePercent -= 10;
@@ -529,7 +556,7 @@ function initAccessibilityControls() {
             showNotification(`Text size decreased to ${fontSizePercent}%`);
         }
     });
-    
+
     // Apply saved font size
     const savedFontSize = localStorage.getItem('fontSize');
     if (savedFontSize) {
@@ -546,14 +573,14 @@ function initViewControls() {
         audioControls.classList.remove('active');
         localStorage.setItem('viewMode', 'text');
     });
-    
+
     audioViewButton.addEventListener('click', () => {
         audioViewButton.classList.add('active');
         textViewButton.classList.remove('active');
         audioControls.classList.add('active');
         localStorage.setItem('viewMode', 'audio');
     });
-    
+
     // Apply saved view mode
     const savedViewMode = localStorage.getItem('viewMode');
     if (savedViewMode === 'audio') {
@@ -568,9 +595,9 @@ function initTTSModelSelector() {
         const performance = selectedOption.getAttribute('data-performance');
         const indicatorDot = modelPerformance.querySelector('.indicator-dot');
         const indicatorText = modelPerformance.querySelector('.indicator-text');
-        
+
         indicatorDot.setAttribute('data-performance', performance);
-        
+
         // Style based on performance level
         if (performance === 'fast') {
             indicatorDot.style.backgroundColor = 'var(--color-success)';
@@ -579,14 +606,14 @@ function initTTSModelSelector() {
         } else if (performance === 'high-quality') {
             indicatorDot.style.backgroundColor = 'var(--color-warning)';
         }
-        
+
         // Update text
         indicatorText.textContent = performance.replace('-', ' ');
-        
+
         // Store preference
         localStorage.setItem('ttsModel', ttsModelSelect.value);
     });
-    
+
     // Apply saved TTS model
     const savedTTSModel = localStorage.getItem('ttsModel');
     if (savedTTSModel) {
@@ -594,7 +621,7 @@ function initTTSModelSelector() {
         // Trigger change event to update indicator
         ttsModelSelect.dispatchEvent(new Event('change'));
     }
-    
+
     // Preview voice button
     previewVoiceButton.addEventListener('click', () => {
         const previewText = "This is a preview of the selected voice model.";
@@ -608,15 +635,15 @@ function initModals() {
     historyButton.addEventListener('click', () => {
         historyModal.classList.add('active');
     });
-    
+
     bookmarkButton.addEventListener('click', () => {
         bookmarksModal.classList.add('active');
     });
-    
+
     settingsButton.addEventListener('click', () => {
         settingsModal.classList.add('active');
     });
-    
+
     // Close modals
     closeModalButtons.forEach(button => {
         button.addEventListener('click', () => {
@@ -624,21 +651,21 @@ function initModals() {
             modal.classList.remove('active');
         });
     });
-    
+
     // Close modal when clicking outside
     document.addEventListener('click', (event) => {
         if (event.target.classList.contains('modal')) {
             event.target.classList.remove('active');
         }
     });
-    
+
     // Save settings
     saveSettingsButton.addEventListener('click', () => {
         // In a real app, this would save all settings
         showNotification('Settings saved successfully');
         settingsModal.classList.remove('active');
     });
-    
+
     // Reset settings
     resetSettingsButton.addEventListener('click', () => {
         // Clear local storage
@@ -654,7 +681,7 @@ function initModals() {
 function updateCharCount() {
     const length = mainQuestionInput.value.length;
     charCount.textContent = length;
-    
+
     // Visual feedback when approaching limit
     if (length > 400) {
         charCount.style.color = 'var(--color-warning)';
@@ -669,55 +696,55 @@ function updateCharCount() {
 function initQueryInput() {
     // Character count update
     mainQuestionInput.addEventListener('input', updateCharCount);
-    
+
     // Auto-resize textarea
     mainQuestionInput.addEventListener('input', () => {
         mainQuestionInput.style.height = 'auto';
         mainQuestionInput.style.height = mainQuestionInput.scrollHeight + 'px';
     });
-    
+
     // Form submission
     mainForm.addEventListener('submit', handleQuestionSubmit);
-    
+
     // Voice input
     voiceInputButton.addEventListener('click', () => {
         if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
             showNotification('Speech recognition not supported in this browser', 'error');
             return;
         }
-        
+
         const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
         const recognition = new SpeechRecognition();
-        
+
         recognition.continuous = false;
         recognition.interimResults = true;
-        
+
         // Add recording indicator
         voiceInputButton.classList.add('recording');
         showNotification('Listening for voice input...');
-        
+
         recognition.onresult = (event) => {
             const transcript = Array.from(event.results)
                 .map(result => result[0].transcript)
                 .join('');
-                
+
             mainQuestionInput.value = transcript;
             updateCharCount();
         };
-        
+
         recognition.onend = () => {
             voiceInputButton.classList.remove('recording');
             showNotification('Voice input captured');
         };
-        
+
         recognition.onerror = (event) => {
             voiceInputButton.classList.remove('recording');
             showNotification(`Error in voice recognition: ${event.error}`, 'error');
         };
-        
+
         recognition.start();
     });
-    
+
     // Sample query clicks
     queryChips.forEach(chip => {
         chip.addEventListener('click', () => {
@@ -726,22 +753,22 @@ function initQueryInput() {
             mainQuestionInput.focus();
         });
     });
-    
+
     // Clear session
     clearSession.addEventListener('click', () => {
         // Remove all messages except welcome
         const messages = conversation.querySelectorAll('.message');
         messages.forEach(message => message.remove());
-        
+
         // Show welcome, hide conversation header
         welcomeContainer.style.display = 'block';
         conversationHeader.style.opacity = '0';
         conversationHeader.style.transform = 'translateY(-10px)';
-        
+
         // Reset counter
         messageCount = 0;
         queryCount.textContent = '0 queries';
-        
+
         showNotification('Learning session cleared');
     });
 }
@@ -750,20 +777,20 @@ function initQueryInput() {
 function initApp() {
     // Initialize base components
     initWaveSurfer();
-    initThemeToggle();
+    setupThemeToggle();
     initAccessibilityControls();
     initViewControls();
     initTTSModelSelector();
     initAudioControls();
     initModals();
     initQueryInput();
-    
+
     // Initially hide conversation header until first question
     conversationHeader.style.opacity = '0';
-    
+
     // Add loading animation
     document.body.classList.add('app-loaded');
-    
+
     console.log('AI Educational Q&A Bot initialized');
 }
 

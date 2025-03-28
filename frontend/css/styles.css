@@ -1,6 +1,6 @@
 /* AI Educational Q&A Bot */
 :root {
-    /* Core colors - Modern educational palette */
+    /* Core colors - Prism brand colors */
     --color-background: #f5f5f7;
     --color-card: #ffffff;
     --color-foreground: #1d1d1f;
@@ -14,7 +14,7 @@
     --color-neutral: #8e8e93;
     --color-submitting: #64d2ff;
 
-    /* Accent colors */
+    /* Accent colors - Prism brand */
     --color-accent: #0071e3;
     --color-accent-light: rgba(0, 113, 227, 0.08);
     --color-accent-glow: rgba(0, 113, 227, 0.2);
@@ -36,8 +36,8 @@
     --color-progress: rgba(0, 113, 227, 0.8);
 
     /* Typography */
-    --font-primary: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Inter', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-    --font-display: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Inter', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    --font-primary: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    --font-display: 'SF Pro Display', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
     --font-mono: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
 
     /* Sizing and spacing */
@@ -342,7 +342,7 @@ body {
     animation: slide-in-bottom 0.7s var(--transition-spring) both;
 }
 
-/* Input container and controls - Apple inspired */
+/* Input container and controls - Prism style */
 .input-container {
     padding: var(--space-6);
     border-top: 1px solid var(--color-border);
@@ -417,7 +417,7 @@ body {
     letter-spacing: -0.01em;
 }
 
-/* Button styles - Apple inspired */
+/* Button styles - Prism style */
 .voice-button,
 .send-button {
     background: transparent;
@@ -607,7 +607,7 @@ body {
     border-color: var(--color-accent-light);
 }
 
-/* Action buttons - Apple style */
+/* Action buttons - Prism style */
 .action-button {
     display: flex;
     align-items: center;
@@ -647,7 +647,7 @@ body {
     transform: translateY(0);
 }
 
-/* Primary button - Apple style */
+/* Primary button - Prism style */
 .action-button.primary {
     background-color: var(--color-accent);
     color: white;
@@ -708,7 +708,7 @@ body {
     }
 }
 
-/* Enhanced welcome container with subtle hover effect */
+/* Enhanced welcome container with Prism brand styling */
 .welcome-container {
     background-color: var(--color-card);
     border-radius: var(--radius-lg);
@@ -1146,4 +1146,57 @@ svg {
 .view-content.active {
     display: block;
     animation: fade-in 0.5s ease-out;
+}
+
+/* Modal styling - Prism style */
+.modal-content {
+    background-color: var(--color-card);
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--color-border);
+}
+
+.modal-header {
+    border-bottom: 1px solid var(--color-border);
+}
+
+.modal-header h2 {
+    color: var(--color-foreground);
+    font-family: var(--font-display);
+    font-weight: 600;
+}
+
+.primary-button {
+    background-color: var(--color-accent);
+    color: white;
+}
+
+.primary-button:hover {
+    background-color: var(--color-accent);
+    opacity: 0.9;
+}
+
+/* Dark mode specific style adjustments */
+.dark-mode .modal-content {
+    background-color: var(--color-card);
+    border-color: var(--color-border);
+}
+
+.dark-mode .action-button {
+    background-color: var(--color-input-bg);
+    color: var(--color-foreground);
+}
+
+.dark-mode .action-button:hover {
+    background-color: var(--color-accent-light);
+    color: var(--color-accent);
+}
+
+.dark-mode .action-button.primary {
+    background-color: var(--color-accent);
+    color: white;
+}
+
+.dark-mode .action-button.primary:hover {
+    background-color: var(--color-accent);
+    opacity: 0.9;
 }

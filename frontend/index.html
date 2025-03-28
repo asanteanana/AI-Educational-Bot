@@ -20,31 +20,7 @@
 <body>
   <!-- Theme and Accessibility Controls -->
   <div class="control-panel">
-    <!-- Accessibility Controls -->
-    <div class="accessibility-controls">
-      <button id="high-contrast-button" class="control-button" aria-label="Toggle high contrast mode">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <circle cx="12" cy="12" r="10"></circle>
-          <path d="M12 2v20M2 12h20"></path>
-        </svg>
-      </button>
-      <button id="text-increase-button" class="control-button" aria-label="Increase text size">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-          <polyline points="17 8 12 3 7 8"></polyline>
-          <line x1="12" y1="3" x2="12" y2="15"></line>
-        </svg>
-      </button>
-      <button id="text-decrease-button" class="control-button" aria-label="Decrease text size">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M21 9v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V9"></path>
-          <polyline points="7 15 12 20 17 15"></polyline>
-          <line x1="12" y1="8" x2="12" y2="20"></line>
-        </svg>
-      </button>
-    </div>
-    
-    <!-- Theme toggle moved to right side -->
+    <!-- Theme toggle -->
     <div class="theme-toggle">
       <button id="light-mode-button" class="theme-button active" aria-label="Switch to light mode">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
@@ -67,6 +43,33 @@
         </svg>
       </button>
     </div>
+
+    <!-- Accessibility Controls -->
+    <div class="accessibility-controls">
+      <button id="high-contrast-button" class="control-button" aria-label="Toggle high contrast mode">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+          stroke-linejoin="round">
+          <circle cx="12" cy="12" r="10"></circle>
+          <path d="M12 2v20M2 12h20"></path>
+        </svg>
+      </button>
+      <button id="text-increase-button" class="control-button" aria-label="Increase text size">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+          stroke-linejoin="round">
+          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+          <polyline points="17 8 12 3 7 8"></polyline>
+          <line x1="12" y1="3" x2="12" y2="15"></line>
+        </svg>
+      </button>
+      <button id="text-decrease-button" class="control-button" aria-label="Decrease text size">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+          stroke-linejoin="round">
+          <path d="M21 9v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V9"></path>
+          <polyline points="7 15 12 20 17 15"></polyline>
+          <line x1="12" y1="8" x2="12" y2="20"></line>
+        </svg>
+      </button>
+    </div>
   </div>
 
   <div class="app-container">
@@ -75,23 +78,28 @@
         <button id="text-view-button" class="view-tab active">Text View</button>
         <button id="audio-view-button" class="view-tab">Audio View</button>
       </div>
-      
+
       <div class="user-options">
         <button id="history-button" class="option-button" aria-label="View recent queries">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+            stroke-linejoin="round">
             <circle cx="12" cy="12" r="10"></circle>
             <polyline points="12 6 12 12 16 14"></polyline>
           </svg>
         </button>
         <button id="bookmark-button" class="option-button" aria-label="View bookmarks">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+            stroke-linejoin="round">
             <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path>
           </svg>
         </button>
         <button id="settings-button" class="option-button" aria-label="Open settings">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+            stroke-linejoin="round">
             <circle cx="12" cy="12" r="3"></circle>
-            <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+            <path
+              d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z">
+            </path>
           </svg>
         </button>
       </div>
@@ -110,66 +118,59 @@
 
     <!-- Response Display Area -->
     <div id="conversation" class="conversation">
-      <!-- Welcome message -->
-      <div class="welcome-container">
-        <div class="welcome-icon">🔍</div>
+      <div id="conversation-header" class="conversation-header hidden">
+        <div class="session-info">
+          <span id="query-count">0 queries</span>
+          <button id="clear-conversation" class="text-button">Clear conversation</button>
+        </div>
+      </div>
+
+      <div id="welcome-container" class="welcome-container">
+        <div class="welcome-icon">💫</div>
         <h2 class="welcome-title">Welcome to Prism</h2>
-        <p class="welcome-text">Ask any educational question to receive detailed explanations in text or audio format. Customize your learning experience with different voice models and playback options.</p>
-        
+        <p class="welcome-text">I'm your educational AI companion. Ask me any question, and I'll provide clear,
+          concise explanations with the ability to listen to responses through text-to-speech.</p>
+
         <div class="sample-queries">
           <h3>Try asking:</h3>
           <div class="query-chips">
             <button class="query-chip">Explain quantum computing</button>
             <button class="query-chip">How does photosynthesis work?</button>
-            <button class="query-chip">What caused the French Revolution?</button>
-            <button class="query-chip">Explain the structure of DNA</button>
+            <button class="query-chip">What causes climate change?</button>
+            <button class="query-chip">Describe the water cycle</button>
+            <button class="query-chip">How do vaccines work?</button>
           </div>
         </div>
       </div>
-
-      <!-- Conversation header -->
-      <div class="conversation-header">
-        <div class="header-title">Your Learning Session</div>
-        <div class="session-info">
-          <span id="query-count">0 queries</span>
-          <button id="clear-session" class="text-button">Clear</button>
-        </div>
-      </div>
-
-      <!-- Conversation content will be populated here dynamically -->
     </div>
 
     <!-- Query Input Section -->
     <div class="input-container">
-      <form id="main-form">
-        <div class="input-wrapper">
-          <textarea class="input-field" id="main-question-input" placeholder="Ask an educational question..." 
-            autocomplete="off" maxlength="500"></textarea>
-          <div class="input-actions">
-            <div class="char-limit">
-              <span id="char-count">0</span>/<span id="char-max">500</span>
-            </div>
-            <button type="button" id="voice-input-button" class="voice-button" aria-label="Use voice input">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                stroke-linejoin="round">
-                <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path>
-                <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
-                <line x1="12" y1="19" x2="12" y2="23"></line>
-                <line x1="8" y1="23" x2="16" y2="23"></line>
-              </svg>
-            </button>
-            <button type="submit" id="main-send-button" class="send-button">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                stroke-linejoin="round">
-                <line x1="22" y1="2" x2="11" y2="13"></line>
-                <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
-              </svg>
-            </button>
-          </div>
-        </div>
-      </form>
+      <div class="input-wrapper">
+        <textarea id="question-input" class="input-field" placeholder="Ask a question..." rows="1"
+          maxlength="500"></textarea>
 
-      <!-- TTS Model Selection -->
+        <div class="input-actions">
+          <div class="char-limit"><span id="char-count">0</span>/500</div>
+          <button id="voice-input" class="voice-button" aria-label="Voice input">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+              stroke-linejoin="round">
+              <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path>
+              <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
+              <line x1="12" y1="19" x2="12" y2="23"></line>
+              <line x1="8" y1="23" x2="16" y2="23"></line>
+            </svg>
+          </button>
+          <button id="send-button" class="send-button" aria-label="Send question">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+              stroke-linejoin="round">
+              <line x1="22" y1="2" x2="11" y2="13"></line>
+              <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+            </svg>
+          </button>
+        </div>
+      </div>
+
       <div class="tts-model-selector">
         <label for="tts-model">Voice Model:</label>
         <div class="select-wrapper">
@@ -199,10 +200,12 @@
       <div class="audio-waveform" id="waveform"></div>
       <div class="playback-controls">
         <button id="play-pause" class="control-button">
-          <svg id="play-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <svg id="play-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
             <polygon points="5 3 19 12 5 21 5 3"></polygon>
           </svg>
-          <svg id="pause-icon" class="hidden" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <svg id="pause-icon" class="hidden" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
             <rect x="6" y="4" width="4" height="16"></rect>
             <rect x="14" y="4" width="4" height="16"></rect>
           </svg>
@@ -223,7 +226,8 @@
         </div>
         <div class="volume-control">
           <button id="volume-button" class="control-button">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+              stroke-linejoin="round">
               <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
               <path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path>
               <path d="M19.07 4.93a10 10 0 0 1 0 14.14"></path>
@@ -231,35 +235,24 @@
           </button>
           <input type="range" id="volume-slider" min="0" max="100" value="100">
         </div>
-        <button id="download-audio" class="control-button">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-            <polyline points="7 10 12 15 17 10"></polyline>
-            <line x1="12" y1="15" x2="12" y2="3"></line>
-          </svg>
-        </button>
       </div>
     </div>
   </div>
+
+  <!-- Notification toast element -->
+  <div id="notification" class="notification" aria-live="assertive"></div>
 
   <!-- Message templates -->
   <template id="user-message-template">
     <div class="message user-message">
       <div class="message-header">
         <div class="user-indicator">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+            stroke-linejoin="round">
             <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
             <circle cx="12" cy="7" r="4"></circle>
           </svg>
           <span>You</span>
-        </div>
-        <div class="message-actions">
-          <button class="action-button edit-message">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
-              <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
-            </svg>
-          </button>
         </div>
       </div>
       <div class="message-content">
@@ -272,19 +265,22 @@
     <div class="message assistant-message">
       <div class="message-header">
         <div class="assistant-indicator">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M12 2L2 19h20L12 2zm0 4l7 12H5l7-12z"/>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+            stroke-linejoin="round">
+            <path d="M12 2L2 19h20L12 2zm0 4l7 12H5l7-12z" />
           </svg>
           <span>Prism</span>
         </div>
         <div class="message-actions">
           <button class="action-button bookmark-response">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+              stroke-linejoin="round">
               <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path>
             </svg>
           </button>
           <button class="action-button copy-response">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+              stroke-linejoin="round">
               <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
               <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
             </svg>
@@ -312,7 +308,8 @@
           Simplify
         </button>
         <button class="action-button additional-resources">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+            stroke-linejoin="round">
             <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
             <polyline points="15 3 21 3 21 9"></polyline>
             <line x1="10" y1="14" x2="21" y2="3"></line>
@@ -323,28 +320,7 @@
     </div>
   </template>
 
-  <template id="typing-indicator-template">
-    <div class="message assistant-message">
-      <div class="message-header">
-        <div class="assistant-indicator">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M12 2L2 19h20L12 2zm0 4l7 12H5l7-12z"/>
-          </svg>
-          <span>Prism</span>
-        </div>
-      </div>
-      <div class="message-content">
-        <div class="message-text">Researching your question...</div>
-        <div class="typing">
-          <span class="typing-dot"></span>
-          <span class="typing-dot"></span>
-          <span class="typing-dot"></span>
-        </div>
-      </div>
-    </div>
-  </template>
-
-  <!-- Modals -->
+  <!-- Settings Modal -->
   <div id="settings-modal" class="modal hidden">
     <div class="modal-content">
       <div class="modal-header">
@@ -355,15 +331,15 @@
         <div class="settings-section">
           <h3>Appearance</h3>
           <div class="setting-item">
-            <label for="theme-select">Theme:</label>
+            <label for="theme-select">Theme</label>
             <select id="theme-select">
               <option value="light">Light</option>
               <option value="dark">Dark</option>
-              <option value="auto">System Default</option>
+              <option value="system">System Default</option>
             </select>
           </div>
           <div class="setting-item">
-            <label for="font-select">Font:</label>
+            <label for="font-select">Font</label>
             <select id="font-select">
               <option value="system">System Default</option>
               <option value="serif">Serif</option>
@@ -372,18 +348,33 @@
             </select>
           </div>
           <div class="setting-item">
-            <label for="font-size">Font Size:</label>
+            <label for="text-size">Text Size</label>
             <div class="range-control">
-              <input type="range" id="font-size" min="80" max="120" value="100">
-              <span id="font-size-value">100%</span>
+              <input type="range" id="text-size" min="80" max="150" value="100">
+              <span id="text-size-value">100%</span>
             </div>
+          </div>
+        </div>
+        <div class="settings-section">
+          <h3>Accessibility</h3>
+          <div class="setting-item checkbox">
+            <input type="checkbox" id="high-contrast-setting">
+            <label for="high-contrast-setting">High Contrast Mode</label>
+          </div>
+          <div class="setting-item checkbox">
+            <input type="checkbox" id="reduce-motion-setting">
+            <label for="reduce-motion-setting">Reduce Motion</label>
+          </div>
+          <div class="setting-item checkbox">
+            <input type="checkbox" id="screen-reader-setting">
+            <label for="screen-reader-setting">Optimize for Screen Readers</label>
           </div>
         </div>
         <div class="settings-section">
           <h3>Audio</h3>
           <div class="setting-item">
-            <label for="default-tts">Default Voice Model:</label>
-            <select id="default-tts">
+            <label for="default-voice">Default Voice</label>
+            <select id="default-voice">
               <option value="standard">Standard Voice</option>
               <option value="neural">Neural TTS</option>
               <option value="premium">Premium Voice</option>
@@ -391,40 +382,28 @@
             </select>
           </div>
           <div class="setting-item">
-            <label for="default-speed">Default Playback Speed:</label>
+            <label for="default-speed">Default Speed</label>
             <select id="default-speed">
-              <option value="0.5">0.5x</option>
               <option value="0.75">0.75x</option>
               <option value="1" selected>1x</option>
               <option value="1.25">1.25x</option>
               <option value="1.5">1.5x</option>
-              <option value="2">2x</option>
             </select>
           </div>
-        </div>
-        <div class="settings-section">
-          <h3>Accessibility</h3>
           <div class="setting-item checkbox">
-            <input type="checkbox" id="high-contrast-mode">
-            <label for="high-contrast-mode">High Contrast Mode</label>
-          </div>
-          <div class="setting-item checkbox">
-            <input type="checkbox" id="screen-reader-opt">
-            <label for="screen-reader-opt">Enhanced Screen Reader Support</label>
-          </div>
-          <div class="setting-item checkbox">
-            <input type="checkbox" id="reduce-motion">
-            <label for="reduce-motion">Reduce Motion</label>
+            <input type="checkbox" id="auto-play-setting">
+            <label for="auto-play-setting">Auto-play Responses</label>
           </div>
         </div>
       </div>
       <div class="modal-footer">
         <button id="reset-settings" class="secondary-button">Reset to Default</button>
-        <button id="save-settings" class="primary-button">Save Settings</button>
+        <button id="save-settings" class="primary-button">Save Changes</button>
       </div>
     </div>
   </div>
 
+  <!-- History Modal -->
   <div id="history-modal" class="modal hidden">
     <div class="modal-content">
       <div class="modal-header">
