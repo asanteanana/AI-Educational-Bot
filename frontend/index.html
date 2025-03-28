@@ -46,67 +46,45 @@
   </div>
 
   <div class="app-container">
-    <div class="app-header">
-      <div class="app-logo">
-        <div class="app-logo-circle">
-          <svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-            <path d="M12 2L2 19h20L12 2zm0 4l7 12H5l7-12z" />
-          </svg>
-        </div>
-        <span class="app-logo-text">Learning Companion</span>
+    <div class="header">
+      <div class="logo-container">
+        <div class="logo-circle"></div>
+        <span>Learning Companion</span>
       </div>
-      <h1 class="app-title">What would you like to learn today?</h1>
-      <p class="app-subtitle">Ask me anything—I'm here to help you explore ideas, understand concepts, and grow your
-        knowledge</p>
+      <h1>What would you like to learn today?</h1>
+      <p>Ask me anything—I'm here to help you explore ideas, understand concepts, and grow your knowledge</p>
     </div>
 
-    <!-- Response Display Area - Simplified -->
-    <div id="conversation" class="conversation">
-      <div id="welcome-container" class="welcome-container">
-        <div class="welcome-icon">✨</div>
-        <h2 class="welcome-title">Begin your learning journey</h2>
-        <p class="welcome-text">I'm your learning companion, here to help you discover and understand new ideas. Every
-          question is a step toward growth. What would you like to explore today?</p>
-      </div>
+    <div class="input-section">
+      <input type="text" placeholder="What are you curious about?" class="search-input">
+      <button class="mic-button">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path>
+          <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
+          <line x1="12" y1="19" x2="12" y2="23"></line>
+          <line x1="8" y1="23" x2="16" y2="23"></line>
+        </svg>
+      </button>
+      <button class="send-button">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="22" y1="2" x2="11" y2="13"></line>
+          <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+        </svg>
+      </button>
     </div>
 
-    <!-- Colorful Gradient Line -->
     <div class="gradient-line"></div>
 
-    <!-- Query Input Section - Simplified -->
-    <div class="input-container">
-      <div class="input-wrapper">
-        <textarea id="question-input" class="input-field" placeholder="What would you like to learn today?" rows="1"
-          maxlength="500"></textarea>
-
-        <div class="input-actions">
-          <div class="char-limit"><span id="char-count">0</span>/500</div>
-          <button id="voice-input" class="voice-button" aria-label="Voice input">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-              stroke-linejoin="round">
-              <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path>
-              <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
-              <line x1="12" y1="19" x2="12" y2="23"></line>
-              <line x1="8" y1="23" x2="16" y2="23"></line>
-            </svg>
-          </button>
-          <button id="send-button" class="send-button" aria-label="Send question">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-              stroke-linejoin="round">
-              <line x1="22" y1="2" x2="11" y2="13"></line>
-              <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
-            </svg>
-          </button>
-        </div>
-      </div>
+    <div class="welcome-section">
+      <div class="sparkle">✨</div>
+      <h2>Begin your learning journey</h2>
+      <p>I'm your learning companion, here to help you discover and understand new ideas. Every question is a step
+        toward growth. What would you like to explore today?</p>
     </div>
 
-    <!-- Footer Navigation Tabs -->
     <div class="footer-tabs">
-      <div class="tab-wrapper">
-        <button class="tab active">Your Learning Questions</button>
-        <button class="tab">Progress</button>
-      </div>
+      <button class="tab active">Your Learning Questions</button>
+      <button class="tab">Progress</button>
     </div>
   </div>
 
