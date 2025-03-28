@@ -112,7 +112,7 @@ body {
     flex-direction: column;
     align-items: center;
     text-align: center;
-    padding: var(--space-6) var(--space-6) var(--space-5);
+    padding: var(--space-8) var(--space-6) var(--space-5);
     border-bottom: 1px solid var(--color-border);
     background-color: var(--color-card);
     transition: background-color 0.3s ease, border-color 0.3s ease;
@@ -122,21 +122,27 @@ body {
     display: flex;
     align-items: center;
     gap: var(--space-2);
-    margin-bottom: var(--space-3);
+    margin-bottom: var(--space-6);
+    position: relative;
 }
 
 .app-logo svg {
-    width: 20px;
-    height: 20px;
+    width: 26px;
+    height: 26px;
     color: var(--color-accent);
+    margin-right: var(--space-1);
+    flex-shrink: 0;
 }
 
 .app-logo-text {
     font-family: var(--font-display);
-    font-size: 15px;
-    font-weight: 600;
+    font-size: 16px;
+    font-weight: 500;
     color: var(--color-foreground);
-    margin-left: var(--space-1);
+    letter-spacing: -0.01em;
+    line-height: 1.1;
+    position: relative;
+    top: 1px;
 }
 
 .app-title {
@@ -171,43 +177,20 @@ body {
     padding: var(--space-1) var(--space-2) var(--space-1) var(--space-4);
     transition: all var(--transition-medium);
     box-shadow: var(--shadow-sm);
-    border: none;
+    border: 1px solid transparent;
     position: relative;
     overflow: hidden;
 }
 
 .input-wrapper:focus-within {
-    box-shadow: 0 0 0 3px var(--color-accent-light), 0 0 15px var(--color-accent-glow);
     background-color: var(--color-card);
     transform: translateY(-1px);
+    box-shadow: 0 0 0 2px rgba(0, 113, 227, 0.1);
+    border-color: rgba(0, 113, 227, 0.5);
 }
 
-/* Animated glow effect behind input */
 .input-wrapper:focus-within::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: radial-gradient(circle at center, var(--color-accent-glow), transparent 70%);
-    opacity: 0.7;
-    z-index: -1;
-    animation: pulse-glow 2s infinite;
-}
-
-@keyframes pulse-glow {
-    0% {
-        opacity: 0.3;
-    }
-
-    50% {
-        opacity: 0.7;
-    }
-
-    100% {
-        opacity: 0.3;
-    }
+    content: none;
 }
 
 .input-field {
@@ -219,6 +202,8 @@ body {
     color: var(--color-foreground);
     font-family: var(--font-primary);
     outline: none;
+    -webkit-appearance: none;
+    appearance: none;
 }
 
 .input-field::placeholder {
