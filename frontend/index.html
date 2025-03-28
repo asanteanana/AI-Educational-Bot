@@ -4,8 +4,9 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Ask - Personal Assistant</title>
-  <meta name="description" content="Your friendly personal assistant for quick answers and helpful information." />
+  <title>Learn - Your Learning Companion</title>
+  <meta name="description"
+    content="Your friendly learning companion that helps you discover knowledge and grow your understanding through thoughtful conversations." />
   <link rel="icon"
     href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%230071e3'%3E%3Ccircle cx='12' cy='12' r='10' /%3E%3C/svg%3E"
     type="image/svg+xml">
@@ -47,17 +48,18 @@
         <svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
           <circle cx="12" cy="12" r="10" />
         </svg>
-        <span class="app-logo-text">Assistant</span>
+        <span class="app-logo-text">Learning Companion</span>
       </div>
 
-      <h1 class="app-title">How can I help you today?</h1>
-      <p class="app-subtitle">Ask me a question or request information on any topic</p>
+      <h1 class="app-title">What would you like to learn today?</h1>
+      <p class="app-subtitle">Ask me anything—I'm here to help you explore ideas, understand concepts, and grow your
+        knowledge</p>
     </div>
 
     <div class="input-container">
       <form id="main-form">
         <div class="input-wrapper">
-          <input type="text" class="input-field" id="main-question-input" placeholder="Type your question here..."
+          <input type="text" class="input-field" id="main-question-input" placeholder="What are you curious about?"
             autocomplete="off">
           <button type="button" id="voice-input-button" class="voice-button" aria-label="Use voice input">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
@@ -82,16 +84,16 @@
     <div id="conversation" class="conversation">
       <!-- Welcome message -->
       <div class="welcome-container">
-        <div class="welcome-icon">💬</div>
-        <h2 class="welcome-title">Welcome to your personal assistant</h2>
-        <p class="welcome-text">I'm here to help answer your questions and provide useful information. Type a question
-          in the field above or use the microphone button to ask with your voice.</p>
+        <div class="welcome-icon">✨</div>
+        <h2 class="welcome-title">Begin your learning journey</h2>
+        <p class="welcome-text">I'm your learning companion, here to help you discover and understand new ideas. Every
+          question is a step toward growth. What would you like to explore today?</p>
       </div>
 
       <!-- Status-based header -->
       <div class="conversation-header">
-        <span style="flex: 3;">Question</span>
-        <span style="flex: 1; text-align: right;">Status</span>
+        <span style="flex: 3;">Your Learning Questions</span>
+        <span style="flex: 1; text-align: right;">Progress</span>
       </div>
 
       <!-- Conversation will be populated here dynamically -->
@@ -109,7 +111,7 @@
             <path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"></path>
             <path d="M12 6v6l4 2"></path>
           </svg>
-          Submitting...
+          Exploring...
         </div>
       </div>
     </div>
@@ -125,7 +127,7 @@
             <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
             <polyline points="22 4 12 14.01 9 11.01"></polyline>
           </svg>
-          Complete
+          Discovered
         </div>
         <div class="message-actions">
           <button class="action-button primary play-audio-button">
@@ -144,7 +146,7 @@
               <path d="M1 20v-6h6"></path>
               <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path>
             </svg>
-            Try Again
+            Different Approach
           </button>
           <button class="action-button download-audio-button">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
@@ -153,7 +155,7 @@
               <polyline points="7 10 12 15 17 10"></polyline>
               <line x1="12" y1="15" x2="12" y2="3"></line>
             </svg>
-            Save Audio
+            Save Lesson
           </button>
         </div>
       </div>
@@ -163,7 +165,7 @@
   <template id="typing-indicator-template">
     <div class="message">
       <div class="message-content">
-        <div class="message-text">Finding your answer...</div>
+        <div class="message-text">Gathering knowledge for you...</div>
         <div class="status-pill status-warning">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
             stroke-linejoin="round">
@@ -171,7 +173,7 @@
             <line x1="12" y1="8" x2="12" y2="12"></line>
             <line x1="12" y1="16" x2="12.01" y2="16"></line>
           </svg>
-          Processing
+          Learning
         </div>
         <div class="typing">
           <span class="typing-dot"></span>
