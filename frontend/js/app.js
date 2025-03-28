@@ -12,1198 +12,760 @@ const conversation = document.getElementById('conversation');
 const welcomeContainer = document.querySelector('.welcome-container');
 const conversationHeader = document.querySelector('.conversation-header');
 const appContainer = document.querySelector('.app-container');
+const charCount = document.getElementById('char-count');
+const charMax = document.getElementById('char-max');
+const userMessageTemplate = document.getElementById('user-message-template');
+const assistantMessageTemplate = document.getElementById('assistant-message-template');
+const typingIndicatorTemplate = document.getElementById('typing-indicator-template');
+const audioControls = document.getElementById('audio-controls');
+const queryCount = document.getElementById('query-count');
+const clearSession = document.getElementById('clear-session');
 
-// Learning-focused responses with audio accessibility emphasis
-const demoResponses = {
-    "hello": "Hello! Welcome to your audio learning companion. I'm designed to make learning more accessible through spoken information. My responses are crafted to be clear and engaging when listened to. What topic would you like to explore today?",
+// Theme and accessibility controls
+const highContrastButton = document.getElementById('high-contrast-button');
+const textIncreaseButton = document.getElementById('text-increase-button');
+const textDecreaseButton = document.getElementById('text-decrease-button');
 
-    "who are you": "I'm your audio-first educational assistant, designed to make knowledge accessible through spoken content. I use natural-sounding text-to-speech technology to help diverse learners access information in a way that works for them. My approach is inspired by the universal accessibility principles championed by resources like Wikipedia, where knowledge should be available to everyone regardless of how they prefer or need to consume information.",
+// View controls
+const textViewButton = document.getElementById('text-view-button');
+const audioViewButton = document.getElementById('audio-view-button');
 
-    "what can you do": "I can transform complex information into clear, spoken explanations that are easy to listen to and understand. This is particularly helpful for auditory learners, people with reading difficulties, those who are multitasking, or anyone who prefers listening over reading. You can ask me about virtually any topic, and I'll provide an explanation optimized for listening. You can also save these audio explanations for later or request simplified versions if needed.",
+// TTS Model Selector
+const ttsModelSelect = document.getElementById('tts-model');
+const modelPerformance = document.getElementById('model-performance');
+const previewVoiceButton = document.getElementById('preview-voice');
 
-    "how does this work": "When you ask a question, I generate a response that's specifically formatted to sound natural when spoken aloud. My text-to-speech engine converts this text to high-quality audio that mimics natural human speech patterns, including appropriate pacing, emphasis, and intonation. This makes complex information more accessible to everyone, including people with reading difficulties, visual impairments, or those who simply prefer auditory learning. You can listen immediately or save the audio for later reference.",
+// Audio playback controls
+const playPauseButton = document.getElementById('play-pause');
+const playIcon = document.getElementById('play-icon');
+const pauseIcon = document.getElementById('pause-icon');
+const currentTimeDisplay = document.getElementById('current-time');
+const totalTimeDisplay = document.getElementById('total-time');
+const speedToggle = document.getElementById('speed-toggle');
+const speedOptions = document.getElementById('speed-options');
+const volumeButton = document.getElementById('volume-button');
+const volumeSlider = document.getElementById('volume-slider');
+const downloadAudioButton = document.getElementById('download-audio');
 
-    "accessibility": "Audio learning addresses several accessibility needs. For people with visual impairments, dyslexia, or other reading difficulties, spoken content provides access to information that might otherwise be challenging to consume. For those with attention difficulties, audio can sometimes be easier to focus on than text. And for people who are busy or multitasking, audio allows learning to happen alongside other activities. This approach to knowledge sharing follows the principles of universal design for learning, which aims to make education accessible to everyone.",
+// Modal Elements
+const historyButton = document.getElementById('history-button');
+const bookmarkButton = document.getElementById('bookmark-button');
+const settingsButton = document.getElementById('settings-button');
+const historyModal = document.getElementById('history-modal');
+const bookmarksModal = document.getElementById('bookmarks-modal');
+const settingsModal = document.getElementById('settings-modal');
+const closeModalButtons = document.querySelectorAll('.close-modal');
+const saveSettingsButton = document.getElementById('save-settings');
+const resetSettingsButton = document.getElementById('reset-settings');
 
-    "help": "I'd be happy to assist with your audio learning needs! You can ask me about any topic, and I'll provide information designed to be heard rather than read. When I respond, you'll see audio controls to listen to the explanation, request a simpler version, or save the audio for later. This service is particularly valuable if you're an auditory learner, have difficulty reading text, or simply prefer to consume information while multitasking. What would you like to learn about today?",
+// Sample query chips
+const queryChips = document.querySelectorAll('.query-chip');
 
-    "thanks": "You're very welcome! I'm glad I could help make information more accessible through audio. Learning should adapt to different needs and preferences, not the other way around. If you have more questions or topics to explore, feel free to ask anytime. I'm here to make knowledge accessible to everyone through the power of speech.",
-};
+// Initialize message counter and storage
+let messageCount = 0;
+let isProcessing = false;
+let currentAudio = null;
+let wavesurfer = null;
+let fontSizePercent = 100;
 
-// Simulate retrieval of information with a learning focus
-const simulateAPIResponse = async (question) => {
-    // Simulate network latency (300-800ms for realistic response)
-    const delay = Math.floor(Math.random() * 500) + 300;
-    await new Promise(resolve => setTimeout(resolve, delay));
+// Initialize WaveSurfer
+function initWaveSurfer() {
+    wavesurfer = WaveSurfer.create({
+        container: '#waveform',
+        waveColor: getComputedStyle(document.documentElement).getPropertyValue('--color-waveform').trim(),
+        progressColor: getComputedStyle(document.documentElement).getPropertyValue('--color-progress').trim(),
+        cursorColor: 'transparent',
+        barWidth: 2,
+        barGap: 1,
+        barRadius: 1,
+        height: 80,
+        responsive: true,
+    });
 
-    // Process query
-    const normalizedQuestion = question.toLowerCase().replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g, "");
+    wavesurfer.on('ready', function() {
+        const duration = wavesurfer.getDuration();
+        totalTimeDisplay.textContent = formatTime(duration);
+        playIcon.classList.remove('hidden');
+        pauseIcon.classList.add('hidden');
+    });
 
-    // Information lookup
-    for (const [keyword, response] of Object.entries(demoResponses)) {
-        if (normalizedQuestion.includes(keyword)) {
-            return response;
-        }
+    wavesurfer.on('play', function() {
+        playIcon.classList.add('hidden');
+        pauseIcon.classList.remove('hidden');
+    });
+
+    wavesurfer.on('pause', function() {
+        playIcon.classList.remove('hidden');
+        pauseIcon.classList.add('hidden');
+    });
+
+    wavesurfer.on('audioprocess', function() {
+        const currentTime = wavesurfer.getCurrentTime();
+        currentTimeDisplay.textContent = formatTime(currentTime);
+    });
+}
+
+// Format time for audio display (mm:ss)
+function formatTime(seconds) {
+    const minutes = Math.floor(seconds / 60);
+    const secondsRemainder = Math.floor(seconds) % 60;
+    return `${minutes}:${secondsRemainder.toString().padStart(2, '0')}`;
+}
+
+// Handle user question submission
+function handleQuestionSubmit(event) {
+    if (event) {
+        event.preventDefault();
     }
 
-    // Audio-learning focused fallback responses
-    const fallbackResponses = [
-        "That's an interesting topic to explore through audio learning. While I don't have complete information right now, I can create a spoken explanation about related concepts if you'd like. Audio formats make complex topics more accessible to many learners who process information better through listening.",
+    const question = mainQuestionInput.value.trim();
+    if (!question || isProcessing) return;
 
-        "This would make for a fascinating audio lesson. In a complete system, I'd provide a spoken explanation with proper pacing and emphasis to make this information easy to absorb through listening. Would you like to explore a related topic that I can explain through audio?",
+    isProcessing = true;
+    
+    // Hide welcome message and show conversation header
+    if (welcomeContainer.style.display !== 'none') {
+        welcomeContainer.style.display = 'none';
+        conversationHeader.style.opacity = '1';
+        conversationHeader.style.transform = 'translateY(0)';
+    }
 
-        "I appreciate your interest in learning about this through audio. While I don't have comprehensive information on this specific topic at the moment, audio learning has been shown to be particularly effective for complex subjects like this one. It allows learners to process information at their own pace and often improves retention.",
+    // Add user message
+    const userMessageElement = addUserMessage(question);
+    
+    // Show typing indicator
+    const typingIndicator = addTypingIndicator();
+    
+    // Reset input
+    mainQuestionInput.value = '';
+    charCount.textContent = '0';
 
-        "That's exactly the kind of thoughtful question that benefits from an audio explanation. While I don't have the full details right now, spoken explanations like those found in educational podcasts and audiobooks have revolutionized how we learn complex topics. They're especially helpful for auditory learners and those with reading difficulties.",
+    // Simulate AI response (would be replaced with actual API call)
+    setTimeout(() => {
+        // Remove typing indicator
+        typingIndicator.remove();
+        
+        // Add AI response
+        const response = generateSampleResponse(question);
+        addAssistantMessage(response);
+        
+        // Update query count
+        messageCount++;
+        queryCount.textContent = `${messageCount} ${messageCount === 1 ? 'query' : 'queries'}`;
+        
+        isProcessing = false;
+    }, 2000);
+}
 
-        "What a great topic to explore through listening! Audio learning, like what Wikipedia's spoken articles provide, makes knowledge more universally accessible. While I don't have the complete information on this yet, I'd be happy to provide audio explanations on related subjects that might interest you."
+// Add user message to conversation
+function addUserMessage(text) {
+    const clone = document.importNode(userMessageTemplate.content, true);
+    const messageText = clone.querySelector('.message-text');
+    messageText.textContent = text;
+    
+    // Add edit functionality to user messages
+    const editButton = clone.querySelector('.edit-message');
+    editButton.addEventListener('click', () => {
+        mainQuestionInput.value = text;
+        mainQuestionInput.focus();
+        updateCharCount();
+    });
+    
+    conversation.appendChild(clone);
+    return conversation.lastElementChild;
+}
+
+// Add assistant message to conversation
+function addAssistantMessage(text) {
+    const clone = document.importNode(assistantMessageTemplate.content, true);
+    const messageText = clone.querySelector('.message-text');
+    messageText.innerHTML = text;
+    
+    // Add event listeners for assistant message actions
+    const playAudioButton = clone.querySelector('.play-audio-button');
+    playAudioButton.addEventListener('click', () => {
+        playResponseAudio(text);
+    });
+    
+    const regenerateButton = clone.querySelector('.regenerate-button');
+    regenerateButton.addEventListener('click', () => {
+        showNotification('Generating simpler explanation...');
+        setTimeout(() => {
+            messageText.innerHTML = generateSimplifiedResponse(text);
+        }, 1000);
+    });
+    
+    const bookmarkButton = clone.querySelector('.bookmark-response');
+    bookmarkButton.addEventListener('click', () => {
+        toggleBookmark(text);
+    });
+    
+    const copyButton = clone.querySelector('.copy-response');
+    copyButton.addEventListener('click', () => {
+        copyToClipboard(text);
+    });
+    
+    const resourcesButton = clone.querySelector('.additional-resources');
+    resourcesButton.addEventListener('click', () => {
+        showNotification('Finding additional resources...');
+    });
+    
+    conversation.appendChild(clone);
+    return conversation.lastElementChild;
+}
+
+// Add typing indicator
+function addTypingIndicator() {
+    const clone = document.importNode(typingIndicatorTemplate.content, true);
+    conversation.appendChild(clone);
+    return conversation.lastElementChild;
+}
+
+// Generate sample response based on question
+function generateSampleResponse(question) {
+    // This would be replaced with actual AI response
+    const responses = [
+        `<p>That's a great question about <strong>${question.split(' ').slice(0, 5).join(' ')}...</strong></p>
+        <p>The concept involves several key principles:</p>
+        <ul>
+            <li>First, we need to understand the fundamental theory</li>
+            <li>Second, practical applications show us how it works in real-world scenarios</li>
+            <li>Finally, recent research has expanded our understanding significantly</li>
+        </ul>
+        <p>Would you like me to elaborate on any specific aspect of this topic?</p>`,
+        
+        `<p>Exploring <strong>${question.split(' ').slice(0, 3).join(' ')}...</strong> is fascinating!</p>
+        <p>From an educational perspective, this topic encompasses:</p>
+        <ol>
+            <li>Historical development and key contributors</li>
+            <li>Core theoretical framework and principles</li>
+            <li>Modern applications and future directions</li>
+        </ol>
+        <p>I can provide more specific information on any of these areas if you're interested.</p>`,
+        
+        `<p>When examining <strong>${question.split(' ').slice(0, 4).join(' ')}...</strong>, it's important to consider multiple perspectives.</p>
+        <p>Current educational research suggests three main approaches:</p>
+        <p>The first approach focuses on theoretical foundations, while the second examines practical implementations. The third, which has gained popularity recently, integrates both perspectives with technological innovations.</p>
+        <p>Would you like to hear more about these approaches?</p>`
     ];
+    
+    return responses[Math.floor(Math.random() * responses.length)];
+}
 
-    return fallbackResponses[Math.floor(Math.random() * fallbackResponses.length)];
-};
+// Generate simplified version of response
+function generateSimplifiedResponse(originalResponse) {
+    // This would be replaced with actual simplification logic or API call
+    return originalResponse.replace(/<\/?ul>|<\/?ol>|<\/?strong>/g, '')
+        .replace(/<li>/g, '• ')
+        .replace(/<\/li>/g, '<br>')
+        .replace(/<p>/g, '<p>📌 ');
+}
 
-// Create a visually engaging typing indicator
-const createTypingIndicator = () => {
-    const template = document.getElementById('typing-indicator-template');
-    return template.content.cloneNode(true);
-};
+// Play response audio
+function playResponseAudio(text) {
+    // Show audio controls if hidden
+    audioControls.classList.add('active');
+    
+    // In a real app, this would call the TTS API with the selected model
+    // For demo, we'll just use a sample audio
+    const modelType = ttsModelSelect.value;
+    showNotification(`Processing with ${modelType} voice model...`);
+    
+    // Simulate loading an audio file
+    setTimeout(() => {
+        // Create a simple audio blob for demonstration (would be replaced with actual TTS audio)
+        const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        const oscillator = audioContext.createOscillator();
+        const gainNode = audioContext.createGain();
+        
+        oscillator.type = 'sine';
+        oscillator.frequency.setValueAtTime(440, audioContext.currentTime);
+        gainNode.gain.setValueAtTime(0.1, audioContext.currentTime);
+        
+        oscillator.connect(gainNode);
+        gainNode.connect(audioContext.destination);
+        
+        const dest = audioContext.createMediaStreamDestination();
+        oscillator.connect(dest);
+        
+        const mediaRecorder = new MediaRecorder(dest.stream);
+        const chunks = [];
+        
+        mediaRecorder.ondataavailable = (evt) => {
+            chunks.push(evt.data);
+        };
+        
+        mediaRecorder.onstop = () => {
+            const blob = new Blob(chunks, { type: 'audio/wav' });
+            const url = URL.createObjectURL(blob);
+            
+            wavesurfer.load(url);
+            currentAudio = url;
+            
+            showNotification('Audio ready to play');
+        };
+        
+        // Record for 5 seconds
+        mediaRecorder.start();
+        oscillator.start();
+        
+        setTimeout(() => {
+            mediaRecorder.stop();
+            oscillator.stop();
+        }, 5000);
+    }, 1000);
+}
 
-// Enhanced notification with motion effects
-const showNotification = (message, duration = 3000) => {
-    // Remove any existing notifications
+// Initialize audio controls
+function initAudioControls() {
+    // Play/Pause toggle
+    playPauseButton.addEventListener('click', () => {
+        if (!wavesurfer) return;
+        wavesurfer.playPause();
+    });
+    
+    // Speed toggle
+    speedToggle.addEventListener('click', () => {
+        speedOptions.classList.toggle('hidden');
+    });
+    
+    // Speed options
+    speedOptions.querySelectorAll('button').forEach(button => {
+        button.addEventListener('click', () => {
+            const speed = parseFloat(button.getAttribute('data-speed'));
+            wavesurfer.setPlaybackRate(speed);
+            speedToggle.textContent = `${speed}x`;
+            
+            // Update active state
+            speedOptions.querySelectorAll('button').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            button.classList.add('active');
+            
+            speedOptions.classList.add('hidden');
+        });
+    });
+    
+    // Volume control
+    volumeSlider.addEventListener('input', () => {
+        const volume = volumeSlider.value / 100;
+        if (wavesurfer) {
+            wavesurfer.setVolume(volume);
+        }
+    });
+    
+    // Download audio
+    downloadAudioButton.addEventListener('click', () => {
+        if (currentAudio) {
+            const a = document.createElement('a');
+            a.href = currentAudio;
+            a.download = 'educational_response.wav';
+            a.click();
+            showNotification('Audio file downloaded');
+        }
+    });
+}
+
+// Copy text to clipboard
+function copyToClipboard(text) {
+    // Strip HTML tags for plain text
+    const tempDiv = document.createElement('div');
+    tempDiv.innerHTML = text;
+    const plainText = tempDiv.textContent || tempDiv.innerText;
+    
+    navigator.clipboard.writeText(plainText).then(() => {
+        showNotification('Response copied to clipboard');
+    }).catch(err => {
+        console.error('Could not copy text: ', err);
+        showNotification('Failed to copy text', 'error');
+    });
+}
+
+// Toggle bookmarking a response
+function toggleBookmark(text) {
+    // In a real app, this would save to local storage or a database
+    showNotification('Response bookmarked for later reference');
+    
+    // For demo purposes, add to bookmarks modal
+    const bookmarksList = document.getElementById('bookmarked-responses');
+    const emptyState = bookmarksList.querySelector('.empty-state');
+    
+    if (emptyState) {
+        emptyState.remove();
+    }
+    
+    const bookmarkItem = document.createElement('div');
+    bookmarkItem.className = 'bookmark-item';
+    
+    const itemText = document.createElement('div');
+    itemText.className = 'bookmark-item-text';
+    // Create a summary from the first 50 chars
+    const tempDiv = document.createElement('div');
+    tempDiv.innerHTML = text;
+    const plainText = tempDiv.textContent || tempDiv.innerText;
+    itemText.textContent = plainText.substring(0, 80) + '...';
+    
+    const itemDate = document.createElement('div');
+    itemDate.className = 'bookmark-item-date';
+    itemDate.textContent = new Date().toLocaleString();
+    
+    bookmarkItem.appendChild(itemText);
+    bookmarkItem.appendChild(itemDate);
+    bookmarksList.appendChild(bookmarkItem);
+}
+
+// Show notification
+function showNotification(message, type = 'info') {
+    // Remove existing notification if any
     const existingNotification = document.querySelector('.notification');
     if (existingNotification) {
         existingNotification.remove();
     }
-
-    // Create notification
+    
     const notification = document.createElement('div');
-    notification.className = 'notification';
+    notification.className = `notification notification-${type}`;
     notification.textContent = message;
-    notification.setAttribute('role', 'status');
-    notification.setAttribute('aria-live', 'polite');
     document.body.appendChild(notification);
-
-    // Animate appearance with spring physics for more natural feel
+    
+    // Fade in
+    setTimeout(() => {
+        notification.style.opacity = '1';
+        notification.style.transform = 'translateY(-10px) translateX(-50%)';
+    }, 10);
+    
+    // Fade out after 3 seconds
     setTimeout(() => {
         notification.style.opacity = '0';
-
-        animate(notification, {
-            opacity: [0, 1],
-            y: [20, 0],
-            scale: [0.95, 1]
-        }, {
-            duration: 0.5,
-            ease: [0.34, 1.56, 0.64, 1]  // Spring-like curve for better feedback
-        });
-    }, 10);
-
-    // Subtle hover animation
-    notification.addEventListener('mouseenter', () => {
-        animate(notification, {
-            scale: 1.05,
-            y: -5
-        }, { duration: 0.2 });
-    });
-
-    notification.addEventListener('mouseleave', () => {
-        animate(notification, {
-            scale: 1,
-            y: 0
-        }, { duration: 0.2 });
-    });
-
-    // Remove after duration with smooth exit
-    setTimeout(() => {
-        animate(notification, {
-            opacity: [1, 0],
-            y: [0, 10],
-            scale: [1, 0.95]
-        }, {
-            duration: 0.4,
-            ease: [0.4, 0, 0.2, 1]
-        }).then(() => notification.remove());
-    }, duration);
-};
-
-// Create a user message with motion
-const createUserMessage = (question) => {
-    const template = document.getElementById('user-message-template');
-    const message = template.content.cloneNode(true);
-
-    message.querySelector('.message-text').textContent = question;
-
-    return message;
-};
-
-// Create an assistant message with motion
-const createAssistantMessage = (answer) => {
-    const template = document.getElementById('assistant-message-template');
-    const message = template.content.cloneNode(true);
-
-    message.querySelector('.message-text').textContent = answer;
-
-    return message;
-};
-
-// Handle the submission of a question with enhanced animations
-const handleQuestionSubmit = async (question) => {
-    if (!question.trim()) return;
-
-    // Add a subtle pulse animation to the app container to acknowledge submission
-    animate(appContainer, {
-        scale: [1, 1.005, 1],
-        boxShadow: ['var(--shadow-md)', 'var(--shadow-lg)', 'var(--shadow-md)']
-    }, {
-        duration: 0.5,
-        ease: [0.34, 1.56, 0.64, 1]
-    });
-
-    // Hide welcome message and show header if this is the first message
-    if (welcomeContainer && welcomeContainer.style.display !== 'none') {
-        // Wiki-style fold animation
-        animate(welcomeContainer, {
-            opacity: [1, 0],
-            height: [welcomeContainer.offsetHeight, 0],
-            scale: [1, 0.98]
-        }, {
-            duration: 0.5,
-            ease: [0.4, 0, 0.2, 1]
-        }).then(() => {
-            welcomeContainer.style.display = 'none';
-
-            // Show the conversation header with a Wikipedia-inspired fade-in animation
-            if (conversationHeader) {
-                conversationHeader.style.display = 'flex';
-
-                // Animated with Framer Motion
-                animate(conversationHeader, {
-                    opacity: [0, 1],
-                    y: [-10, 0],
-                    backgroundColor: ['var(--color-card)', 'var(--color-input-bg)']
-                }, {
-                    duration: 0.6,
-                    delay: 0.1,
-                    ease: [0.16, 1, 0.3, 1] // Custom ease for Wikipedia-like appearance
-                });
-            }
-        });
-    }
-
-    // Add user message with Wikipedia-inspired animation
-    const userMessage = createUserMessage(question);
-    conversation.appendChild(userMessage);
-
-    // Get the actual DOM element to animate with Framer Motion
-    const userMessageElement = userMessage.querySelector('.message');
-    userMessageElement.style.opacity = '0';
-    userMessageElement.style.transform = 'translateY(10px)';
-
-    // Animate message appearance with a Wikipedia-style fade
-    animate(userMessageElement, {
-        opacity: [0, 1],
-        y: [10, 0],
-        borderLeftWidth: [0, 4, 0], // Wiki-style highlight effect
-        borderLeftColor: ['transparent', 'var(--color-accent)', 'transparent']
-    }, {
-        duration: 0.5,
-        ease: [0.16, 1, 0.3, 1]
-    });
-
-    // Add typing indicator with a staggered animation
-    const typingIndicator = createTypingIndicator();
-    conversation.appendChild(typingIndicator);
-
-    // Get the actual typing indicator DOM element
-    const typingElement = typingIndicator.querySelector('.message');
-    typingElement.style.opacity = '0';
-    typingElement.style.transform = 'translateY(10px)';
-
-    // Animate typing indicator appearance
-    animate(typingElement, {
-        opacity: [0, 1],
-        y: [10, 0]
-    }, {
-        duration: 0.4,
-        delay: 0.2,
-        ease: [0.34, 1.56, 0.64, 1]
-    });
-
-    // Scroll to bottom with smooth animation
-    animate(conversation, {
-        scrollTop: conversation.scrollHeight
-    }, {
-        duration: 0.8,
-        ease: [0.34, 1.56, 0.64, 1]
-    });
-
-    try {
-        // Simulate information retrieval
-        const response = await simulateAPIResponse(question);
-
-        // Remove typing indicator with a fade-out animation
-        animate(typingElement, {
-            opacity: [1, 0],
-            y: [0, -10],
-            scale: [1, 0.96]
-        }, {
-            duration: 0.3,
-            ease: [0.4, 0, 0.2, 1]
-        }).then(() => {
-            const typingElement = conversation.querySelector('.status-warning').closest('.message');
-            conversation.removeChild(typingElement);
-
-            // Add assistant message
-            const assistantMessage = createAssistantMessage(response);
-            conversation.appendChild(assistantMessage);
-
-            // Animate the new message with a more dramatic entrance
-            const messageElement = assistantMessage.querySelector('.message');
-            messageElement.style.opacity = '0';
-            messageElement.style.transform = 'translateY(20px) scale(0.98)';
-
-            animate(messageElement, {
-                opacity: [0, 1],
-                y: [20, 0],
-                scale: [0.98, 1]
-            }, {
-                duration: 0.6,
-                delay: 0.1,
-                ease: [0.34, 1.56, 0.64, 1]
-            });
-
-            // Add a subtle highlight effect to emphasize new content
-            setTimeout(() => {
-                animate(messageElement.querySelector('.message-content'), {
-                    backgroundColor: ['var(--color-accent-light)', 'var(--color-bg-secondary)']
-                }, {
-                    duration: 1.5,
-                    ease: [0.4, 0, 0.2, 1]
-                });
-            }, 600);
-
-            // Setup action buttons with staggered appearance
-            setupActionButtons(messageElement.querySelector('.message-content'), response);
-
-            // Stagger animate action buttons
-            const actionButtons = messageElement.querySelectorAll('.action-button');
-            actionButtons.forEach((button, index) => {
-                button.style.opacity = '0';
-                button.style.transform = 'translateY(10px)';
-
-                animate(button, {
-                    opacity: [0, 1],
-                    y: [10, 0]
-                }, {
-                    duration: 0.4,
-                    delay: 0.2 + (index * 0.1),
-                    ease: [0.34, 1.56, 0.64, 1]
-                });
-            });
-
-            // Scroll to bottom with smooth animation
-            animate(conversation, {
-                scrollTop: conversation.scrollHeight
-            }, {
-                duration: 0.8,
-                ease: [0.34, 1.56, 0.64, 1]
-            });
-        });
-
-    } catch (error) {
-        // Handle errors gracefully
-        animate(typingElement, {
-            opacity: [1, 0],
-            y: [0, -10]
-        }, {
-            duration: 0.3,
-            ease: [0.4, 0, 0.2, 1]
-        }).then(() => {
-            const typingElement = conversation.querySelector('.status-warning').closest('.message');
-            conversation.removeChild(typingElement);
-
-            showNotification("Something went wrong with your learning journey. Let's try again.");
-        });
-    }
-};
-
-// Setup action buttons with enhanced animations
-const setupActionButtons = (messageContent, answerText) => {
-    const playAudioButton = messageContent.querySelector('.play-audio-button');
-    const regenerateButton = messageContent.querySelector('.regenerate-button');
-    const downloadAudioButton = messageContent.querySelector('.download-audio-button');
-
-    // Set up audio playback
-    let isSpeaking = false;
-
-    playAudioButton.addEventListener('click', async () => {
-        // Button click animation
-        animate(playAudioButton, {
-            scale: [1, 0.92, 1],
-        }, {
-            duration: 0.3,
-            ease: [0.34, 1.56, 0.64, 1]
-        });
-
-        if (isSpeaking) {
-            window.speechSynthesis.cancel();
-            isSpeaking = false;
-            playAudioButton.innerHTML = `
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                stroke-linejoin="round">
-                <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
-                <path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path>
-                <path d="M19.07 4.93a10 10 0 0 1 0 14.14"></path>
-            </svg>
-            Listen`;
-            return;
-        }
-
-        // Change status pill to show playing with animation
-        const statusPill = messageContent.querySelector('.status-pill');
-
-        // Animate the status change
-        animate(statusPill, {
-            scale: [1, 1.1, 1],
-            backgroundColor: ['var(--color-success-bg)', 'var(--color-info-bg)']
-        }, {
-            duration: 0.4,
-            ease: [0.34, 1.56, 0.64, 1]
-        });
-
-        statusPill.className = 'status-pill status-info';
-        statusPill.innerHTML = `
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-            stroke-linejoin="round">
-            <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
-            <path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path>
-        </svg>
-        Playing lesson`;
-
-        try {
-            await speak(answerText);
-            isSpeaking = true;
-            playAudioButton.innerHTML = `
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                stroke-linejoin="round">
-                <rect x="4" y="4" width="16" height="16" rx="2" ry="2"></rect>
-                <rect x="9" y="9" width="6" height="6"></rect>
-            </svg>
-            Stop`;
-
-            // Reset when speech ends
-            window.speechSynthesis.addEventListener('end', () => {
-                isSpeaking = false;
-
-                // Animate button change
-                animate(playAudioButton, {
-                    scale: [1, 0.95, 1.05, 1],
-                }, {
-                    duration: 0.4,
-                    ease: [0.34, 1.56, 0.64, 1]
-                });
-
-                playAudioButton.innerHTML = `
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                    stroke-linejoin="round">
-                    <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
-                    <path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path>
-                    <path d="M19.07 4.93a10 10 0 0 1 0 14.14"></path>
-                </svg>
-                Listen`;
-
-                // Reset status pill with animation
-                animate(statusPill, {
-                    scale: [1, 0.95, 1.05, 1],
-                    backgroundColor: ['var(--color-info-bg)', 'var(--color-success-bg)']
-                }, {
-                    duration: 0.4,
-                    ease: [0.34, 1.56, 0.64, 1]
-                });
-
-                statusPill.className = 'status-pill status-success';
-                statusPill.innerHTML = `
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
-                    <polyline points="22 4 12 14.01 9 11.01"></polyline>
-                </svg>
-                Discovered`;
-            }, { once: true });
-
-        } catch (error) {
-            // Reset status pill
-            animate(statusPill, {
-                backgroundColor: ['var(--color-info-bg)', 'var(--color-success-bg)']
-            }, {
-                duration: 0.3,
-                ease: [0.4, 0, 0.2, 1]
-            });
-
-            statusPill.className = 'status-pill status-success';
-            statusPill.innerHTML = `
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
-                <polyline points="22 4 12 14.01 9 11.01"></polyline>
-            </svg>
-            Discovered`;
-
-            showNotification('Could not play audio lesson. Please try again.');
-        }
-    });
-
-    // Set up regenerate button
-    regenerateButton.addEventListener('click', async () => {
-        // Button click animation
-        animate(regenerateButton, {
-            scale: [1, 0.92, 1],
-        }, {
-            duration: 0.3,
-            ease: [0.34, 1.56, 0.64, 1]
-        });
-
-        // Change status pill to show regenerating with animation
-        const statusPill = messageContent.querySelector('.status-pill');
-
-        animate(statusPill, {
-            scale: [1, 1.1, 1],
-            backgroundColor: ['var(--color-success-bg)', 'var(--color-warning-bg)']
-        }, {
-            duration: 0.4,
-            ease: [0.34, 1.56, 0.64, 1]
-        });
-
-        statusPill.className = 'status-pill status-warning';
-        statusPill.innerHTML = `
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M23 4v6h-6"></path>
-            <path d="M1 20v-6h6"></path>
-            <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path>
-        </svg>
-        Finding new approach...`;
-
-        try {
-            // Get the question (first element before this one)
-            const questionElement = messageContent.closest('.message').previousElementSibling;
-            const question = questionElement.querySelector('.message-text').textContent;
-
-            // Get new response
-            const newResponse = await simulateAPIResponse(question);
-
-            // Animate answer text change
-            const messageTextElement = messageContent.querySelector('.message-text');
-
-            animate(messageTextElement, {
-                opacity: [1, 0.5, 1],
-                y: [0, -5, 0]
-            }, {
-                duration: 0.6,
-                ease: [0.34, 1.56, 0.64, 1]
-            });
-
-            // Update answer text
-            messageTextElement.textContent = newResponse;
-
-            // Show notification
-            showNotification('Found a different perspective for you!');
-
-            // Reset status pill with animation
-            animate(statusPill, {
-                scale: [1, 0.95, 1.05, 1],
-                backgroundColor: ['var(--color-warning-bg)', 'var(--color-success-bg)']
-            }, {
-                duration: 0.4,
-                ease: [0.34, 1.56, 0.64, 1]
-            });
-
-            statusPill.className = 'status-pill status-success';
-            statusPill.innerHTML = `
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
-                <polyline points="22 4 12 14.01 9 11.01"></polyline>
-            </svg>
-            Discovered`;
-
-        } catch (error) {
-            // Reset status pill
-            animate(statusPill, {
-                backgroundColor: ['var(--color-warning-bg)', 'var(--color-success-bg)']
-            }, {
-                duration: 0.3,
-                ease: [0.4, 0, 0.2, 1]
-            });
-
-            statusPill.className = 'status-pill status-success';
-            statusPill.innerHTML = `
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
-                <polyline points="22 4 12 14.01 9 11.01"></polyline>
-            </svg>
-            Discovered`;
-
-            showNotification('Could not find a different approach. Please try again.');
-        }
-    });
-
-    // Set up download audio button
-    downloadAudioButton.addEventListener('click', async () => {
-        // Button click animation
-        animate(downloadAudioButton, {
-            scale: [1, 0.92, 1],
-        }, {
-            duration: 0.3,
-            ease: [0.34, 1.56, 0.64, 1]
-        });
-
-        // Change status pill to show downloading with animation
-        const statusPill = messageContent.querySelector('.status-pill');
-
-        animate(statusPill, {
-            scale: [1, 1.1, 1],
-            backgroundColor: ['var(--color-success-bg)', 'var(--color-neutral-bg)']
-        }, {
-            duration: 0.4,
-            ease: [0.34, 1.56, 0.64, 1]
-        });
-
-        statusPill.className = 'status-pill status-neutral';
-        statusPill.innerHTML = `
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-            <polyline points="7 10 12 15 17 10"></polyline>
-            <line x1="12" y1="15" x2="12" y2="3"></line>
-        </svg>
-        Saving lesson...`;
-
-        try {
-            await downloadAudio(answerText);
-
-            // Show notification
-            showNotification('Lesson saved for later study!');
-
-            // Reset status pill with animation
-            animate(statusPill, {
-                scale: [1, 0.95, 1.05, 1],
-                backgroundColor: ['var(--color-neutral-bg)', 'var(--color-success-bg)']
-            }, {
-                duration: 0.4,
-                ease: [0.34, 1.56, 0.64, 1]
-            });
-
-            statusPill.className = 'status-pill status-success';
-            statusPill.innerHTML = `
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
-                <polyline points="22 4 12 14.01 9 11.01"></polyline>
-            </svg>
-            Discovered`;
-
-        } catch (error) {
-            // Reset status pill
-            animate(statusPill, {
-                backgroundColor: ['var(--color-neutral-bg)', 'var(--color-success-bg)']
-            }, {
-                duration: 0.3,
-                ease: [0.4, 0, 0.2, 1]
-            });
-
-            statusPill.className = 'status-pill status-success';
-            statusPill.innerHTML = `
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
-                <polyline points="22 4 12 14.01 9 11.01"></polyline>
-            </svg>
-            Discovered`;
-
-            showNotification('Could not save lesson. Please try again.');
-        }
-    });
-};
-
-// Text-to-speech functionality with enhanced voice
-const speak = (text) => {
-    return new Promise((resolve, reject) => {
-        if (!window.speechSynthesis) {
-            reject(new Error('Speech synthesis not supported'));
-            return;
-        }
-
-        const utterance = new SpeechSynthesisUtterance(text);
-
-        // Use a more natural voice if available
-        const voices = window.speechSynthesis.getVoices();
-        const preferredVoice = voices.find(voice =>
-            voice.lang.startsWith('en') &&
-            (voice.name.includes('Female') || voice.name.includes('Samantha'))
-        );
-
-        utterance.voice = preferredVoice || voices.find(voice => voice.lang.startsWith('en')) || voices[0];
-        utterance.rate = 0.95; // Slightly slower rate for better comprehension
-        utterance.pitch = 1;
-
-        utterance.onend = () => resolve();
-        utterance.onerror = (event) => reject(new Error(`Speech synthesis error: ${event.error}`));
-
-        window.speechSynthesis.speak(utterance);
-    });
-};
-
-// Enhanced download audio file with animation
-const downloadAudio = async (text) => {
-    return new Promise((resolve, reject) => {
-        try {
-            // In a real implementation, this would convert text to an audio file
-            // For demo purposes, we'll just simulate the download
-            setTimeout(() => {
-                const blob = new Blob([text], { type: 'text/plain' });
-                const url = URL.createObjectURL(blob);
-                const a = document.createElement('a');
-                a.href = url;
-                a.download = `learning-material-${Date.now()}.txt`;
-                document.body.appendChild(a);
-
-                // Add a visual indicator for download
-                const downloadIcon = document.createElement('div');
-                downloadIcon.style.position = 'fixed';
-                downloadIcon.style.top = '50%';
-                downloadIcon.style.left = '50%';
-                downloadIcon.style.transform = 'translate(-50%, -50%)';
-                downloadIcon.style.backgroundColor = 'var(--color-accent)';
-                downloadIcon.style.borderRadius = '50%';
-                downloadIcon.style.width = '60px';
-                downloadIcon.style.height = '60px';
-                downloadIcon.style.display = 'flex';
-                downloadIcon.style.alignItems = 'center';
-                downloadIcon.style.justifyContent = 'center';
-                downloadIcon.style.color = 'white';
-                downloadIcon.style.zIndex = '9999';
-                downloadIcon.style.boxShadow = '0 0 20px var(--color-accent-glow)';
-                downloadIcon.style.opacity = '0';
-                downloadIcon.innerHTML = `
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-                    <polyline points="7 10 12 15 17 10"></polyline>
-                    <line x1="12" y1="15" x2="12" y2="3"></line>
-                </svg>`;
-                document.body.appendChild(downloadIcon);
-
-                animate(downloadIcon, {
-                    opacity: [0, 1, 1, 0],
-                    scale: [0.5, 1.2, 1, 0.8],
-                    y: [0, -20, -20, 20]
-                }, {
-                    duration: 1.2,
-                    ease: [0.34, 1.56, 0.64, 1]
-                }).then(() => {
-                    document.body.removeChild(downloadIcon);
-                });
-
-                a.click();
-
-                // Cleanup
-                setTimeout(() => {
-                    document.body.removeChild(a);
-                    URL.revokeObjectURL(url);
-                    resolve();
-                }, 100);
-            }, 800);
-        } catch (error) {
-            reject(error);
-        }
-    });
-};
-
-// Setup voice input with enhanced visual feedback
-const setupVoiceInput = () => {
-    if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
-        voiceInputButton.style.display = 'none';
-        return;
-    }
-
-    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-    const recognition = new SpeechRecognition();
-    recognition.lang = 'en-US';
-    recognition.continuous = false;
-    recognition.interimResults = true;
-
-    let isListening = false;
-
-    voiceInputButton.addEventListener('click', () => {
-        // Button animation
-        animate(voiceInputButton, {
-            scale: [1, 0.9, 1.1, 1],
-        }, {
-            duration: 0.5,
-            ease: [0.34, 1.56, 0.64, 1]
-        });
-
-        if (isListening) {
-            recognition.stop();
-            return;
-        }
-
-        // Clear input with animation
-        animate(mainQuestionInput, {
-            borderColor: ['transparent', 'var(--color-accent)'],
-            scale: [1, 0.99, 1]
-        }, {
-            duration: 0.4,
-            ease: [0.34, 1.56, 0.64, 1]
-        });
-
-        mainQuestionInput.value = '';
-        mainQuestionInput.placeholder = 'Listening to your question...';
-
-        // Show recording state with animation
-        voiceInputButton.classList.add('recording');
-
-        // Animate the recording glow
-        animate(voiceInputButton, {
-            boxShadow: ['0 0 0 0 rgba(255, 59, 48, 0)', '0 0 0 8px rgba(255, 59, 48, 0.4)', '0 0 0 0 rgba(255, 59, 48, 0)']
-        }, {
-            duration: 2,
-            repeat: Infinity,
-            ease: [0.4, 0, 0.2, 1]
-        });
-
-        recognition.start();
-        isListening = true;
-
-        showNotification('Listening... Speak clearly to explore your topic');
-    });
-
-    recognition.onresult = (event) => {
-        const transcript = Array.from(event.results)
-            .map(result => result[0].transcript)
-            .join('');
-
-        // Animate text appearance in input field
-        if (mainQuestionInput.value === '') {
-            animate(mainQuestionInput, {
-                scale: [0.99, 1.01, 1]
-            }, {
-                duration: 0.4,
-                ease: [0.34, 1.56, 0.64, 1]
-            });
-        }
-
-        mainQuestionInput.value = transcript;
-    };
-
-    recognition.onend = () => {
-        isListening = false;
-        voiceInputButton.classList.remove('recording');
-
-        // Stop the glow animation
-        animate(voiceInputButton, {
-            boxShadow: ['0 0 0 8px rgba(255, 59, 48, 0.4)', '0 0 0 0 rgba(255, 59, 48, 0)']
-        }, {
-            duration: 0.3,
-            ease: [0.4, 0, 0.2, 1]
-        });
-
-        mainQuestionInput.placeholder = 'What are you curious about?';
-
-        if (mainQuestionInput.value.trim()) {
-            // If we captured something, submit after a short delay
-            setTimeout(() => {
-                // Animate the input field to acknowledge submission
-                animate(mainQuestionInput, {
-                    scale: [1, 0.98, 1]
-                }, {
-                    duration: 0.4,
-                    ease: [0.34, 1.56, 0.64, 1]
-                });
-
-                mainForm.dispatchEvent(new Event('submit'));
-            }, 300);
-        } else {
-            showNotification('No question detected. What would you like to learn about?');
-        }
-    };
-
-    recognition.onerror = () => {
-        isListening = false;
-        voiceInputButton.classList.remove('recording');
-        mainQuestionInput.placeholder = 'What are you curious about?';
-
-        // Stop the glow animation
-        animate(voiceInputButton, {
-            boxShadow: ['0 0 0 8px rgba(255, 59, 48, 0.4)', '0 0 0 0 rgba(255, 59, 48, 0)']
-        }, {
-            duration: 0.3,
-            ease: [0.4, 0, 0.2, 1]
-        });
-
-        showNotification('Voice recognition error. Please try typing your question instead.');
-    };
-};
-
-// Setup theme toggle with enhanced animations and fix bugs
-const setupThemeToggle = () => {
-    // Dark mode: Define the function to toggle dark mode
-    const applyDarkMode = (isDark) => {
-        if (isDark) {
-            document.body.classList.add('dark-mode');
-            lightModeButton.classList.remove('active');
-            darkModeButton.classList.add('active');
-            localStorage.setItem('theme', 'dark');
-        } else {
-            document.body.classList.remove('dark-mode');
-            darkModeButton.classList.remove('active');
-            lightModeButton.classList.add('active');
-            localStorage.setItem('theme', 'light');
-        }
-
-        // Force a reflow to ensure CSS variables are applied properly
-        document.body.offsetHeight;
-    };
-
-    // Check for saved theme preference or use system preference
+        notification.style.transform = 'translateY(10px) translateX(-50%)';
+        setTimeout(() => {
+            notification.remove();
+        }, 300);
+    }, 3000);
+}
+
+// Initialize theme toggle
+function initThemeToggle() {
+    // Check for system preference or saved preference
+    const prefersDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches;
     const savedTheme = localStorage.getItem('theme');
-    const prefersDarkMode = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
-
-    // Apply initial theme
-    const isDark = savedTheme === 'dark' || (!savedTheme && prefersDarkMode);
-    applyDarkMode(isDark);
-
+    
+    if (savedTheme === 'dark' || (!savedTheme && prefersDarkMode)) {
+        document.body.classList.add('dark-mode');
+        darkModeButton.classList.add('active');
+        lightModeButton.classList.remove('active');
+    } else {
+        lightModeButton.classList.add('active');
+        darkModeButton.classList.remove('active');
+    }
+    
     // Light mode toggle
     lightModeButton.addEventListener('click', () => {
-        if (!document.body.classList.contains('dark-mode')) return;
-
-        // Apply mode change
-        applyDarkMode(false);
-
-        // Wikipedia-style flash effect
-        const flash = document.createElement('div');
-        flash.style.position = 'fixed';
-        flash.style.inset = '0';
-        flash.style.backgroundColor = 'rgba(255, 255, 255, 0.2)';
-        flash.style.pointerEvents = 'none';
-        flash.style.zIndex = '9999';
-        flash.style.opacity = '0';
-        document.body.appendChild(flash);
-
-        animate(flash, {
-            opacity: [0, 0.7, 0]
-        }, {
-            duration: 0.8,
-            ease: [0.34, 1.56, 0.64, 1]
-        }).then(() => {
-            document.body.removeChild(flash);
-        });
-
+        document.body.classList.remove('dark-mode');
+        localStorage.setItem('theme', 'light');
+        lightModeButton.classList.add('active');
+        darkModeButton.classList.remove('active');
         showNotification('Light mode activated');
+        
+        // Update wavesurfer colors if initialized
+        if (wavesurfer) {
+            wavesurfer.setWaveColor(getComputedStyle(document.documentElement).getPropertyValue('--color-waveform').trim());
+            wavesurfer.setProgressColor(getComputedStyle(document.documentElement).getPropertyValue('--color-progress').trim());
+        }
     });
-
+    
     // Dark mode toggle
     darkModeButton.addEventListener('click', () => {
-        if (document.body.classList.contains('dark-mode')) return;
-
-        // Apply mode change
-        applyDarkMode(true);
-
-        // Wikipedia-style flash effect for dark mode
-        const flash = document.createElement('div');
-        flash.style.position = 'fixed';
-        flash.style.inset = '0';
-        flash.style.backgroundColor = 'rgba(0, 0, 0, 0.2)';
-        flash.style.pointerEvents = 'none';
-        flash.style.zIndex = '9999';
-        flash.style.opacity = '0';
-        document.body.appendChild(flash);
-
-        animate(flash, {
-            opacity: [0, 0.7, 0]
-        }, {
-            duration: 0.8,
-            ease: [0.34, 1.56, 0.64, 1]
-        }).then(() => {
-            document.body.removeChild(flash);
-        });
-
+        document.body.classList.add('dark-mode');
+        localStorage.setItem('theme', 'dark');
+        darkModeButton.classList.add('active');
+        lightModeButton.classList.remove('active');
         showNotification('Dark mode activated');
-    });
-};
-
-// Animated entrance effects for UI elements with Wikipedia-inspired animations
-const animateUIElements = () => {
-    // Get all the key UI sections
-    const elements = [
-        appContainer,
-        document.querySelector('.app-header'),
-        document.querySelector('.input-container'),
-        welcomeContainer,
-        document.querySelector('.theme-toggle')
-    ];
-
-    // Set initial states
-    elements.forEach(el => {
-        if (el) {
-            el.style.opacity = '0';
-            el.style.transform = 'translateY(20px)';
+        
+        // Update wavesurfer colors if initialized
+        if (wavesurfer) {
+            wavesurfer.setWaveColor(getComputedStyle(document.documentElement).getPropertyValue('--color-waveform').trim());
+            wavesurfer.setProgressColor(getComputedStyle(document.documentElement).getPropertyValue('--color-progress').trim());
         }
     });
+}
 
-    // Staggered animation of elements with Wikipedia-style progressive loading
-    elements.forEach((el, index) => {
-        if (el) {
-            setTimeout(() => {
-                animate(el, {
-                    opacity: [0, 1],
-                    y: [20, 0],
-                    scale: [0.98, 1]
-                }, {
-                    duration: 0.6,
-                    ease: [0.16, 1, 0.3, 1] // Wikipedia-inspired ease curve
-                });
-            }, 100 + (index * 100));
-        }
-    });
-
-    // Wikipedia-style header animation
-    const appTitle = document.querySelector('.app-title');
-    if (appTitle) {
-        const originalText = appTitle.textContent;
-        appTitle.innerHTML = '';
-
-        // Add characters one by one like Wikipedia page load
-        originalText.split('').forEach((char, index) => {
-            const span = document.createElement('span');
-            span.textContent = char;
-            span.style.opacity = '0';
-            span.style.display = 'inline-block';
-            appTitle.appendChild(span);
-
-            setTimeout(() => {
-                animate(span, {
-                    opacity: [0, 1],
-                    y: [5, 0]
-                }, {
-                    duration: 0.1,
-                    ease: 'linear'
-                });
-            }, 600 + (index * 25));
-        });
-    }
-
-    // Animate citation box with Wikipedia-style appearance
-    const citationBox = document.querySelector('.citation-box');
-    if (citationBox) {
-        citationBox.style.opacity = '0';
-        citationBox.style.transform = 'translateY(10px)';
-
-        setTimeout(() => {
-            animate(citationBox, {
-                opacity: [0, 1],
-                y: [10, 0],
-                boxShadow: [
-                    '0 0 0 rgba(0, 0, 0, 0)',
-                    '0 2px 6px rgba(0, 0, 0, 0.08)'
-                ]
-            }, {
-                duration: 0.8,
-                delay: 1,
-                ease: [0.16, 1, 0.3, 1]
-            });
-        }, 1200);
-    }
-};
-
-// Initialize the application with enhanced animations
-const initApp = () => {
-    // Hide conversation header initially
-    if (conversationHeader) {
-        conversationHeader.style.display = 'none';
-    }
-
-    // Add Wikipedia-inspired animations to the UI
-    animateUIElements();
-
-    // Setup event listeners with enhanced feedback
-    mainForm.addEventListener('submit', (e) => {
-        e.preventDefault();
-        const question = mainQuestionInput.value.trim();
-        if (question) {
-            // Wikipedia-inspired button animation
-            animate(mainSendButton, {
-                scale: [1, 0.9, 1],
-                backgroundColor: [
-                    'var(--color-accent)',
-                    'var(--color-accent)',
-                    'var(--color-accent)'
-                ]
-            }, {
-                duration: 0.4,
-                ease: [0.16, 1, 0.3, 1]
-            });
-
-            handleQuestionSubmit(question);
-            mainQuestionInput.value = '';
-
-            // Add Wikipedia-style focus animation to input after submit
-            animate(mainQuestionInput, {
-                backgroundColor: [
-                    'var(--color-card)',
-                    'var(--color-input-bg)'
-                ]
-            }, {
-                duration: 0.6,
-                ease: [0.16, 1, 0.3, 1]
-            });
+// Initialize accessibility controls
+function initAccessibilityControls() {
+    // High contrast mode
+    highContrastButton.addEventListener('click', () => {
+        document.body.classList.toggle('high-contrast-mode');
+        highContrastButton.classList.toggle('active');
+        
+        if (document.body.classList.contains('high-contrast-mode')) {
+            localStorage.setItem('high-contrast', 'enabled');
+            showNotification('High contrast mode enabled');
         } else {
-            // Wikipedia-style error shake
-            animate(mainQuestionInput, {
-                x: [0, -3, 3, -3, 3, 0],
-            }, {
-                duration: 0.5,
-                ease: [0.16, 1, 0.3, 1]
-            });
-
-            // Subtle highlight effect
-            animate(mainQuestionInput, {
-                borderColor: ['transparent', 'var(--color-error)', 'transparent']
-            }, {
-                duration: 1,
-                ease: [0.16, 1, 0.3, 1]
-            });
-
-            showNotification('What would you like to learn about?');
+            localStorage.setItem('high-contrast', 'disabled');
+            showNotification('High contrast mode disabled');
         }
     });
-
-    // Setup voice input
-    setupVoiceInput();
-
-    // Setup theme toggle
-    setupThemeToggle();
-
-    // Focus input after load with animation
-    setTimeout(() => {
-        mainQuestionInput.focus();
-
-        // Subtle pulse animation to draw attention
-        const inputWrapper = mainQuestionInput.closest('.input-wrapper');
-        if (inputWrapper) {
-            animate(inputWrapper, {
-                boxShadow: [
-                    'var(--shadow-sm)',
-                    '0 0 0 2px var(--color-accent-light), 0 0 15px var(--color-accent-glow)',
-                    'var(--shadow-sm)'
-                ]
-            }, {
-                duration: 1.5,
-                ease: [0.34, 1.56, 0.64, 1]
-            });
-        }
-    }, 1000);
-
-    // Add ripple effect to send button - Wikipedia-inspired interaction
-    mainSendButton.addEventListener('mousedown', (e) => {
-        const rect = mainSendButton.getBoundingClientRect();
-        const x = e.clientX - rect.left;
-        const y = e.clientY - rect.top;
-
-        const ripple = document.createElement('span');
-        ripple.style.position = 'absolute';
-        ripple.style.top = `${y}px`;
-        ripple.style.left = `${x}px`;
-        ripple.style.transform = 'translate(-50%, -50%) scale(0)';
-        ripple.style.width = '120px';
-        ripple.style.height = '120px';
-        ripple.style.background = 'rgba(255, 255, 255, 0.4)';
-        ripple.style.borderRadius = '50%';
-        ripple.style.pointerEvents = 'none';
-
-        mainSendButton.appendChild(ripple);
-
-        animate(ripple, {
-            transform: ['translate(-50%, -50%) scale(0)', 'translate(-50%, -50%) scale(1)'],
-            opacity: [1, 0]
-        }, {
-            duration: 0.6,
-            ease: [0.4, 0, 0.2, 1]
-        }).then(() => {
-            mainSendButton.removeChild(ripple);
-        });
-    });
-
-    // Add subtle hover effect for welcome container
-    if (welcomeContainer) {
-        // Add a subtle Wikipedia-inspired blue effect
-        const welcomeGlow = document.createElement('div');
-        welcomeGlow.style.position = 'absolute';
-        welcomeGlow.style.inset = '0';
-        welcomeGlow.style.background = 'radial-gradient(circle at 50% 50%, rgba(0, 113, 227, 0.05), transparent 70%)';
-        welcomeGlow.style.opacity = '0';
-        welcomeGlow.style.pointerEvents = 'none';
-        welcomeContainer.appendChild(welcomeGlow);
-
-        // Animate the glow subtly like Wikipedia's hover effects
-        animate(welcomeGlow, {
-            opacity: [0, 0.6, 0]
-        }, {
-            duration: 3,
-            ease: [0.4, 0, 0.2, 1],
-            repeat: Infinity,
-            repeatDelay: 3
-        });
+    
+    // Apply saved high contrast setting
+    if (localStorage.getItem('high-contrast') === 'enabled') {
+        document.body.classList.add('high-contrast-mode');
+        highContrastButton.classList.add('active');
     }
-
-    // Add parallax effect to app container for more depth
-    document.addEventListener('mousemove', (e) => {
-        const mouseX = (e.clientX / window.innerWidth - 0.5) * 10;
-        const mouseY = (e.clientY / window.innerHeight - 0.5) * 10;
-
-        // Only apply the subtle effect if not on mobile
-        if (window.innerWidth > 768) {
-            requestAnimationFrame(() => {
-                appContainer.style.transform = `perspective(1000px) rotateX(${mouseY * 0.1}deg) rotateY(${mouseX * 0.1}deg) translateZ(0)`;
-            });
+    
+    // Text size adjustments
+    textIncreaseButton.addEventListener('click', () => {
+        if (fontSizePercent < 150) {
+            fontSizePercent += 10;
+            document.documentElement.style.fontSize = `${fontSizePercent}%`;
+            localStorage.setItem('fontSize', fontSizePercent);
+            showNotification(`Text size increased to ${fontSizePercent}%`);
         }
     });
-};
+    
+    textDecreaseButton.addEventListener('click', () => {
+        if (fontSizePercent > 80) {
+            fontSizePercent -= 10;
+            document.documentElement.style.fontSize = `${fontSizePercent}%`;
+            localStorage.setItem('fontSize', fontSizePercent);
+            showNotification(`Text size decreased to ${fontSizePercent}%`);
+        }
+    });
+    
+    // Apply saved font size
+    const savedFontSize = localStorage.getItem('fontSize');
+    if (savedFontSize) {
+        fontSizePercent = parseInt(savedFontSize);
+        document.documentElement.style.fontSize = `${fontSizePercent}%`;
+    }
+}
 
-// Monitor system color scheme changes with improved reliability
-const watchSystemColorScheme = () => {
-    if (window.matchMedia) {
-        const colorSchemeQuery = window.matchMedia('(prefers-color-scheme: dark)');
+// Initialize view controls
+function initViewControls() {
+    textViewButton.addEventListener('click', () => {
+        textViewButton.classList.add('active');
+        audioViewButton.classList.remove('active');
+        audioControls.classList.remove('active');
+        localStorage.setItem('viewMode', 'text');
+    });
+    
+    audioViewButton.addEventListener('click', () => {
+        audioViewButton.classList.add('active');
+        textViewButton.classList.remove('active');
+        audioControls.classList.add('active');
+        localStorage.setItem('viewMode', 'audio');
+    });
+    
+    // Apply saved view mode
+    const savedViewMode = localStorage.getItem('viewMode');
+    if (savedViewMode === 'audio') {
+        audioViewButton.click();
+    }
+}
 
-        // Check for preference change
-        const handleChange = (e) => {
-            const savedTheme = localStorage.getItem('theme');
-            // Only auto switch if user hasn't explicitly set a preference
-            if (!savedTheme) {
-                // Ensure we force a reflow for CSS variables to update properly
-                document.body.classList.toggle('dark-mode', e.matches);
-                document.body.offsetHeight;
+// Initialize TTS model selector
+function initTTSModelSelector() {
+    ttsModelSelect.addEventListener('change', () => {
+        const selectedOption = ttsModelSelect.options[ttsModelSelect.selectedIndex];
+        const performance = selectedOption.getAttribute('data-performance');
+        const indicatorDot = modelPerformance.querySelector('.indicator-dot');
+        const indicatorText = modelPerformance.querySelector('.indicator-text');
+        
+        indicatorDot.setAttribute('data-performance', performance);
+        
+        // Style based on performance level
+        if (performance === 'fast') {
+            indicatorDot.style.backgroundColor = 'var(--color-success)';
+        } else if (performance === 'balanced') {
+            indicatorDot.style.backgroundColor = 'var(--color-info)';
+        } else if (performance === 'high-quality') {
+            indicatorDot.style.backgroundColor = 'var(--color-warning)';
+        }
+        
+        // Update text
+        indicatorText.textContent = performance.replace('-', ' ');
+        
+        // Store preference
+        localStorage.setItem('ttsModel', ttsModelSelect.value);
+    });
+    
+    // Apply saved TTS model
+    const savedTTSModel = localStorage.getItem('ttsModel');
+    if (savedTTSModel) {
+        ttsModelSelect.value = savedTTSModel;
+        // Trigger change event to update indicator
+        ttsModelSelect.dispatchEvent(new Event('change'));
+    }
+    
+    // Preview voice button
+    previewVoiceButton.addEventListener('click', () => {
+        const previewText = "This is a preview of the selected voice model.";
+        playResponseAudio(previewText);
+    });
+}
 
-                // Update buttons
-                if (e.matches) {
-                    lightModeButton.classList.remove('active');
-                    darkModeButton.classList.add('active');
-                } else {
-                    darkModeButton.classList.remove('active');
-                    lightModeButton.classList.add('active');
-                }
-            }
+// Initialize modal controls
+function initModals() {
+    // Show modals
+    historyButton.addEventListener('click', () => {
+        historyModal.classList.add('active');
+    });
+    
+    bookmarkButton.addEventListener('click', () => {
+        bookmarksModal.classList.add('active');
+    });
+    
+    settingsButton.addEventListener('click', () => {
+        settingsModal.classList.add('active');
+    });
+    
+    // Close modals
+    closeModalButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            const modal = button.closest('.modal');
+            modal.classList.remove('active');
+        });
+    });
+    
+    // Close modal when clicking outside
+    document.addEventListener('click', (event) => {
+        if (event.target.classList.contains('modal')) {
+            event.target.classList.remove('active');
+        }
+    });
+    
+    // Save settings
+    saveSettingsButton.addEventListener('click', () => {
+        // In a real app, this would save all settings
+        showNotification('Settings saved successfully');
+        settingsModal.classList.remove('active');
+    });
+    
+    // Reset settings
+    resetSettingsButton.addEventListener('click', () => {
+        // Clear local storage
+        localStorage.clear();
+        showNotification('Settings reset to defaults');
+        setTimeout(() => {
+            window.location.reload();
+        }, 1000);
+    });
+}
+
+// Update character count
+function updateCharCount() {
+    const length = mainQuestionInput.value.length;
+    charCount.textContent = length;
+    
+    // Visual feedback when approaching limit
+    if (length > 400) {
+        charCount.style.color = 'var(--color-warning)';
+    } else if (length > 450) {
+        charCount.style.color = 'var(--color-error)';
+    } else {
+        charCount.style.color = '';
+    }
+}
+
+// Initialize query input
+function initQueryInput() {
+    // Character count update
+    mainQuestionInput.addEventListener('input', updateCharCount);
+    
+    // Auto-resize textarea
+    mainQuestionInput.addEventListener('input', () => {
+        mainQuestionInput.style.height = 'auto';
+        mainQuestionInput.style.height = mainQuestionInput.scrollHeight + 'px';
+    });
+    
+    // Form submission
+    mainForm.addEventListener('submit', handleQuestionSubmit);
+    
+    // Voice input
+    voiceInputButton.addEventListener('click', () => {
+        if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
+            showNotification('Speech recognition not supported in this browser', 'error');
+            return;
+        }
+        
+        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+        const recognition = new SpeechRecognition();
+        
+        recognition.continuous = false;
+        recognition.interimResults = true;
+        
+        // Add recording indicator
+        voiceInputButton.classList.add('recording');
+        showNotification('Listening for voice input...');
+        
+        recognition.onresult = (event) => {
+            const transcript = Array.from(event.results)
+                .map(result => result[0].transcript)
+                .join('');
+                
+            mainQuestionInput.value = transcript;
+            updateCharCount();
         };
+        
+        recognition.onend = () => {
+            voiceInputButton.classList.remove('recording');
+            showNotification('Voice input captured');
+        };
+        
+        recognition.onerror = (event) => {
+            voiceInputButton.classList.remove('recording');
+            showNotification(`Error in voice recognition: ${event.error}`, 'error');
+        };
+        
+        recognition.start();
+    });
+    
+    // Sample query clicks
+    queryChips.forEach(chip => {
+        chip.addEventListener('click', () => {
+            mainQuestionInput.value = chip.textContent;
+            updateCharCount();
+            mainQuestionInput.focus();
+        });
+    });
+    
+    // Clear session
+    clearSession.addEventListener('click', () => {
+        // Remove all messages except welcome
+        const messages = conversation.querySelectorAll('.message');
+        messages.forEach(message => message.remove());
+        
+        // Show welcome, hide conversation header
+        welcomeContainer.style.display = 'block';
+        conversationHeader.style.opacity = '0';
+        conversationHeader.style.transform = 'translateY(-10px)';
+        
+        // Reset counter
+        messageCount = 0;
+        queryCount.textContent = '0 queries';
+        
+        showNotification('Learning session cleared');
+    });
+}
 
-        // Add change listener with compatibility
-        try {
-            // Modern approach
-            colorSchemeQuery.addEventListener('change', handleChange);
-        } catch (e) {
-            // Fallback for older browsers
-            colorSchemeQuery.addListener(handleChange);
-        }
-    }
-};
+// Initialize app
+function initApp() {
+    // Initialize base components
+    initWaveSurfer();
+    initThemeToggle();
+    initAccessibilityControls();
+    initViewControls();
+    initTTSModelSelector();
+    initAudioControls();
+    initModals();
+    initQueryInput();
+    
+    // Initially hide conversation header until first question
+    conversationHeader.style.opacity = '0';
+    
+    // Add loading animation
+    document.body.classList.add('app-loaded');
+    
+    console.log('AI Educational Q&A Bot initialized');
+}
 
-// Start the application
-document.addEventListener('DOMContentLoaded', () => {
-    // Wait a short time to ensure all elements are fully loaded
-    setTimeout(() => {
-        initApp();
-        watchSystemColorScheme();
-    }, 100);
-}); 
+// Start app when DOM is loaded
+document.addEventListener('DOMContentLoaded', initApp); 
