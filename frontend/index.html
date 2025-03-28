@@ -48,9 +48,11 @@
   <div class="app-container">
     <div class="app-header">
       <div class="app-logo">
-        <svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-          <path d="M12 2L2 19h20L12 2zm0 4l7 12H5l7-12z" />
-        </svg>
+        <div class="app-logo-circle">
+          <svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12 2L2 19h20L12 2zm0 4l7 12H5l7-12z" />
+          </svg>
+        </div>
         <span class="app-logo-text">Learning Companion</span>
       </div>
       <h1 class="app-title">What would you like to learn today?</h1>
@@ -68,10 +70,13 @@
       </div>
     </div>
 
+    <!-- Colorful Gradient Line -->
+    <div class="gradient-line"></div>
+
     <!-- Query Input Section - Simplified -->
     <div class="input-container">
       <div class="input-wrapper">
-        <textarea id="question-input" class="input-field" placeholder="What are you curious about?" rows="1"
+        <textarea id="question-input" class="input-field" placeholder="What would you like to learn today?" rows="1"
           maxlength="500"></textarea>
 
         <div class="input-actions">
