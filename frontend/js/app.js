@@ -968,7 +968,7 @@ const animateUIElements = () => {
         }
     });
 
-    // Staggered animation of elements
+    // Staggered animation of elements with spring physics for more natural motion
     elements.forEach((el, index) => {
         if (el) {
             setTimeout(() => {
@@ -977,15 +977,190 @@ const animateUIElements = () => {
                     y: [20, 0],
                     scale: [0.98, 1]
                 }, {
-                    duration: 0.6,
-                    ease: [0.34, 1.56, 0.64, 1]
+                    duration: 0.7,
+                    ease: [0.34, 1.56, 0.64, 1] // Spring-like curve
                 });
-            }, 100 + (index * 150));
+            }, 100 + (index * 120));
         }
     });
 
-    // Add subtle hover effect to app container
+    // Enhanced animation for app title with character-by-character reveal
+    const appTitle = document.querySelector('.app-title');
+    if (appTitle) {
+        const originalText = appTitle.textContent;
+        const charCount = originalText.length;
+
+        // Create wrapper for text animation
+        const charWrapper = document.createElement('span');
+        charWrapper.style.position = 'relative';
+        charWrapper.style.display = 'inline-block';
+
+        // Clear original content
+        appTitle.textContent = '';
+        appTitle.appendChild(charWrapper);
+
+        // Create spans for each character
+        for (let i = 0; i < charCount; i++) {
+            const charSpan = document.createElement('span');
+            charSpan.textContent = originalText[i];
+            charSpan.style.opacity = '0';
+            charSpan.style.display = 'inline-block';
+            charSpan.style.transform = 'translateY(20px)';
+            charWrapper.appendChild(charSpan);
+
+            // Animate each character with stagger
+            setTimeout(() => {
+                animate(charSpan, {
+                    opacity: [0, 1],
+                    y: [20, 0],
+                    rotate: [10, 0]
+                }, {
+                    duration: 0.5,
+                    ease: [0.34, 1.56, 0.64, 1]
+                });
+            }, 600 + (i * 30)); // Starts after initial page load
+        }
+    }
+
+    // Add subtle scroll-triggered animations to the welcome container content
+    if (welcomeContainer) {
+        const welcomeTitle = welcomeContainer.querySelector('.welcome-title');
+        const welcomeText = welcomeContainer.querySelector('.welcome-text');
+        const welcomeIcon = welcomeContainer.querySelector('.welcome-icon');
+
+        // Create and set up intersection observer for scroll animations
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    // Different animation for each element
+                    if (entry.target === welcomeIcon) {
+                        animate(welcomeIcon, {
+                            scale: [0.5, 1.2, 1],
+                            rotate: [0, 15, 0]
+                        }, {
+                            duration: 1,
+                            ease: [0.34, 1.56, 0.64, 1]
+                        });
+                    } else if (entry.target === welcomeTitle) {
+                        animate(welcomeTitle, {
+                            opacity: [0, 1],
+                            y: [15, 0]
+                        }, {
+                            duration: 0.7,
+                            delay: 0.2,
+                            ease: [0.34, 1.56, 0.64, 1]
+                        });
+                    } else if (entry.target === welcomeText) {
+                        animate(welcomeText, {
+                            opacity: [0, 1],
+                            y: [10, 0]
+                        }, {
+                            duration: 0.7,
+                            delay: 0.4,
+                            ease: [0.34, 1.56, 0.64, 1]
+                        });
+                    }
+
+                    // Unobserve after animation is triggered
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.2 });
+
+        // Set initial states and observe elements
+        if (welcomeIcon) {
+            welcomeIcon.style.opacity = '1';
+            welcomeIcon.style.transform = 'scale(0.5)';
+            observer.observe(welcomeIcon);
+        }
+
+        if (welcomeTitle) {
+            welcomeTitle.style.opacity = '0';
+            welcomeTitle.style.transform = 'translateY(15px)';
+            observer.observe(welcomeTitle);
+        }
+
+        if (welcomeText) {
+            welcomeText.style.opacity = '0';
+            welcomeText.style.transform = 'translateY(10px)';
+            observer.observe(welcomeText);
+        }
+    }
+
+    // Add magnetic hover effect to app logo
+    const logo = document.querySelector('.app-logo');
+    if (logo) {
+        // Create shine element
+        const shine = document.createElement('div');
+        shine.style.position = 'absolute';
+        shine.style.top = '0';
+        shine.style.left = '-100%';
+        shine.style.width = '50%';
+        shine.style.height = '100%';
+        shine.style.background = 'linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent)';
+        shine.style.transform = 'skewX(-25deg)';
+        shine.style.pointerEvents = 'none';
+
+        logo.style.position = 'relative';
+        logo.style.overflow = 'hidden';
+        logo.appendChild(shine);
+
+        // Add magnetic hover effect
+        logo.addEventListener('mousemove', (e) => {
+            const rect = logo.getBoundingClientRect();
+            const centerX = rect.left + rect.width / 2;
+            const centerY = rect.top + rect.height / 2;
+            const moveX = (e.clientX - centerX) / 10;
+            const moveY = (e.clientY - centerY) / 10;
+
+            animate(logo, {
+                x: moveX,
+                y: moveY,
+                rotateX: moveY / 2,
+                rotateY: -moveX / 2
+            }, { duration: 0.2 });
+        });
+
+        logo.addEventListener('mouseleave', () => {
+            animate(logo, {
+                x: 0,
+                y: 0,
+                rotateX: 0,
+                rotateY: 0
+            }, {
+                duration: 0.5,
+                ease: [0.34, 1.56, 0.64, 1]
+            });
+        });
+
+        // Animate shine every few seconds
+        const animateShine = () => {
+            animate(shine, {
+                left: ['-100%', '200%']
+            }, {
+                duration: 1.5,
+                ease: [0.4, 0, 0.2, 1]
+            });
+        };
+
+        // Initial animation and then repeat
+        setTimeout(animateShine, 2000);
+        setInterval(animateShine, 8000);
+    }
+
+    // Add parallax effect to the app container on mouse move
     if (appContainer) {
+        document.addEventListener('mousemove', (e) => {
+            const mouseX = e.clientX / window.innerWidth - 0.5;
+            const mouseY = e.clientY / window.innerHeight - 0.5;
+
+            // Subtle movement based on mouse position
+            requestAnimationFrame(() => {
+                appContainer.style.transform = `translateX(${mouseX * 5}px) translateY(${mouseY * 5}px)`;
+            });
+        });
+
+        // Enhanced hover effect
         appContainer.addEventListener('mouseenter', () => {
             animate(appContainer, {
                 y: -5,
@@ -1007,38 +1182,66 @@ const animateUIElements = () => {
         });
     }
 
-    // Add shine effect to logo
-    const logo = document.querySelector('.app-logo');
-    if (logo) {
-        // Create shine element
-        const shine = document.createElement('div');
-        shine.style.position = 'absolute';
-        shine.style.top = '0';
-        shine.style.left = '-100%';
-        shine.style.width = '50%';
-        shine.style.height = '100%';
-        shine.style.background = 'linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent)';
-        shine.style.transform = 'skewX(-25deg)';
-        shine.style.pointerEvents = 'none';
+    // Add animated focus effect to input field
+    const inputField = document.getElementById('main-question-input');
+    if (inputField) {
+        inputField.addEventListener('focus', () => {
+            const inputWrapper = inputField.closest('.input-wrapper');
+            if (inputWrapper) {
+                animate(inputWrapper, {
+                    scale: [1, 1.01],
+                    boxShadow: [
+                        'var(--shadow-sm)',
+                        '0 0 0 2px rgba(0, 113, 227, 0.2), 0 0 15px rgba(0, 113, 227, 0.15)'
+                    ]
+                }, {
+                    duration: 0.4,
+                    ease: [0.34, 1.56, 0.64, 1]
+                });
+            }
+        });
 
-        logo.style.position = 'relative';
-        logo.style.overflow = 'hidden';
-        logo.appendChild(shine);
-
-        // Animate shine every few seconds
-        const animateShine = () => {
-            animate(shine, {
-                left: ['-100%', '200%']
-            }, {
-                duration: 1.5,
-                ease: [0.4, 0, 0.2, 1]
-            });
-        };
-
-        // Initial animation and then repeat
-        setTimeout(animateShine, 2000);
-        setInterval(animateShine, 8000);
+        inputField.addEventListener('blur', () => {
+            const inputWrapper = inputField.closest('.input-wrapper');
+            if (inputWrapper) {
+                animate(inputWrapper, {
+                    scale: [1.01, 1],
+                    boxShadow: [
+                        '0 0 0 2px rgba(0, 113, 227, 0.2), 0 0 15px rgba(0, 113, 227, 0.15)',
+                        'var(--shadow-sm)'
+                    ]
+                }, {
+                    duration: 0.3,
+                    ease: [0.4, 0, 0.2, 1]
+                });
+            }
+        });
     }
+
+    // Add animated hover effects to all buttons
+    document.querySelectorAll('button').forEach(button => {
+        if (!button.classList.contains('theme-button') && !button.classList.contains('action-button')) {
+            button.addEventListener('mouseenter', () => {
+                animate(button, {
+                    scale: [1, 1.05],
+                    y: [0, -2]
+                }, {
+                    duration: 0.2,
+                    ease: [0.34, 1.56, 0.64, 1]
+                });
+            });
+
+            button.addEventListener('mouseleave', () => {
+                animate(button, {
+                    scale: [1.05, 1],
+                    y: [-2, 0]
+                }, {
+                    duration: 0.2,
+                    ease: [0.4, 0, 0.2, 1]
+                });
+            });
+        }
+    });
 };
 
 // Initialize the application with enhanced animations
@@ -1087,6 +1290,20 @@ const initApp = () => {
             showNotification('What would you like to learn about?');
         }
     });
+
+    // Add subtle bounce animation to the send button when input has content
+    if (mainQuestionInput && mainSendButton) {
+        mainQuestionInput.addEventListener('input', () => {
+            if (mainQuestionInput.value.trim().length > 0) {
+                animate(mainSendButton, {
+                    scale: [1, 1.1, 1],
+                }, {
+                    duration: 0.4,
+                    ease: [0.34, 1.56, 0.64, 1]
+                });
+            }
+        });
+    }
 
     // Setup voice input
     setupVoiceInput();
