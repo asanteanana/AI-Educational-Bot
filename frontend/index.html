@@ -6,6 +6,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Learning Companion</title>
   <link rel="stylesheet" href="css/styles.css">
+  <!-- Add Framer Motion -->
+  <script src="https://unpkg.com/framer-motion@10.16.4/dist/framer-motion.js"></script>
 </head>
 
 <body>
@@ -13,53 +15,98 @@
     <!-- Header Section -->
     <div class="header">
       <div class="logo-container">
-        <div class="logo-circle">
+        <div class="logo-circle motion-fade">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor">
             <path
               d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18a8.967 8.967 0 00-6 2.292m0-14.25v14.25" />
           </svg>
         </div>
-        <span>Learning Companion</span>
+        <span class="motion-slide-right">Learning Companion</span>
       </div>
-      <h1>What would you like to learn today?</h1>
-      <p>Ask me anything—I'm here to help you explore ideas, understand concepts, and grow your knowledge</p>
+      <h1 class="motion-slide-up">What would you like to learn today?</h1>
+      <p class="motion-slide-up-delay">Ask me anything—I'm here to help you explore ideas, understand concepts, and grow
+        your knowledge</p>
     </div>
 
-    <!-- Input Section -->
-    <div class="input-section">
-      <input type="text" class="search-input" placeholder="What are you curious about?" />
-      <button class="mic-button">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-          <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path>
-          <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
-          <line x1="12" y1="19" x2="12" y2="23"></line>
-          <line x1="8" y1="23" x2="16" y2="23"></line>
+    <!-- Enhanced Input Section -->
+    <div class="input-section motion-fade-up">
+      <div class="search-container">
+        <svg class="search-icon" width="16" height="16" viewBox="0 0 20 20" fill="none" stroke="currentColor">
+          <path d="M9 17A8 8 0 1 0 9 1a8 8 0 0 0 0 16Z" />
+          <path d="m15 15 4 4" />
         </svg>
-      </button>
-      <button class="send-button">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-          <line x1="22" y1="2" x2="11" y2="13"></line>
-          <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
-        </svg>
-      </button>
+        <input type="text" class="search-input" placeholder="What are you curious about?" />
+        <div class="input-actions">
+          <button class="mic-button motion-scale" aria-label="Voice input">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+              <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path>
+              <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
+              <line x1="12" y1="19" x2="12" y2="23"></line>
+              <line x1="8" y1="23" x2="16" y2="23"></line>
+            </svg>
+            <div class="button-feedback"></div>
+          </button>
+          <button class="send-button motion-scale" aria-label="Send message">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+              <line x1="22" y1="2" x2="11" y2="13"></line>
+              <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+            </svg>
+            <div class="button-feedback"></div>
+          </button>
+        </div>
+      </div>
     </div>
 
     <!-- Gradient Line -->
-    <div class="gradient-line"></div>
+    <div class="gradient-line motion-expand"></div>
 
     <!-- Welcome Section -->
-    <div class="welcome-section">
-      <div class="sparkle">✨</div>
+    <div class="welcome-section motion-fade-up-delay">
+      <div class="sparkle motion-float">✨</div>
       <h2>Begin your learning journey</h2>
-      <p>I'm your learning companion, here to help you discover and understand new ideas. Every question is a step toward growth. What would you like to explore today?</p>
+      <p>I'm your learning companion, here to help you discover and understand new ideas. Every question is a step
+        toward growth. What would you like to explore today?</p>
     </div>
 
     <!-- Footer Tabs -->
     <div class="footer-tabs">
-      <button class="tab active">Your Learning Questions</button>
-      <button class="tab">Progress</button>
+      <button class="tab active motion-slide-up">Your Learning Questions</button>
+      <button class="tab motion-slide-up">Progress</button>
     </div>
   </div>
+
+  <script>
+    // Initialize Framer Motion animations
+    document.addEventListener('DOMContentLoaded', () => {
+      // Add motion classes to elements
+      document.querySelectorAll('.motion-fade').forEach(el => {
+        el.style.opacity = '0';
+        el.style.animation = 'fadeIn 0.6s ease-out forwards';
+      });
+
+      document.querySelectorAll('.motion-slide-up').forEach(el => {
+        el.style.opacity = '0';
+        el.style.transform = 'translateY(20px)';
+        el.style.animation = 'slideUp 0.6s ease-out forwards';
+      });
+
+      document.querySelectorAll('.motion-slide-right').forEach(el => {
+        el.style.opacity = '0';
+        el.style.transform = 'translateX(-20px)';
+        el.style.animation = 'slideRight 0.6s ease-out forwards';
+      });
+
+      // Add interaction animations
+      document.querySelectorAll('.motion-scale').forEach(el => {
+        el.addEventListener('mouseenter', () => {
+          el.style.transform = 'scale(1.1)';
+        });
+        el.addEventListener('mouseleave', () => {
+          el.style.transform = 'scale(1)';
+        });
+      });
+    });
+  </script>
 </body>
 
 </html>
