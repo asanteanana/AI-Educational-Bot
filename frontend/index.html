@@ -4,85 +4,132 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>InfoLex - Your AI Learning Companion</title>
+  <title>InfoLex - AI Learning Companion</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/styles.css">
+  <!-- PDF.js for PDF parsing -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+  <!-- AWS SDK for Amazon Polly TTS -->
+  <script src="https://sdk.amazonaws.com/js/aws-sdk-2.1001.0.min.js"></script>
   <!-- Add Framer Motion -->
   <script src="https://unpkg.com/framer-motion@10.16.4/dist/framer-motion.js"></script>
-  <!-- Add Inter font for Claude AI-inspired typography -->
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
 
 <body>
   <div class="app-container">
-    <!-- Header Section -->
-    <div class="header">
+    <header class="header">
       <div class="logo-container">
-        <div class="logo-circle motion-fade">
-          <!-- Simplified, modern logo design -->
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
-            stroke-linecap="round" stroke-linejoin="round">
-            <path d="M12 4L4 8l8 4 8-4-8-4z" />
-            <path d="M4 12l8 4 8-4" />
-            <path d="M4 16l8 4 8-4" />
+        <div class="logo-circle">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path>
           </svg>
         </div>
-        <span class="motion-slide-right">InfoLex</span>
+        <span>InfoLex</span>
       </div>
-      <h1 class="motion-slide-up">What would you like to learn today?</h1>
-      <p class="motion-slide-up-delay">Explore ideas, understand concepts, and expand your knowledge with AI-powered
-        learning</p>
+      <h1>Your AI Learning Companion</h1>
+      <p>Upload PDFs, ask questions, and learn through interactive conversations</p>
+    </header>
+
+    <!-- PDF Upload Section -->
+    <div class="pdf-section">
+      <div class="upload-container" id="dropZone">
+        <svg class="upload-icon" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+          <polyline points="17 8 12 3 7 8"></polyline>
+          <line x1="12" y1="3" x2="12" y2="15"></line>
+        </svg>
+        <p>Drag & drop your PDF here or <button class="upload-button" id="fileSelect">choose a file</button></p>
+        <input type="file" id="fileInput" accept=".pdf" style="display: none;">
+      </div>
     </div>
 
-    <!-- Enhanced Input Section -->
-    <div class="input-section motion-fade-up">
+    <!-- PDF Viewer and Controls -->
+    <div class="pdf-viewer-section" style="display: none;">
+      <div class="pdf-controls">
+        <div class="voice-controls">
+          <select id="voiceSelect" class="voice-select">
+            <option value="default">Default Voice</option>
+          </select>
+          <div class="speed-control">
+            <label>Speed:</label>
+            <input type="range" id="speedControl" min="0.5" max="2" step="0.1" value="1">
+            <span id="speedValue">1x</span>
+          </div>
+        </div>
+        <div class="playback-controls">
+          <button id="playButton" class="control-button">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+              <polygon points="5 3 19 12 5 21 5 3"></polygon>
+            </svg>
+          </button>
+          <button id="pauseButton" class="control-button">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+              <rect x="6" y="4" width="4" height="16"></rect>
+              <rect x="14" y="4" width="4" height="16"></rect>
+            </svg>
+          </button>
+          <button id="stopButton" class="control-button">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+              <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+            </svg>
+          </button>
+        </div>
+        <div class="progress-container">
+          <div class="progress-bar" id="progressBar">
+            <div class="progress-fill"></div>
+          </div>
+          <span class="time-display" id="timeDisplay">00:00 / 00:00</span>
+        </div>
+      </div>
+      <div id="pdfViewer" class="pdf-content"></div>
+    </div>
+
+    <div class="input-section">
       <div class="search-container">
-        <svg class="search-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-          stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <svg class="search-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor">
           <circle cx="11" cy="11" r="8"></circle>
           <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
         </svg>
-        <input type="text" class="search-input" placeholder="What are you curious about?" />
+        <input type="text" class="search-input" placeholder="What would you like to learn today?" />
         <div class="input-actions">
-          <button class="mic-button motion-scale" aria-label="Voice input">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-              stroke-linecap="round" stroke-linejoin="round">
+          <button class="mic-button">
+            <div class="button-feedback"></div>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor">
               <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path>
               <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
               <line x1="12" y1="19" x2="12" y2="23"></line>
               <line x1="8" y1="23" x2="16" y2="23"></line>
             </svg>
-            <div class="button-feedback"></div>
           </button>
-          <button class="send-button motion-scale" aria-label="Send message">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-              stroke-linecap="round" stroke-linejoin="round">
-              <path d="M22 2L11 13"></path>
-              <path d="M22 2L15 22L11 13L2 9L22 2Z"></path>
-            </svg>
+          <button class="send-button">
             <div class="button-feedback"></div>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+              <line x1="22" y1="2" x2="11" y2="13"></line>
+              <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+            </svg>
           </button>
         </div>
       </div>
     </div>
 
-    <!-- Gradient Line -->
-    <div class="gradient-line motion-expand"></div>
+    <div class="gradient-line"></div>
 
-    <!-- Welcome Section -->
-    <div class="welcome-section motion-fade-up-delay">
-      <div class="sparkle motion-float">✨</div>
-      <h2>Begin your learning journey</h2>
-      <p>Let InfoLex guide you through a world of knowledge. Every question opens new paths to understanding. What
-        interests you?</p>
+    <div class="welcome-section">
+      <span class="sparkle">✨</span>
+      <h2>Welcome to Your Learning Journey</h2>
+      <p>Upload a PDF and start learning with natural voice interaction. Ask questions, get explanations, and engage
+        with your content in a whole new way.</p>
     </div>
 
-    <!-- Footer Tabs -->
     <div class="footer-tabs">
-      <button class="tab active motion-slide-up">Your Learning Path</button>
-      <button class="tab motion-slide-up">Progress</button>
+      <button class="tab active">Your Learning Path</button>
+      <button class="tab">History</button>
     </div>
   </div>
 
+  <script src="js/pdf-handler.js"></script>
+  <script src="js/tts-engine.js"></script>
+  <script src="js/app.js"></script>
   <script>
     // Initialize Framer Motion animations
     document.addEventListener('DOMContentLoaded', () => {

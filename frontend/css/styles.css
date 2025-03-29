@@ -445,3 +445,252 @@ body {
         scroll-behavior: auto !important;
     }
 }
+
+/* PDF Upload Section */
+.pdf-section {
+    padding: 24px 32px;
+    background: var(--claude-bg);
+}
+
+.upload-container {
+    border: 2px dashed var(--claude-border);
+    border-radius: 16px;
+    padding: 32px;
+    text-align: center;
+    transition: all 0.3s var(--animation-bounce);
+    background: var(--claude-hover);
+}
+
+.upload-container.drag-over {
+    border-color: var(--claude-accent);
+    background: rgba(92, 95, 239, 0.05);
+    transform: scale(1.02);
+}
+
+.upload-icon {
+    width: 48px;
+    height: 48px;
+    stroke: var(--claude-secondary);
+    margin-bottom: 16px;
+}
+
+.upload-container p {
+    color: var(--claude-secondary);
+    font-size: 16px;
+    margin: 0;
+}
+
+.upload-button {
+    background: none;
+    border: none;
+    color: var(--claude-accent);
+    font-weight: 500;
+    cursor: pointer;
+    padding: 0;
+    margin: 0;
+    font-size: inherit;
+    font-family: inherit;
+    transition: color 0.3s ease;
+}
+
+.upload-button:hover {
+    color: var(--hover-blue);
+    text-decoration: underline;
+}
+
+/* PDF Viewer Section */
+.pdf-viewer-section {
+    background: var(--claude-bg);
+    border-radius: 16px;
+    margin: 0 32px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px var(--shadow-color);
+}
+
+.pdf-controls {
+    padding: 16px;
+    border-bottom: 1px solid var(--claude-border);
+    background: var(--claude-hover);
+}
+
+.voice-controls {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    margin-bottom: 16px;
+}
+
+.voice-select {
+    padding: 8px 12px;
+    border-radius: 8px;
+    border: 1px solid var(--claude-border);
+    background: var(--claude-bg);
+    color: var(--claude-text);
+    font-family: inherit;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.voice-select:hover {
+    border-color: var(--claude-accent);
+}
+
+.speed-control {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.speed-control label {
+    color: var(--claude-secondary);
+    font-size: 14px;
+}
+
+.speed-control input[type="range"] {
+    width: 100px;
+    height: 4px;
+    background: var(--claude-border);
+    border-radius: 2px;
+    -webkit-appearance: none;
+}
+
+.speed-control input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 16px;
+    height: 16px;
+    background: var(--claude-accent);
+    border-radius: 50%;
+    cursor: pointer;
+    transition: transform 0.3s var(--animation-spring);
+}
+
+.speed-control input[type="range"]::-webkit-slider-thumb:hover {
+    transform: scale(1.2);
+}
+
+.speed-control span {
+    color: var(--claude-secondary);
+    font-size: 14px;
+    min-width: 32px;
+}
+
+.playback-controls {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 16px;
+}
+
+.control-button {
+    background: none;
+    border: none;
+    padding: 8px;
+    cursor: pointer;
+    border-radius: 50%;
+    transition: all 0.3s var(--animation-spring);
+}
+
+.control-button:hover {
+    background: rgba(92, 95, 239, 0.1);
+}
+
+.control-button svg {
+    width: 24px;
+    height: 24px;
+    stroke: var(--claude-accent);
+}
+
+.progress-container {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.progress-bar {
+    flex: 1;
+    height: 4px;
+    background: var(--claude-border);
+    border-radius: 2px;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+}
+
+.progress-fill {
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+    background: var(--claude-accent);
+    border-radius: 2px;
+    width: 0;
+    transition: width 0.1s linear;
+}
+
+.time-display {
+    color: var(--claude-secondary);
+    font-size: 14px;
+    font-variant-numeric: tabular-nums;
+}
+
+.pdf-content {
+    padding: 32px;
+    background: white;
+    min-height: 400px;
+    max-height: 600px;
+    overflow-y: auto;
+}
+
+.pdf-content canvas {
+    display: block;
+    margin: 0 auto;
+    max-width: 100%;
+    height: auto;
+}
+
+/* Text highlighting */
+.text-layer {
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    color: transparent;
+    pointer-events: none;
+}
+
+.text-layer>span {
+    position: absolute;
+    white-space: pre;
+    cursor: text;
+    transform-origin: 0% 0%;
+}
+
+.text-layer .highlighted {
+    background: rgba(92, 95, 239, 0.2);
+    border-radius: 2px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 640px) {
+
+    .pdf-section,
+    .pdf-viewer-section {
+        margin: 0 24px;
+    }
+
+    .voice-controls {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 16px;
+    }
+
+    .speed-control {
+        justify-content: space-between;
+    }
+
+    .playback-controls {
+        justify-content: center;
+    }
+}
