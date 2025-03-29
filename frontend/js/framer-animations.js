@@ -1,71 +1,36 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // Initialize Framer Motion
-    const { motion } = window.framerMotion;
-
-    // Animation variants
-    const fadeIn = {
-        initial: { opacity: 0 },
-        animate: { opacity: 1, transition: { duration: 0.5, ease: [0.25, 0.1, 0.25, 1] } }
+    // Initialize animations
+    const animateElement = (element, options) => {
+        element.style.transition = `all ${options.duration || 0.3}s ${options.ease || 'cubic-bezier(0.25, 0.1, 0.25, 1)'}`;
+        Object.assign(element.style, options.animate);
     };
 
-    const slideUp = {
-        initial: { y: 10, opacity: 0 },
-        animate: { y: 0, opacity: 1, transition: { duration: 0.5, ease: [0.25, 0.1, 0.25, 1] } }
-    };
+    // Fade in header
+    const header = document.querySelector('.header');
+    if (header) {
+        setTimeout(() => {
+            header.style.opacity = '1';
+        }, 100);
+    }
 
-    const scaleIn = {
-        initial: { scale: 0.98, opacity: 0 },
-        animate: { scale: 1, opacity: 1, transition: { duration: 0.3, ease: [0.25, 0.1, 0.25, 1] } }
-    };
-
-    // Apply animations to elements
-    document.querySelectorAll('[data-motion]').forEach(element => {
-        const type = element.dataset.motion;
-        const delay = element.dataset.delay || 0;
-
-        let animation;
-        switch (type) {
-            case 'fade':
-                animation = fadeIn;
-                break;
-            case 'slide-up':
-                animation = slideUp;
-                break;
-            case 'scale':
-                animation = scaleIn;
-                break;
-            default:
-                animation = fadeIn;
-        }
-
-        motion(element, {
-            ...animation,
-            animate: {
-                ...animation.animate,
-                transition: {
-                    ...animation.animate.transition,
-                    delay: parseFloat(delay)
-                }
-            }
-        });
-    });
-
-    // Logo animation
+    // Animate logo
     const logoCircle = document.querySelector('.logo-circle');
     if (logoCircle) {
-        motion(logoCircle, {
-            whileHover: { scale: 1.1, rotate: 180, transition: { duration: 0.3 } },
-            whileTap: { scale: 0.95 }
+        logoCircle.addEventListener('mouseenter', () => {
+            logoCircle.style.transform = 'scale(1.1) rotate(180deg)';
+        });
+        logoCircle.addEventListener('mouseleave', () => {
+            logoCircle.style.transform = 'scale(1) rotate(0deg)';
         });
     }
 
-    // Search container hover effect
+    // Animate search container
     const searchContainer = document.querySelector('.search-container');
     if (searchContainer) {
         let mouseX = 0;
         let mouseY = 0;
 
-        searchContainer.addEventListener('mousemove', (e) => {
+        const updateGradient = (e) => {
             const rect = searchContainer.getBoundingClientRect();
             mouseX = e.clientX - rect.left;
             mouseY = e.clientY - rect.top;
@@ -73,30 +38,33 @@ document.addEventListener('DOMContentLoaded', () => {
             searchContainer.style.background = `
                 radial-gradient(
                     circle at ${mouseX}px ${mouseY}px,
-                    rgba(247, 247, 248, 1) 0%,
-                    rgba(247, 247, 248, 0.95) 50%,
-                    rgba(247, 247, 248, 0.9) 100%
+                    var(--color-surface) 0%,
+                    var(--color-surface) 50%,
+                    var(--color-surface) 100%
                 )
             `;
-        });
+        };
 
+        searchContainer.addEventListener('mousemove', updateGradient);
         searchContainer.addEventListener('mouseleave', () => {
-            searchContainer.style.background = '#f7f7f8';
+            searchContainer.style.background = 'var(--color-surface)';
         });
     }
 
-    // Button hover animations
+    // Animate buttons
     document.querySelectorAll('.action-button').forEach(button => {
-        motion(button, {
-            whileHover: { scale: 1.05, transition: { duration: 0.2 } },
-            whileTap: { scale: 0.95 }
+        button.addEventListener('mouseenter', () => {
+            button.style.transform = 'scale(1.05)';
         });
 
-        // Add ripple effect
+        button.addEventListener('mouseleave', () => {
+            button.style.transform = 'scale(1)';
+        });
+
         button.addEventListener('click', (e) => {
-            const rect = button.getBoundingClientRect();
             const ripple = document.createElement('div');
             ripple.className = 'ripple';
+            const rect = button.getBoundingClientRect();
             ripple.style.left = `${e.clientX - rect.left}px`;
             ripple.style.top = `${e.clientY - rect.top}px`;
             button.appendChild(ripple);
@@ -106,19 +74,38 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // Scroll animations
-    const observer = new IntersectionObserver(
-        (entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('visible');
-                    observer.unobserve(entry.target);
-                }
-            });
-        },
-        { threshold: 0.1 }
+    const observerOptions = {
+        threshold: 0.1,
+        rootMargin: '20px'
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.style.opacity = '1';
+                entry.target.style.transform = 'translateY(0)';
+                observer.unobserve(entry.target);
+            }
+        });
+    }, observerOptions);
+
+    // Observe elements with animation classes
+    document.querySelectorAll('.motion-fade, .motion-slide-up, .motion-scale').forEach(
+        element => {
+            element.style.opacity = '0';
+            if (element.classList.contains('motion-slide-up')) {
+                element.style.transform = 'translateY(10px)';
+            }
+            observer.observe(element);
+        }
     );
 
-    document.querySelectorAll('.motion-fade, .motion-slide-up, .motion-scale').forEach(
-        element => observer.observe(element)
-    );
+    // Initialize tab interactions
+    const tabs = document.querySelectorAll('.learning-path-tab');
+    tabs.forEach(tab => {
+        tab.addEventListener('click', () => {
+            tabs.forEach(t => t.classList.remove('active'));
+            tab.classList.add('active');
+        });
+    });
 }); 
