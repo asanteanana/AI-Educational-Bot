@@ -11,28 +11,29 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
   <!-- AWS SDK for Amazon Polly TTS -->
   <script src="https://sdk.amazonaws.com/js/aws-sdk-2.1001.0.min.js"></script>
-  <!-- Add Framer Motion -->
+  <!-- Framer Motion -->
   <script src="https://unpkg.com/framer-motion@10.16.4/dist/framer-motion.js"></script>
 </head>
 
 <body>
-  <div class="app-container">
-    <header class="header">
+  <div class="app-container" data-motion="fade">
+    <header class="header" data-motion="slide-down">
       <div class="logo-container">
-        <div class="logo-circle">
+        <div class="logo-circle" data-motion="spring">
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path>
           </svg>
         </div>
-        <span>InfoLex</span>
+        <span data-motion="slide-right">InfoLex</span>
       </div>
-      <h1>Your AI Learning Companion</h1>
-      <p>Upload PDFs, ask questions, and learn through interactive conversations</p>
+      <h1 data-motion="slide-up">Your AI Learning Companion</h1>
+      <p data-motion="slide-up" data-delay="0.1">Upload PDFs, ask questions, and learn through interactive conversations
+      </p>
     </header>
 
     <!-- PDF Upload Section -->
-    <div class="pdf-section">
-      <div class="upload-container" id="dropZone">
+    <div class="pdf-section" data-motion="fade-up">
+      <div class="upload-container" id="dropZone" data-motion="scale">
         <svg class="upload-icon" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor">
           <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
           <polyline points="17 8 12 3 7 8"></polyline>
@@ -44,37 +45,37 @@
     </div>
 
     <!-- PDF Viewer and Controls -->
-    <div class="pdf-viewer-section" style="display: none;">
-      <div class="pdf-controls">
+    <div class="pdf-viewer-section" style="display: none;" data-motion="fade-up">
+      <div class="pdf-controls" data-motion="slide-down">
         <div class="voice-controls">
-          <select id="voiceSelect" class="voice-select">
+          <select id="voiceSelect" class="voice-select" data-motion="slide-right">
             <option value="default">Default Voice</option>
           </select>
-          <div class="speed-control">
+          <div class="speed-control" data-motion="slide-left">
             <label>Speed:</label>
             <input type="range" id="speedControl" min="0.5" max="2" step="0.1" value="1">
             <span id="speedValue">1x</span>
           </div>
         </div>
-        <div class="playback-controls">
-          <button id="playButton" class="control-button">
+        <div class="playback-controls" data-motion="fade">
+          <button id="playButton" class="control-button" data-motion="scale">
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor">
               <polygon points="5 3 19 12 5 21 5 3"></polygon>
             </svg>
           </button>
-          <button id="pauseButton" class="control-button">
+          <button id="pauseButton" class="control-button" data-motion="scale">
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor">
               <rect x="6" y="4" width="4" height="16"></rect>
               <rect x="14" y="4" width="4" height="16"></rect>
             </svg>
           </button>
-          <button id="stopButton" class="control-button">
+          <button id="stopButton" class="control-button" data-motion="scale">
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor">
               <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
             </svg>
           </button>
         </div>
-        <div class="progress-container">
+        <div class="progress-container" data-motion="slide-up">
           <div class="progress-bar" id="progressBar">
             <div class="progress-fill"></div>
           </div>
@@ -84,15 +85,15 @@
       <div id="pdfViewer" class="pdf-content"></div>
     </div>
 
-    <div class="input-section">
-      <div class="search-container">
+    <div class="input-section" data-motion="slide-up">
+      <div class="search-container" data-motion="scale">
         <svg class="search-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor">
           <circle cx="11" cy="11" r="8"></circle>
           <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
         </svg>
         <input type="text" class="search-input" placeholder="What would you like to learn today?" />
         <div class="input-actions">
-          <button class="mic-button">
+          <button class="mic-button" data-motion="scale">
             <div class="button-feedback"></div>
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor">
               <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path>
@@ -101,7 +102,7 @@
               <line x1="8" y1="23" x2="16" y2="23"></line>
             </svg>
           </button>
-          <button class="send-button">
+          <button class="send-button" data-motion="scale">
             <div class="button-feedback"></div>
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor">
               <line x1="22" y1="2" x2="11" y2="13"></line>
@@ -112,56 +113,25 @@
       </div>
     </div>
 
-    <div class="gradient-line"></div>
+    <div class="gradient-line" data-motion="scale-x"></div>
 
-    <div class="welcome-section">
-      <span class="sparkle">✨</span>
-      <h2>Welcome to Your Learning Journey</h2>
-      <p>Upload a PDF and start learning with natural voice interaction. Ask questions, get explanations, and engage
+    <div class="welcome-section" data-motion="fade-up">
+      <span class="sparkle" data-motion="float">✨</span>
+      <h2 data-motion="slide-up">Welcome to Your Learning Journey</h2>
+      <p data-motion="slide-up" data-delay="0.2">Upload a PDF and start learning with natural voice interaction. Ask
+        questions, get explanations, and engage
         with your content in a whole new way.</p>
     </div>
 
-    <div class="footer-tabs">
-      <button class="tab active">Your Learning Path</button>
-      <button class="tab">History</button>
+    <div class="footer-tabs" data-motion="slide-up">
+      <button class="tab active" data-motion="slide-up">Your Learning Path</button>
+      <button class="tab" data-motion="slide-up" data-delay="0.1">History</button>
     </div>
   </div>
 
+  <script src="js/framer-animations.js"></script>
   <script src="js/pdf-handler.js"></script>
   <script src="js/tts-engine.js"></script>
-  <script src="js/app.js"></script>
-  <script>
-    // Initialize Framer Motion animations
-    document.addEventListener('DOMContentLoaded', () => {
-      // Add motion classes to elements
-      document.querySelectorAll('.motion-fade').forEach(el => {
-        el.style.opacity = '0';
-        el.style.animation = 'fadeIn 0.6s ease-out forwards';
-      });
-
-      document.querySelectorAll('.motion-slide-up').forEach(el => {
-        el.style.opacity = '0';
-        el.style.transform = 'translateY(20px)';
-        el.style.animation = 'slideUp 0.6s ease-out forwards';
-      });
-
-      document.querySelectorAll('.motion-slide-right').forEach(el => {
-        el.style.opacity = '0';
-        el.style.transform = 'translateX(-20px)';
-        el.style.animation = 'slideRight 0.6s ease-out forwards';
-      });
-
-      // Add interaction animations
-      document.querySelectorAll('.motion-scale').forEach(el => {
-        el.addEventListener('mouseenter', () => {
-          el.style.transform = 'scale(1.1)';
-        });
-        el.addEventListener('mouseleave', () => {
-          el.style.transform = 'scale(1)';
-        });
-      });
-    });
-  </script>
 </body>
 
 </html>

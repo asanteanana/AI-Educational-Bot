@@ -55,6 +55,10 @@ body {
     overflow: hidden;
     position: relative;
     transition: transform 0.3s var(--animation-bounce);
+    margin: 20px auto;
+    height: calc(100vh - 40px);
+    display: flex;
+    flex-direction: column;
 }
 
 .app-container:hover {
@@ -63,8 +67,9 @@ body {
 
 /* Header */
 .header {
-    padding: 40px 32px;
+    padding: 24px 32px;
     text-align: center;
+    flex-shrink: 0;
 }
 
 .logo-container {
@@ -72,7 +77,7 @@ body {
     align-items: center;
     justify-content: center;
     gap: 14px;
-    margin-bottom: 32px;
+    margin-bottom: 20px;
 }
 
 .logo-circle {
@@ -83,17 +88,39 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: transform 0.3s var(--animation-spring);
+    transition: all 0.5s var(--animation-spring);
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+}
+
+.logo-circle::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transform: translateX(-100%);
+    transition: transform 0.6s ease;
 }
 
 .logo-circle:hover {
     transform: scale(1.05) rotate(5deg);
+    box-shadow: 0 4px 12px rgba(92, 95, 239, 0.3);
+}
+
+.logo-circle:hover::before {
+    transform: translateX(100%);
 }
 
 .logo-circle svg {
     width: 24px;
     height: 24px;
     stroke: white;
+    transition: transform 0.5s var(--animation-spring);
+}
+
+.logo-circle:hover svg {
+    transform: scale(1.1) rotate(-5deg);
 }
 
 .logo-container span {
@@ -123,8 +150,9 @@ body {
 
 /* Enhanced Input Section */
 .input-section {
-    padding: 24px 32px;
+    padding: 16px 32px;
     background: var(--claude-bg);
+    flex-shrink: 0;
 }
 
 .search-container {
@@ -188,38 +216,45 @@ body {
     border-radius: 12px;
     position: relative;
     transition: all 0.3s var(--animation-spring);
+    overflow: hidden;
 }
 
-.mic-button:hover,
-.send-button:hover {
-    background: rgba(92, 95, 239, 0.1);
+.mic-button::before,
+.send-button::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: var(--claude-accent);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    border-radius: inherit;
 }
 
-.mic-button svg,
-.send-button svg {
-    width: 22px;
-    height: 22px;
-    stroke: var(--claude-secondary);
-    transition: stroke 0.3s ease;
+.mic-button:hover::before,
+.send-button:hover::before {
+    opacity: 0.1;
 }
 
-.mic-button:hover svg,
-.send-button:hover svg {
-    stroke: var(--claude-accent);
+.mic-button:active::before,
+.send-button:active::before {
+    opacity: 0.2;
 }
 
 .button-feedback {
     position: absolute;
     inset: 0;
-    border-radius: 12px;
-    transition: transform 0.6s var(--animation-spring);
+    border-radius: inherit;
     pointer-events: none;
+    transform: scale(0.8);
+    opacity: 0;
+    background: var(--claude-accent);
+    transition: all 0.4s var(--animation-spring);
 }
 
 .mic-button:active .button-feedback,
 .send-button:active .button-feedback {
-    transform: scale(0.85);
-    background: rgba(92, 95, 239, 0.15);
+    transform: scale(1.2);
+    opacity: 0.2;
 }
 
 /* Gradient Line */
@@ -233,8 +268,14 @@ body {
 
 /* Welcome Section */
 .welcome-section {
-    padding: 56px 32px;
+    padding: 32px;
     text-align: center;
+    flex: 1;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    min-height: 200px;
 }
 
 .sparkle {
@@ -265,8 +306,10 @@ body {
 .footer-tabs {
     display: flex;
     border-top: 1px solid var(--claude-border);
-    padding: 20px 32px;
+    padding: 16px 32px;
     gap: 32px;
+    flex-shrink: 0;
+    background: var(--claude-bg);
 }
 
 .tab {
@@ -281,25 +324,27 @@ body {
     font-weight: 500;
 }
 
-.tab:hover {
-    color: var(--claude-accent);
-}
-
-.tab.active {
-    color: var(--claude-accent);
-    font-weight: 600;
-}
-
-.tab.active::after {
+.tab::before {
     content: '';
     position: absolute;
-    bottom: -21px;
+    bottom: -17px;
     left: 0;
     right: 0;
     height: 2px;
     background: var(--claude-accent);
-    transform-origin: center;
-    animation: scaleIn 0.3s var(--animation-spring) forwards;
+    transform: scaleX(0);
+    opacity: 0;
+    transition: all 0.3s var(--animation-spring);
+}
+
+.tab:hover::before {
+    transform: scaleX(0.5);
+    opacity: 0.5;
+}
+
+.tab.active::before {
+    transform: scaleX(1);
+    opacity: 1;
 }
 
 /* Animations */
@@ -448,8 +493,9 @@ body {
 
 /* PDF Upload Section */
 .pdf-section {
-    padding: 24px 32px;
+    padding: 16px 32px;
     background: var(--claude-bg);
+    flex-shrink: 0;
 }
 
 .upload-container {
@@ -500,11 +546,11 @@ body {
 
 /* PDF Viewer Section */
 .pdf-viewer-section {
-    background: var(--claude-bg);
-    border-radius: 16px;
-    margin: 0 32px;
+    flex: 1;
     overflow: hidden;
-    box-shadow: 0 2px 8px var(--shadow-color);
+    display: flex;
+    flex-direction: column;
+    margin: 0 32px 16px;
 }
 
 .pdf-controls {
@@ -635,11 +681,10 @@ body {
 }
 
 .pdf-content {
-    padding: 32px;
-    background: white;
-    min-height: 400px;
-    max-height: 600px;
+    flex: 1;
     overflow-y: auto;
+    padding: 24px;
+    min-height: 200px;
 }
 
 .pdf-content canvas {
@@ -693,4 +738,28 @@ body {
     .playback-controls {
         justify-content: center;
     }
+}
+
+/* Add smooth scrollbar styling */
+.welcome-section::-webkit-scrollbar,
+.pdf-content::-webkit-scrollbar {
+    width: 8px;
+}
+
+.welcome-section::-webkit-scrollbar-track,
+.pdf-content::-webkit-scrollbar-track {
+    background: var(--claude-hover);
+    border-radius: 4px;
+}
+
+.welcome-section::-webkit-scrollbar-thumb,
+.pdf-content::-webkit-scrollbar-thumb {
+    background: var(--claude-border);
+    border-radius: 4px;
+    transition: background 0.3s ease;
+}
+
+.welcome-section::-webkit-scrollbar-thumb:hover,
+.pdf-content::-webkit-scrollbar-thumb:hover {
+    background: var(--claude-secondary);
 }
